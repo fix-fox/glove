@@ -696,10 +696,9 @@ describe("generateKeymap", () => {
     const result = generateKeymap(config);
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.keymap).toContain("lt: lt {");
-      expect(result.keymap).toContain('compatible = "zmk,behavior-hold-tap"');
+      expect(result.keymap).toContain("&lt {");
+      expect(result.keymap).not.toContain("lt: lt {");
       expect(result.keymap).toContain("quick-tap-ms = <175>");
-      expect(result.keymap).toContain("bindings = <&mo>, <&kp>;");
       expect(result.keymap).toContain("&lt 1 SPACE");
     }
   });

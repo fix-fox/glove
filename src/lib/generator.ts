@@ -268,36 +268,60 @@ function generateModMorphBlock(mm: ModMorphDefinition): string {
 // Hold-tap generation
 // =============================================================================
 
+// ZMK built-in hold-tap behavior names that must be overridden, not redefined.
+const ZMK_BUILTIN_HOLD_TAPS = new Set(["lt", "mt"]);
+
 function generateHoldTapBlock(ht: HoldTapDefinition): string {
+  const isOverride = ZMK_BUILTIN_HOLD_TAPS.has(ht.name);
   const lines: string[] = [];
-  lines.push(`        ${ht.name}: ${ht.name} {`);
-  lines.push(`            compatible = "zmk,behavior-hold-tap";`);
-  lines.push(`            #binding-cells = <2>;`);
-  lines.push(`            flavor = "${ht.flavor}";`);
-  lines.push(`            tapping-term-ms = <${ht.tappingTermMs}>;`);
+
+  if (isOverride) {
+    lines.push(`&${ht.name} {`);
+  } else {
+    lines.push(`        ${ht.name}: ${ht.name} {`);
+    lines.push(`            compatible = "zmk,behavior-hold-tap";`);
+    lines.push(`            #binding-cells = <2>;`);
+  }
+
+  const indent = isOverride ? "    " : "            ";
+  lines.push(`${indent}flavor = "${ht.flavor}";`);
+  lines.push(`${indent}tapping-term-ms = <${ht.tappingTermMs}>;`);
   if (ht.quickTapMs !== undefined) {
-    lines.push(`            quick-tap-ms = <${ht.quickTapMs}>;`);
+    lines.push(`${indent}quick-tap-ms = <${ht.quickTapMs}>;`);
   }
   if (ht.requirePriorIdleMs !== undefined) {
-    lines.push(`            require-prior-idle-ms = <${ht.requirePriorIdleMs}>;`);
+    lines.push(`${indent}require-prior-idle-ms = <${ht.requirePriorIdleMs}>;`);
   }
-  lines.push(`            bindings = <${ht.holdBinding}>, <${ht.tapBinding}>;`);
+  if (!isOverride) {
+    lines.push(`${indent}bindings = <${ht.holdBinding}>, <${ht.tapBinding}>;`);
+  }
   if (ht.holdTriggerKeyPositions && ht.holdTriggerKeyPositions.length > 0) {
-    lines.push(`            hold-trigger-key-positions = <${ht.holdTriggerKeyPositions.join(" ")}>;`);
+    lines.push(`${indent}hold-trigger-key-positions = <${ht.holdTriggerKeyPositions.join(" ")}>;`);
   }
   if (ht.holdTriggerOnRelease === true) {
-    lines.push(`            hold-trigger-on-release;`);
+    lines.push(`${indent}hold-trigger-on-release;`);
   }
-  lines.push(`        };`);
+
+  lines.push(isOverride ? "};" : "        };");
   return lines.join("\n");
 }
 
 function generateBehaviorsSection(modMorphs: ModMorphDefinition[], holdTaps: HoldTapDefinition[]): string {
   const blocks: string[] = [];
   for (const mm of modMorphs) blocks.push(generateModMorphBlock(mm));
-  for (const ht of holdTaps) blocks.push(generateHoldTapBlock(ht));
+  for (const ht of holdTaps) {
+    if (!ZMK_BUILTIN_HOLD_TAPS.has(ht.name)) {
+      blocks.push(generateHoldTapBlock(ht));
+    }
+  }
   if (blocks.length === 0) return "";
   return `    behaviors {\n${blocks.join("\n\n")}\n    };\n\n`;
+}
+
+function generateOverridesSection(holdTaps: HoldTapDefinition[]): string {
+  const overrides = holdTaps.filter(ht => ZMK_BUILTIN_HOLD_TAPS.has(ht.name));
+  if (overrides.length === 0) return "";
+  return overrides.map(ht => generateHoldTapBlock(ht)).join("\n\n") + "\n\n";
 }
 
 // =============================================================================
@@ -407,12 +431,13 @@ ${bindingsStr}
 
   const macrosSection = generateMacrosSection(config.macros ?? []);
   const behaviorsSection = generateBehaviorsSection(config.modMorphs ?? [], config.holdTaps ?? []);
+  const overridesSection = generateOverridesSection(config.holdTaps ?? []);
   const combosSection = generateCombosSection(config.combos ?? []);
   const condLayersSection = generateConditionalLayersSection(config.conditionalLayers ?? []);
 
   const keymap = `${includes.join("\n")}
 
-/ {
+${overridesSection}/ {
 ${macrosSection}${behaviorsSection}${combosSection}${condLayersSection}    keymap {
         compatible = "zmk,keymap";
 

@@ -5,6 +5,13 @@
 #include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/pointing.h>
 
+&lt {
+    flavor = "balanced";
+    tapping-term-ms = <280>;
+    quick-tap-ms = <175>;
+    require-prior-idle-ms = <150>;
+};
+
 / {
     macros {
         rgb_ug_status_macro: rgb_ug_status_macro {
@@ -93,16 +100,6 @@
             #binding-cells = <0>;
             bindings = <&kp Q>, <&kp QMARK>;
             mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        lt: lt {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <280>;
-            quick-tap-ms = <175>;
-            require-prior-idle-ms = <150>;
-            bindings = <&mo>, <&kp>;
         };
 
         magic: magic {
@@ -233,7 +230,7 @@
                 &trans  &kp PERIOD  &kp COMMA  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &trans
                 &trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHIFT F  &hml LA(LGUI) G  &hmr RA(RGUI) H  &hmr RSHIFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &kp APOS
                 &trans  &kp Z  &kp X  &kp C  &lt 11 V  &kp B  &trans  &trans  &trans  &trans  &trans  &trans  &kp N  &lt 11 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &mo 0  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
