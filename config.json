@@ -2103,8 +2103,8 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "q_qmark"
+            "type": "mod_morph",
+            "name": "mm_q_shift_qmark"
           },
           "hold": null
         },
@@ -8183,6 +8183,16 @@
       "name": "mm_bspc_shift_del",
       "defaultBinding": "&kp BSPC",
       "morphBinding": "&kp DEL",
+      "mods": [
+        "MOD_LSFT",
+        "MOD_RSFT"
+      ]
+    },
+    {
+      "id": "5bf7b238-0e97-4f35-b0ad-43317508625e",
+      "name": "mm_q_shift_qmark",
+      "defaultBinding": "&kp Q",
+      "morphBinding": "&kp QMARK",
       "mods": [
         "MOD_LSFT",
         "MOD_RSFT"
