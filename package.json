@@ -10,7 +10,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate-firmware": "tsx scripts/generate-firmware.ts"
   },
   "keywords": [],
   "author": "",

@@ -49,7 +49,7 @@ const WEST_YML = `manifest:
     path: config
 `;
 
-function detectPointingFeature(config: KeyboardConfig): boolean {
+export function detectPointingFeature(config: KeyboardConfig): boolean {
   for (const layer of config.layers) {
     for (const key of layer.keys) {
       for (const b of [key.tap, key.hold]) {
