@@ -1,0 +1,135 @@
+#!/bin/bash
+# Generate ZMK firmware, push, build via GitHub Actions, and flash to Glove80.
+
+set -e
+
+REPO="fix-fox/glove"
+FIRMWARE_PATTERN="glove80_lh*.uf2"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
+
+cd "$REPO_DIR"
+
+# ── Generate keymap ──────────────────────────────────────────────────────────
+echo "Generating firmware files..."
+npm run generate-firmware --silent
+
+# ── Check for changes ────────────────────────────────────────────────────────
+CHANGED_FILES="config/glove80.keymap config/glove80.conf"
+CHANGES=$(git diff --name-only -- $CHANGED_FILES 2>/dev/null)
+UNTRACKED=$(git ls-files --others --exclude-standard -- $CHANGED_FILES 2>/dev/null)
+ALL_CHANGES=$(echo -e "${CHANGES}\n${UNTRACKED}" | sed '/^$/d' | sort -u)
+
+if [ -n "$ALL_CHANGES" ]; then
+    echo ""
+    echo "Changed files:"
+    for f in $ALL_CHANGES; do
+        echo "  $f"
+    done
+    echo ""
+    git diff -- $CHANGED_FILES 2>/dev/null
+    echo ""
+    read -p "Commit and push? [Y/n] " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Nn]$ ]]; then
+        echo "Aborted."
+        exit 0
+    fi
+    git add -- $CHANGED_FILES 2>/dev/null
+    git commit -m "keymap: update from configurator"
+    git push
+else
+    echo "No keymap changes — checking latest build."
+fi
+
+# ── Wait for build ───────────────────────────────────────────────────────────
+echo ""
+echo "Checking for workflow runs..."
+
+RUN_INFO=$(gh run list --repo "$REPO" --workflow build.yml --limit 1 --json databaseId,status,conclusion,headBranch,createdAt,displayTitle)
+RUN_ID=$(echo "$RUN_INFO" | jq -r '.[0].databaseId')
+STATUS=$(echo "$RUN_INFO" | jq -r '.[0].status')
+CONCLUSION=$(echo "$RUN_INFO" | jq -r '.[0].conclusion')
+BRANCH=$(echo "$RUN_INFO" | jq -r '.[0].headBranch')
+CREATED_AT=$(echo "$RUN_INFO" | jq -r '.[0].createdAt')
+TITLE=$(echo "$RUN_INFO" | jq -r '.[0].displayTitle')
+
+CREATED_HUMAN=$(date -d "$CREATED_AT" "+%Y-%m-%d %H:%M:%S" 2>/dev/null || echo "$CREATED_AT")
+
+if [ "$STATUS" = "in_progress" ] || [ "$STATUS" = "queued" ]; then
+    echo "Build in progress: $TITLE"
+    echo "Waiting for build to complete..."
+    gh run watch "$RUN_ID" --repo "$REPO" --exit-status
+    CONCLUSION=$(gh run view "$RUN_ID" --repo "$REPO" --json conclusion -q '.conclusion')
+fi
+
+if [ "$CONCLUSION" != "success" ]; then
+    echo "Error: Latest build failed (status: $CONCLUSION)"
+    echo "Check: https://github.com/$REPO/actions/runs/$RUN_ID"
+    exit 1
+fi
+
+echo ""
+echo "=== Latest successful build ==="
+echo "  Commit:  $TITLE"
+echo "  Branch:  $BRANCH"
+echo "  Time:    $CREATED_HUMAN"
+echo "  Run:     https://github.com/$REPO/actions/runs/$RUN_ID"
+echo ""
+
+read -p "Download and flash this firmware? [Y/n] " -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Nn]$ ]]; then
+    echo "Aborted."
+    exit 0
+fi
+
+# ── Download firmware ────────────────────────────────────────────────────────
+TEMP_DIR=$(mktemp -d)
+cleanup() { rm -rf "$TEMP_DIR"; }
+trap cleanup EXIT
+
+echo "Downloading firmware artifact..."
+gh run download "$RUN_ID" --repo "$REPO" --dir "$TEMP_DIR"
+
+FIRMWARE_FILE=$(find "$TEMP_DIR" -name "$FIRMWARE_PATTERN" -type f | head -1)
+
+if [ -z "$FIRMWARE_FILE" ]; then
+    echo "Error: Could not find left hand firmware ($FIRMWARE_PATTERN)"
+    echo "Contents of download:"
+    find "$TEMP_DIR" -type f
+    exit 1
+fi
+
+echo "Found firmware: $(basename "$FIRMWARE_FILE")"
+
+# ── Flash ────────────────────────────────────────────────────────────────────
+echo ""
+echo "Put the LEFT hand in bootloader mode:"
+echo "  1. Hold the bottom-left key (magic key)"
+echo "  2. While holding, tap the top-left key"
+echo "  3. Release both — keyboard mounts as GLV80LHBOOT (D:)"
+echo ""
+echo "Waiting for device at D:\\ ..."
+
+TIMEOUT=60
+ELAPSED=0
+while ! cmd.exe /c "if exist D:\\ (exit 0) else (exit 1)" 2>/dev/null; do
+    sleep 1
+    ELAPSED=$((ELAPSED + 1))
+    if [ $ELAPSED -ge $TIMEOUT ]; then
+        echo ""
+        echo "Error: Timeout waiting for device at D:\\"
+        exit 1
+    fi
+    printf "\r  Waiting... %ds" $ELAPSED
+done
+echo ""
+
+echo "Device detected! Copying firmware..."
+FIRMWARE_WIN_PATH=$(wslpath -w "$FIRMWARE_FILE")
+cmd.exe /c copy "$FIRMWARE_WIN_PATH" "D:\\" > /dev/null
+
+echo ""
+echo "Firmware copied. The keyboard will reboot automatically."
+echo "Done!"
