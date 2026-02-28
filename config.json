@@ -1,0 +1,8395 @@
+{
+  "name": "Imported Keymap",
+  "version": 1,
+  "layers": [
+    {
+      "id": "3a27eaec-1bb8-4201-a462-c5bf4add19b8",
+      "name": "default",
+      "keys": [
+        {
+          "tap": {
+            "type": "to",
+            "layerIndex": 0
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "to",
+            "layerIndex": 10
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LG(L)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "tog",
+            "layerIndex": 3
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Q"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "W"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "P"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "B"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "J"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "L"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "U"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Y"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SEMI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LGUI",
+            "param2": "A"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LALT",
+            "param2": "R"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LCTRL",
+            "param2": "S"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LSHIFT",
+            "param2": "T"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LA(LGUI)",
+            "param2": "G"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RA(RGUI)",
+            "param2": "M"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RSHIFT",
+            "param2": "N"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RCTRL",
+            "param2": "E"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RALT",
+            "param2": "I"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RGUI",
+            "param2": "O"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Z"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "X"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "D"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 11
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "V"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "TAB"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 5
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "ESCAPE"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 8
+          }
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "TAB"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 9
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "K"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "H"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 11
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "COMMA"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DOT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "FSLH"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "magic",
+            "param1": "1",
+            "param2": "0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "GRAVE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SPACE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "ENTER"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mod_morph",
+            "name": "mm_bspc_shift_del"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 4
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DEL"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 9
+          }
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PSCRN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(SPACE)"
+          },
+          "hold": {
+            "type": "kp",
+            "keyCode": "LG(LALT)"
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SPACE"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 6
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "ENTER"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "tog",
+            "layerIndex": 9
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "TILDE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "magic",
+            "param1": "1",
+            "param2": "0"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "e28238c7-1625-45ed-8dc8-bf6d8b74852f",
+      "name": "magic",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "bt",
+            "action": "BT_CLR"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "bt",
+            "action": "BT_CLR_ALL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_SPI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_SAI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_HUI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_BRI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_TOG"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "bootloader"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_SPD"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_SAD"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_HUD"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_BRD"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "rgb_ug",
+            "action": "RGB_EFF"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "bootloader"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "sys_reset"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "bt_2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "bt_3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "sys_reset"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "bt_0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "bt_1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "out",
+            "action": "OUT_USB"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "none"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "to",
+            "layerIndex": 2
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "a1079237-d640-44c0-a356-81c532d22ff5",
+      "name": "factory_test",
+      "keys": [
+        {
+          "tap": {
+            "type": "to",
+            "layerIndex": 0
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "ffbad991-56e9-4c66-955a-625a86aa1116",
+      "name": "hebrew",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PERIOD"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "COMMA"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "E"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "R"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "T"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Y"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "U"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "I"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "O"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "P"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LGUI",
+            "param2": "A"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LALT",
+            "param2": "S"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LCTRL",
+            "param2": "D"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LSHIFT",
+            "param2": "F"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LA(LGUI)",
+            "param2": "G"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RA(RGUI)",
+            "param2": "H"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RSHIFT",
+            "param2": "J"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RCTRL",
+            "param2": "K"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RALT",
+            "param2": "L"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RGUI",
+            "param2": "SEMI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "APOS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Z"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "X"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "V"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 11
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "B"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "M"
+          },
+          "hold": {
+            "type": "mo",
+            "layerIndex": 11
+          }
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "APOS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SLASH"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "q_qmark"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mo",
+            "layerIndex": 0
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "39dc4047-1280-4ab3-a522-5f5fed7e639b",
+      "name": "cursor",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LA(F4)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(W)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(F)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(P)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(B)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PG_UP"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "UP"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PG_DN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LGUI",
+            "param2": "LC(A)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LALT",
+            "param2": "LC(R)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LCTRL",
+            "param2": "LC(S)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LSHIFT",
+            "param2": "LC(T)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(G)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DOWN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RIGHT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(Y)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(Z)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(X)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(C)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(D)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(V)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "ESCAPE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "HOME"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "ESCAPE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "END"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DEL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "ENTER"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LA(LC(V))"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "41460d56-52d1-47fe-b8bb-cff34b25af60",
+      "name": "numbers",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F10"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT_ALT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LCTRL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT_SHIFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F11"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F12"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "c9bf3e12-993a-49d4-90ba-50a6cd174f66",
+      "name": "symbols",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "COLON"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "CARET"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "AMPS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "STAR"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PIPE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "BSLH"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "EQUAL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "MINUS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "UNDER"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "GRAVE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SQT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DOUBLE_QUOTES"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RCTRL",
+            "param2": "PLUS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "TILDE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "FSLH"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LESS_THAN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT_BRACE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LBKT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT_PARENTHESIS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SEMI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "COLON"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RIGHT_PARENTHESIS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RBKT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RIGHT_BRACE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "GREATER_THAN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "BSPC"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "d78cc48b-b2d1-4eff-9816-a1a27fc1121f",
+      "name": "hebrew_symbols",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "W"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "GRAVE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "113a4ab2-26a6-4b81-a3c2-3da4cc3f19ae",
+      "name": "system",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_VOLUME_DOWN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_MUTE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_VOLUME_UP"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_BRIGHTNESS_INC"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F10"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_PREV"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_PLAY_PAUSE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_NEXT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C_BRIGHTNESS_DEC"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F11"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PRINTSCREEN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F12"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT_ALT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "2da20cac-22fe-4a4a-bcb5-41374f5893c6",
+      "name": "mouse",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "msc",
+            "direction": "SCRL_UP"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_UP"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "msc",
+            "direction": "SCRL_DOWN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LCTRL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT_SHIFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_LEFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_DOWN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_RIGHT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(X)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(C)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LC(V)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "msc",
+            "direction": "SCRL_LEFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "tog",
+            "layerIndex": 9
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "msc",
+            "direction": "SCRL_RIGHT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mo",
+            "layerIndex": 12
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mkp",
+            "button": "LCLK"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mkp",
+            "button": "LCLK"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mkp",
+            "button": "MCLK"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mkp",
+            "button": "RCLK"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "215a4726-00e6-484f-bdd5-f24985454e51",
+      "name": "original_default",
+      "keys": [
+        {
+          "tap": {
+            "type": "to",
+            "layerIndex": 0
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F10"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "EQUAL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "MINUS"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "TAB"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Q"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "W"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "E"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "R"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "T"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Y"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "U"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "I"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "O"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "P"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "BSLH"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "ESC"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "A"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "S"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "D"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "G"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "H"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "J"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "K"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "L"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SEMI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SQT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "GRAVE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Z"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "X"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "V"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "B"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LSHFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LCTRL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT_GUI"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RMETA"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RCTRL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RSHFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "M"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "COMMA"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DOT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "FSLH"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PG_UP"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "magic",
+            "param1": "1",
+            "param2": "0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "HOME"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "END"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LEFT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RIGHT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "BSPC"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DEL"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LALT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RALT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RET"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "SPACE"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "UP"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "DOWN"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "LBKT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "RBKT"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "PG_DN"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "3ab994ab-682b-41ac-a446-8f56f131a48b",
+      "name": "macros",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "flow_bookmark"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "select_line"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "delete_to_bol"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "gemini_tab"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "COLON"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "tog",
+            "layerIndex": 9
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "lang_toggle"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "delete_to_eol"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "lang_toggle"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "tog",
+            "layerIndex": 9
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "delete_to_bol"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "delete_to_eol"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "d2bc7e6b-1940-4135-bba4-60946b9eca21",
+      "name": "mouse_slow",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_Y(-300)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_X(-300)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_Y(300)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "mmv",
+            "direction": "MOVE_X(300)"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "03fbc012-44d8-4790-ad31-a7f533d7ea78",
+      "name": "mod_active",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    },
+    {
+      "id": "b898238c-c7a4-4682-96c5-a077636561cc",
+      "name": "english_alpha",
+      "keys": [
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Q"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "W"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "F"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "P"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "B"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "J"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "L"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "U"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Y"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LGUI",
+            "param2": "A"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LALT",
+            "param2": "R"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LCTRL",
+            "param2": "S"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LSHIFT",
+            "param2": "T"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LA(LGUI)",
+            "param2": "G"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RA(RGUI)",
+            "param2": "M"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RSHIFT",
+            "param2": "N"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RCTRL",
+            "param2": "E"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RALT",
+            "param2": "I"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RGUI",
+            "param2": "O"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "Z"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "X"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "C"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "D"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "V"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "K"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "H"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        }
+      ]
+    }
+  ],
+  "macros": [
+    {
+      "id": "12886d9f-6b8a-4e35-81af-593779eb59ac",
+      "name": "rgb_ug_status_macro",
+      "label": "RGB_UG_STATUS",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&rgb_ug",
+            "RGB_STATUS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5d62a142-bd8b-46df-acdb-d18f893117fd",
+      "name": "bt_0",
+      "label": "BT_0",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&out",
+            "OUT_BLE",
+            "&bt",
+            "BT_SEL",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a333cf16-7300-4533-b88d-a03899a15e76",
+      "name": "bt_1",
+      "label": "BT_1",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&out",
+            "OUT_BLE",
+            "&bt",
+            "BT_SEL",
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c35012e0-376b-4ca8-a8f8-1a7a926d5b54",
+      "name": "bt_2",
+      "label": "BT_2",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&out",
+            "OUT_BLE",
+            "&bt",
+            "BT_SEL",
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cb19ccb7-64da-4c84-9148-a1af07148042",
+      "name": "bt_3",
+      "label": "BT_3",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&out",
+            "OUT_BLE",
+            "&bt",
+            "BT_SEL",
+            "3"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8f9d7355-ab96-4954-b761-c486c59639d8",
+      "name": "lang_toggle",
+      "label": "LANG_TOGGLE",
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LGUI"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp SPACE"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LGUI"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&tog 3"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "84fc0c22-c230-486d-9972-3ec660718d5e",
+      "name": "delete_to_bol",
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp HOME"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp BSPC"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "386296ff-c3f4-4bf3-8e84-88fa109297f7",
+      "name": "delete_to_eol",
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp END"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp BSPC"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f17f6dcf-e511-49c4-936a-07562fc3c4ef",
+      "name": "select_line",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp HOME"
+          ]
+        },
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp END"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f65473e9-a9f2-4a7e-a745-901f2213a8a0",
+      "name": "gemini_tab",
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp T"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp AT"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp G"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp E"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp M"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp I"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp N"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp I"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp TAB"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "37948adb-7ce0-44f6-9062-a3e66258a6d3",
+      "name": "flow_bookmark",
+      "label": "FLOW_BOOKMARK",
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp SPACE"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp B",
+            "&kp SPACE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cbbc53f5-6714-4d26-b788-ffd66a3a6bd3",
+      "name": "mod_activate",
+      "bindingCells": 1,
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&mo 13"
+          ]
+        },
+        {
+          "directive": "param_1to1"
+        },
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp MACRO_PLACEHOLDER"
+          ]
+        },
+        {
+          "directive": "pause_for_release"
+        },
+        {
+          "directive": "param_1to1"
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp MACRO_PLACEHOLDER"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&mo 13"
+          ]
+        }
+      ]
+    }
+  ],
+  "modMorphs": [
+    {
+      "id": "0d344117-902c-4d81-8ba5-01935e155d28",
+      "name": "mm_bspc_shift_del",
+      "defaultBinding": "&kp BSPC",
+      "morphBinding": "&kp DEL",
+      "mods": [
+        "MOD_LSFT",
+        "MOD_RSFT"
+      ]
+    }
+  ],
+  "holdTaps": [
+    {
+      "id": "7f5415f0-7ecd-4464-bb4d-2e5d58875767",
+      "name": "lt",
+      "flavor": "balanced",
+      "tappingTermMs": 280,
+      "quickTapMs": 175,
+      "requirePriorIdleMs": 150,
+      "holdBinding": "&mo",
+      "tapBinding": "&kp"
+    },
+    {
+      "id": "d385d0b8-46b7-48a5-a09f-b52620f3d636",
+      "name": "magic",
+      "label": "MAGIC_HOLD_TAP",
+      "flavor": "tap-preferred",
+      "tappingTermMs": 200,
+      "holdBinding": "&mo",
+      "tapBinding": "&rgb_ug_status_macro"
+    },
+    {
+      "id": "6801c853-cbe0-412f-aa94-9ab5fa9264d4",
+      "name": "hml",
+      "flavor": "balanced",
+      "tappingTermMs": 280,
+      "quickTapMs": 175,
+      "requirePriorIdleMs": 150,
+      "holdBinding": "&mod_activate",
+      "tapBinding": "&kp",
+      "holdTriggerKeyPositions": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        75,
+        76,
+        77,
+        78,
+        79,
+        72,
+        73,
+        74,
+        55,
+        56,
+        57,
+        52,
+        69
+      ],
+      "holdTriggerOnRelease": true
+    },
+    {
+      "id": "0c9d9385-27bf-4d00-9bff-6f985b915cc5",
+      "name": "hmr",
+      "flavor": "balanced",
+      "tappingTermMs": 280,
+      "quickTapMs": 175,
+      "requirePriorIdleMs": 150,
+      "holdBinding": "&mod_activate",
+      "tapBinding": "&kp",
+      "holdTriggerKeyPositions": [
+        4,
+        3,
+        2,
+        1,
+        0,
+        15,
+        14,
+        13,
+        12,
+        11,
+        10,
+        27,
+        26,
+        25,
+        24,
+        23,
+        22,
+        39,
+        38,
+        37,
+        36,
+        35,
+        34,
+        51,
+        50,
+        49,
+        48,
+        47,
+        46,
+        68,
+        67,
+        66,
+        65,
+        64,
+        71,
+        70,
+        69,
+        54,
+        53,
+        52,
+        57,
+        74
+      ],
+      "holdTriggerOnRelease": true
+    },
+    {
+      "id": "b36fe461-4e33-47d9-b69c-dd2a87e37cb2",
+      "name": "lt_mm_bspc_shift_del",
+      "flavor": "balanced",
+      "tappingTermMs": 280,
+      "quickTapMs": 175,
+      "requirePriorIdleMs": 150,
+      "holdBinding": "&mo",
+      "tapBinding": "&mm_bspc_shift_del"
+    }
+  ],
+  "combos": [
+    {
+      "id": "e0e901a7-6eae-4016-949f-65c42b72afe0",
+      "name": "toggle_left_hand",
+      "keyPositions": [
+        52,
+        69
+      ],
+      "binding": "&tog 4"
+    },
+    {
+      "id": "5f56ac8d-ae81-4da7-acd5-3f144dec9915",
+      "name": "mouse_toggle",
+      "keyPositions": [
+        74,
+        57
+      ],
+      "binding": "&tog 9"
+    },
+    {
+      "id": "d23b219b-5bdb-4616-96f2-3f739c3d88f2",
+      "name": "caps_lock",
+      "keyPositions": [
+        39,
+        40
+      ],
+      "binding": "&kp CAPS",
+      "timeoutMs": 30,
+      "requirePriorIdleMs": 300
+    },
+    {
+      "id": "9d5eaaee-0b98-4990-a52b-5bc198f04430",
+      "name": "caps_word",
+      "keyPositions": [
+        38,
+        41
+      ],
+      "binding": "&caps_word",
+      "timeoutMs": 30,
+      "requirePriorIdleMs": 300
+    }
+  ],
+  "conditionalLayers": [
+    {
+      "id": "753b9fcf-ad99-40ed-97cd-8a4ace9eb5bd",
+      "name": "hebrew_symbols",
+      "ifLayers": [
+        3,
+        6
+      ],
+      "thenLayer": 7
+    },
+    {
+      "id": "1831b90b-8a51-477f-8f39-88f21ac77bb7",
+      "name": "english_alpha_when_mod",
+      "ifLayers": [
+        3,
+        13
+      ],
+      "thenLayer": 14
+    }
+  ]
+}
