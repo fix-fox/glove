@@ -2164,8 +2164,7 @@
         },
         {
           "tap": {
-            "type": "mo",
-            "layerIndex": 0
+            "type": "trans"
           },
           "hold": null
         },
@@ -8174,7 +8173,9 @@
             "&mo 13"
           ]
         }
-      ]
+      ],
+      "waitMs": 0,
+      "tapMs": 0
     }
   ],
   "modMorphs": [

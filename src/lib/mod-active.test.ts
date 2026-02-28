@@ -83,12 +83,14 @@ describe("ensureModActiveLayer", () => {
 });
 
 describe("ensureModActivateMacro", () => {
-  it("creates parameterized macro", () => {
+  it("creates parameterized macro with zero timing", () => {
     const config = makeConfig([makeLayer("Base"), makeLayer(MOD_ACTIVE_LAYER_NAME)]);
     const result = ensureModActivateMacro(config, 1);
     const macro = result.macros!.find((m) => m.name === MOD_ACTIVATE_MACRO_NAME);
     expect(macro).toBeDefined();
     expect(macro!.bindingCells).toBe(1);
+    expect(macro!.waitMs).toBe(0);
+    expect(macro!.tapMs).toBe(0);
     expect(macro!.steps.some((s) => s.directive === "param_1to1")).toBe(true);
     expect(macro!.steps.some((s) => s.directive === "press")).toBe(true);
   });

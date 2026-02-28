@@ -65,6 +65,8 @@ export function ensureModActivateMacro(
     id: crypto.randomUUID(),
     name: MOD_ACTIVATE_MACRO_NAME,
     bindingCells: 1,
+    waitMs: 0,
+    tapMs: 0,
     steps: [
       { directive: "press", bindings: [`&mo ${modActiveLayerIndex}`] },
       { directive: "param_1to1" },
