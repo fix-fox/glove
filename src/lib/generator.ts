@@ -238,7 +238,7 @@ function generateMacroBlock(macro: MacroDefinition): string {
         break;
     }
   }
-  lines.push(`            bindings = ${bindings.join(" ")};`);
+  lines.push(`            bindings = ${bindings.join(", ")};`);
   lines.push(`        };`);
   return lines.join("\n");
 }
