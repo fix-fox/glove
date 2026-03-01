@@ -23,6 +23,15 @@ export function FlashDialog({ open, onOpenChange, lines, running }: FlashDialogP
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [lines.length]);
 
+  // Auto-close on success
+  useEffect(() => {
+    const lastLine = lines[lines.length - 1];
+    if (!running && lastLine !== undefined && lastLine.includes("Done!")) {
+      const timer = setTimeout(() => onOpenChange(false), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [running, lines, onOpenChange]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
