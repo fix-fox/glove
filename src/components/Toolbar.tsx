@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { ExportDialog } from "./ExportDialog";
 import { ErrorDialog } from "./ErrorDialog";
+import { FlashDialog } from "./FlashDialog";
 import { MacroEditor } from "./MacroEditor";
 import { ComboEditor } from "./ComboEditor";
 import { ConditionalLayerEditor } from "./ConditionalLayerEditor";
@@ -20,6 +21,9 @@ export function Toolbar() {
   const [combosOpen, setCombosOpen] = useState(false);
   const [condLayersOpen, setCondLayersOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [flashOpen, setFlashOpen] = useState(false);
+  const [flashLines, setFlashLines] = useState<string[]>([]);
+  const [flashRunning, setFlashRunning] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [errorOpen, setErrorOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -48,6 +52,44 @@ export function Toolbar() {
     }
   };
 
+  const handleFlash = useCallback(async () => {
+    setFlashLines([]);
+    setFlashRunning(true);
+    setFlashOpen(true);
+    try {
+      const res = await fetch("/api/flash", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editorStore.getState().config),
+      });
+      if (!res.body) {
+        setFlashLines(["ERROR: No response body"]);
+        return;
+      }
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop()!;
+        if (lines.length > 0) {
+          setFlashLines((prev) => [...prev, ...lines]);
+        }
+      }
+      if (buffer) {
+        setFlashLines((prev) => [...prev, buffer]);
+      }
+      editorStore.getState().markClean();
+    } catch (err) {
+      setFlashLines((prev) => [...prev, `ERROR: ${err instanceof Error ? err.message : String(err)}`]);
+    } finally {
+      setFlashRunning(false);
+    }
+  }, []);
+
   return (
     <div
       className="flex flex-wrap items-center gap-2"
@@ -60,6 +102,14 @@ export function Toolbar() {
         disabled={saving}
       >
         {saving ? "Saving..." : "Save"}
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleFlash}
+        disabled={flashRunning}
+      >
+        {flashRunning ? "Flashing..." : "Flash"}
       </Button>
       {saveStatus && (
         <span className="text-xs text-muted-foreground">{saveStatus}</span>
@@ -114,6 +164,7 @@ export function Toolbar() {
       <ComboEditor open={combosOpen} onOpenChange={setCombosOpen} />
       <ConditionalLayerEditor open={condLayersOpen} onOpenChange={setCondLayersOpen} />
       <ErrorDialog open={errorOpen} onOpenChange={setErrorOpen} error={errorText} />
+      <FlashDialog open={flashOpen} onOpenChange={setFlashOpen} lines={flashLines} running={flashRunning} />
     </div>
   );
 }
