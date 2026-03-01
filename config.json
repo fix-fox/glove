@@ -8139,6 +8139,8 @@
       "id": "cbbc53f5-6714-4d26-b788-ffd66a3a6bd3",
       "name": "mod_activate",
       "bindingCells": 1,
+      "waitMs": 0,
+      "tapMs": 0,
       "steps": [
         {
           "directive": "press",
@@ -8173,9 +8175,7 @@
             "&mo 13"
           ]
         }
-      ],
-      "waitMs": 0,
-      "tapMs": 0
+      ]
     }
   ],
   "modMorphs": [
