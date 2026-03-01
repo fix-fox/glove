@@ -8407,9 +8407,11 @@
       "thenLayer": 14
     }
   ],
-  "mouseSettings": {
-    "normalSpeed": 900,
-    "precisionSpeed": 300
+  "hrmSettings": {
+    "flavor": "balanced",
+    "tappingTermMs": 280,
+    "quickTapMs": 175,
+    "requirePriorIdleMs": 150
   },
   "ltSettings": {
     "flavor": "balanced",
@@ -8417,10 +8419,8 @@
     "quickTapMs": 175,
     "requirePriorIdleMs": 0
   },
-  "hrmSettings": {
-    "flavor": "balanced",
-    "tappingTermMs": 280,
-    "quickTapMs": 175,
-    "requirePriorIdleMs": 150
+  "mouseSettings": {
+    "normalSpeed": 900,
+    "precisionSpeed": 300
   }
 }
