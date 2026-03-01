@@ -7,6 +7,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    exclude: ["e2e/**", "node_modules/**"],
     setupFiles: ["./src/lib/test-setup.ts"],
     server: {
       deps: {
