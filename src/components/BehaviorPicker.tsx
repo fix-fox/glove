@@ -317,12 +317,22 @@ function BehaviorParams({
       );
     case "mmv":
       return (
-        <StringParamSelect
-          value={value.direction}
-          onChange={(direction) => onChange({ type: "mmv", direction })}
-          options={MMV_DIRECTIONS}
-          label="Direction"
-        />
+        <div className="flex flex-col gap-2">
+          <StringParamSelect
+            value={value.direction}
+            onChange={(direction) => onChange({ ...value, direction })}
+            options={MMV_DIRECTIONS}
+            label="Direction"
+          />
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={value.precision ?? false}
+              onChange={(e) => onChange({ ...value, precision: e.target.checked || undefined })}
+            />
+            Precision
+          </label>
+        </div>
       );
     case "msc":
       return (

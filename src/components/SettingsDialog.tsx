@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { HrmSettings, HoldTapDefinition } from "@/types/schema";
+import type { HrmSettings, HoldTapDefinition, MouseSettings } from "@/types/schema";
+import { DEFAULT_MOUSE_SETTINGS } from "@/types/schema";
 import { editorStore, useEditorStore } from "@/lib/store";
 import { HRM_DEFAULTS } from "@/lib/hrm";
 import { getEffectiveHrmSettings, LT_DEF_NAME } from "@/lib/mod-active";
@@ -47,14 +48,22 @@ export function SettingsDialog({
   const [quickTapMs, setQuickTapMs] = useState(current.quickTapMs);
   const [requirePriorIdleMs, setRequirePriorIdleMs] = useState(current.requirePriorIdleMs);
 
+  const currentMouse = config.mouseSettings ?? DEFAULT_MOUSE_SETTINGS;
+  const [normalSpeed, setNormalSpeed] = useState(currentMouse.normalSpeed);
+  const [precisionSpeed, setPrecisionSpeed] = useState(currentMouse.precisionSpeed);
+
   // Sync local state when dialog opens
   useEffect(() => {
     if (open) {
-      const s = getEffectiveHrmSettings(editorStore.getState().config);
+      const c = editorStore.getState().config;
+      const s = getEffectiveHrmSettings(c);
       setFlavor(s.flavor);
       setTappingTermMs(s.tappingTermMs);
       setQuickTapMs(s.quickTapMs);
       setRequirePriorIdleMs(s.requirePriorIdleMs);
+      const ms = c.mouseSettings ?? DEFAULT_MOUSE_SETTINGS;
+      setNormalSpeed(ms.normalSpeed);
+      setPrecisionSpeed(ms.precisionSpeed);
     }
   }, [open]);
 
@@ -78,9 +87,12 @@ export function SettingsDialog({
       };
     });
 
+    const newMouseSettings: MouseSettings = { normalSpeed, precisionSpeed };
+
     editorStore.getState().patchConfig({
       hrmSettings: newSettings,
       holdTaps,
+      mouseSettings: newMouseSettings,
     });
     onOpenChange(false);
   };
@@ -102,10 +114,11 @@ export function SettingsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>HRM / Layer-tap Settings</DialogTitle>
+          <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
+          <h3 className="text-sm font-medium">HRM / Layer-tap</h3>
           <div className="flex flex-col gap-1.5">
             <Label>Flavor</Label>
             <Select value={flavor} onValueChange={(v) => setFlavor(v as HrmSettings["flavor"])}>
@@ -151,6 +164,30 @@ export function SettingsDialog({
               min={0}
               value={requirePriorIdleMs}
               onChange={(e) => setRequirePriorIdleMs(Math.max(0, parseInt(e.target.value) || 0))}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+            />
+          </div>
+
+          <h3 className="text-sm font-medium mt-2">Mouse Speed</h3>
+
+          <div className="flex flex-col gap-1.5">
+            <Label>Normal Speed</Label>
+            <input
+              type="number"
+              min={1}
+              value={normalSpeed}
+              onChange={(e) => setNormalSpeed(Math.max(1, parseInt(e.target.value) || 1))}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Label>Precision Speed</Label>
+            <input
+              type="number"
+              min={1}
+              value={precisionSpeed}
+              onChange={(e) => setPrecisionSpeed(Math.max(1, parseInt(e.target.value) || 1))}
               className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
             />
           </div>
