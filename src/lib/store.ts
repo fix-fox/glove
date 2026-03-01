@@ -1,5 +1,6 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { current } from "immer";
 import { temporal } from "zundo";
 import type { Behavior, KeyboardConfig, MouseSettings } from "../types/schema";
 import { DEFAULT_KEY, GLOVE80_KEY_COUNT, KeyboardConfigSchema } from "../types/schema";
@@ -107,8 +108,8 @@ export function createEditorStore() {
         }),
         applyDragDrop: (layerIndex, sourceIndex, targetIndex, mode) => set((state) => {
           const layer = state.config.layers[layerIndex]!;
-          const src = structuredClone(layer.keys[sourceIndex]!);
-          const tgt = structuredClone(layer.keys[targetIndex]!);
+          const src = structuredClone(current(layer.keys[sourceIndex]!));
+          const tgt = structuredClone(current(layer.keys[targetIndex]!));
           if (mode === "move") {
             layer.keys[targetIndex] = src;
             layer.keys[sourceIndex] = layerIndex === 0

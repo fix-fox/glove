@@ -528,9 +528,17 @@ export function KeyEditor() {
       onClick={handleDismiss}
     >
       <div
-        className="bg-popover border rounded-lg shadow-lg p-6 w-[340px] max-h-[80vh] overflow-y-auto"
+        className="relative bg-popover border rounded-lg shadow-lg p-6 w-[340px] max-h-[80vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
+        <button
+          type="button"
+          onClick={handleDismiss}
+          className="absolute top-2 right-2 text-muted-foreground hover:text-foreground text-lg leading-none p-1"
+          aria-label="Close"
+        >
+          {"\u00D7"}
+        </button>
         <h2 className="text-sm font-semibold mb-4">
           {GLOVE80_KEY_NAMES[selectedKeyIndex]} ({selectedKeyIndex})
         </h2>
