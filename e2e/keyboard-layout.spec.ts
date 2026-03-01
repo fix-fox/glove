@@ -12,11 +12,11 @@ test.describe("keyboard layout", () => {
   });
 
   test("key editor open", async ({ page }) => {
-    // Click a non-magic key to open the editor
-    const keys = page.locator(".grid button");
-    await keys.first().click();
-    // Wait for the editor panel to appear
-    await page.locator(".fixed").waitFor();
+    // Click a non-magic key to open the editor — use dispatchEvent
+    // to avoid click coordinates landing on the wrapper div
+    const firstKey = page.locator(".grid button").first();
+    await firstKey.dispatchEvent("click");
+    await page.getByTestId("key-editor-overlay").waitFor({ timeout: 5000 });
     await expect(page).toHaveScreenshot("key-editor-open.png");
   });
 

@@ -524,6 +524,7 @@ export function KeyEditor() {
 
   return (
     <div
+      data-testid="key-editor-overlay"
       className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={handleDismiss}
     >
