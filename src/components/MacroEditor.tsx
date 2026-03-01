@@ -31,13 +31,7 @@ function newStep(): MacroStep {
   return { directive: "tap", bindings: ["&kp A"] };
 }
 
-export function MacroEditor({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
+export function MacroEditorContent() {
   const allMacros = useEditorStore((s) => s.config.macros) ?? [];
   // Filter out auto-managed mod macros
   const macros = allMacros.filter((m) => !isModMacro(m));
@@ -66,35 +60,44 @@ export function MacroEditor({
     updateMacros(macros.map((m) => (m.id === updated.id ? updated : m)));
   };
 
+  return !editing ? (
+    <div className="flex flex-col gap-2">
+      {macros.map((m) => (
+        <div key={m.id} className="flex items-center gap-2 border rounded p-2">
+          <span className="flex-1 text-sm font-mono">{m.name}</span>
+          <Button size="sm" variant="outline" onClick={() => setEditingId(m.id)}>
+            Edit
+          </Button>
+          <Button size="sm" variant="destructive" onClick={() => removeMacro(m.id)}>
+            Delete
+          </Button>
+        </div>
+      ))}
+      <Button onClick={addMacro}>Add Macro</Button>
+    </div>
+  ) : (
+    <MacroForm
+      macro={editing}
+      onChange={updateMacro}
+      onBack={() => setEditingId(null)}
+    />
+  );
+}
+
+export function MacroEditor({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Macros</DialogTitle>
         </DialogHeader>
-
-        {!editing ? (
-          <div className="flex flex-col gap-2">
-            {macros.map((m) => (
-              <div key={m.id} className="flex items-center gap-2 border rounded p-2">
-                <span className="flex-1 text-sm font-mono">{m.name}</span>
-                <Button size="sm" variant="outline" onClick={() => setEditingId(m.id)}>
-                  Edit
-                </Button>
-                <Button size="sm" variant="destructive" onClick={() => removeMacro(m.id)}>
-                  Delete
-                </Button>
-              </div>
-            ))}
-            <Button onClick={addMacro}>Add Macro</Button>
-          </div>
-        ) : (
-          <MacroForm
-            macro={editing}
-            onChange={updateMacro}
-            onBack={() => setEditingId(null)}
-          />
-        )}
+        <MacroEditorContent />
       </DialogContent>
     </Dialog>
   );
