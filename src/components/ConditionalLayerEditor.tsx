@@ -4,12 +4,6 @@ import { useState } from "react";
 import type { ConditionalLayerDefinition } from "@/types/schema";
 import { editorStore, useEditorStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 function newConditionalLayer(): ConditionalLayerDefinition {
   return {
@@ -81,24 +75,5 @@ export function ConditionalLayerEditorContent() {
           onChange={(e) => save({ ...editing, thenLayer: Number(e.target.value) })} />
       </label>
     </div>
-  );
-}
-
-export function ConditionalLayerEditor({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Conditional Layers</DialogTitle>
-        </DialogHeader>
-        <ConditionalLayerEditorContent />
-      </DialogContent>
-    </Dialog>
   );
 }

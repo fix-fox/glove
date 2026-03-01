@@ -4,12 +4,6 @@ import { useState } from "react";
 import type { ComboDefinition } from "@/types/schema";
 import { editorStore, useEditorStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 function newCombo(): ComboDefinition {
   return {
@@ -100,24 +94,5 @@ export function ComboEditorContent() {
           }} />
       </label>
     </div>
-  );
-}
-
-export function ComboEditor({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Combos</DialogTitle>
-        </DialogHeader>
-        <ComboEditorContent />
-      </DialogContent>
-    </Dialog>
   );
 }

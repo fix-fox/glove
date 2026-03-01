@@ -6,12 +6,6 @@ import { editorStore, useEditorStore } from "@/lib/store";
 import { isModMacro } from "@/lib/mod-active";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -81,25 +75,6 @@ export function MacroEditorContent() {
       onChange={updateMacro}
       onBack={() => setEditingId(null)}
     />
-  );
-}
-
-export function MacroEditor({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Macros</DialogTitle>
-        </DialogHeader>
-        <MacroEditorContent />
-      </DialogContent>
-    </Dialog>
   );
 }
 
