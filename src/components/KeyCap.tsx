@@ -90,7 +90,8 @@ export const KeyCap = memo(function KeyCap({
       onDragStart={(e) => {
         e.dataTransfer.effectAllowed = "all";
         e.dataTransfer.setData("text/plain", String(index));
-        onDragStart?.(index);
+        // Defer so browser captures ghost image before highlight renders
+        requestAnimationFrame(() => onDragStart?.(index));
       }}
       onDragEnd={() => {
         onDragEnd?.();
