@@ -1,7 +1,15 @@
-import type { Behavior, Key, KeyboardConfig, MacroDefinition, ModMorphDefinition, HoldTapDefinition, ComboDefinition, ConditionalLayerDefinition } from "../types/schema";
+import type { Behavior, Key, KeyboardConfig, MacroDefinition, ModMorphDefinition, HoldTapDefinition, ComboDefinition, ConditionalLayerDefinition, MouseSettings } from "../types/schema";
+import { DEFAULT_MOUSE_SETTINGS } from "../types/schema";
 import { parseModifiedKeyCode } from "./keycodes";
 
-function tapBehaviorToString(behavior: Behavior): string {
+const PRECISION_DIRECTION_MAP: Record<string, string> = {
+  MOVE_UP: "MOVE_Y(-{speed})",
+  MOVE_DOWN: "MOVE_Y({speed})",
+  MOVE_LEFT: "MOVE_X(-{speed})",
+  MOVE_RIGHT: "MOVE_X({speed})",
+};
+
+function tapBehaviorToString(behavior: Behavior, mouseSettings?: MouseSettings): string {
   switch (behavior.type) {
     case "kp":
       return `&kp ${behavior.keyCode}`;
@@ -34,8 +42,16 @@ function tapBehaviorToString(behavior: Behavior): string {
       return `&rgb_ug ${behavior.action}`;
     case "out":
       return `&out ${behavior.action}`;
-    case "mmv":
+    case "mmv": {
+      if (behavior.precision) {
+        const speed = (mouseSettings ?? DEFAULT_MOUSE_SETTINGS).precisionSpeed;
+        const template = PRECISION_DIRECTION_MAP[behavior.direction];
+        if (template) {
+          return `&mmv ${template.replace("{speed}", String(speed))}`;
+        }
+      }
       return `&mmv ${behavior.direction}`;
+    }
     case "msc":
       return `&msc ${behavior.direction}`;
     case "mkp":
@@ -49,9 +65,9 @@ function tapBehaviorToString(behavior: Behavior): string {
   }
 }
 
-export function behaviorToString(key: Key): string {
+export function behaviorToString(key: Key, mouseSettings?: MouseSettings): string {
   if (key.hold === null) {
-    return tapBehaviorToString(key.tap);
+    return tapBehaviorToString(key.tap, mouseSettings);
   }
 
   // Layer-tap: hold is a layer behavior
@@ -60,7 +76,7 @@ export function behaviorToString(key: Key): string {
       return `&lt ${key.hold.layerIndex} ${key.tap.keyCode}`;
     }
     // Non-kp tap: needs a custom hold-tap def named lt_<tapName>
-    const tapName = tapBehaviorToString(key.tap).replace(/^&/, "");
+    const tapName = tapBehaviorToString(key.tap, mouseSettings).replace(/^&/, "");
     return `&lt_${tapName} ${key.hold.layerIndex} 0`;
   }
 
@@ -70,7 +86,7 @@ export function behaviorToString(key: Key): string {
   }
 
   // Unsupported combination — validation should catch this before we get here
-  return tapBehaviorToString(key.tap);
+  return tapBehaviorToString(key.tap, mouseSettings);
 }
 
 export type ValidationError = {
@@ -398,8 +414,9 @@ export function generateKeymap(config: KeyboardConfig): GeneratorResult {
     return { ok: false, errors };
   }
 
+  const mouseSettings = config.mouseSettings;
   const layerBlocks = config.layers.map((layer) => {
-    const bindings = layer.keys.map((key) => behaviorToString(key));
+    const bindings = layer.keys.map((key) => behaviorToString(key, mouseSettings));
 
     // Chunk into physical rows
     const rows: string[] = [];

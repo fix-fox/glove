@@ -81,6 +81,11 @@ describe("behaviorLabel", () => {
     expect(behaviorLabel({ type: "mmv", direction: "MOVE_LEFT" })).toBe("M_LEFT");
   });
 
+  it("precision mmv returns p-prefixed label", () => {
+    expect(behaviorLabel({ type: "mmv", direction: "MOVE_UP", precision: true })).toBe("pM_UP");
+    expect(behaviorLabel({ type: "mmv", direction: "MOVE_DOWN", precision: true })).toBe("pM_DN");
+  });
+
   it("msc returns shortened direction", () => {
     expect(behaviorLabel({ type: "msc", direction: "SCRL_UP" })).toBe("SC_UP");
     expect(behaviorLabel({ type: "msc", direction: "SCRL_DOWN" })).toBe("SC_DN");

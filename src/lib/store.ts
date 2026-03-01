@@ -1,8 +1,8 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { temporal } from "zundo";
-import type { Behavior, KeyboardConfig } from "../types/schema";
-import { DEFAULT_KEY, GLOVE80_KEY_COUNT, KeyboardConfigSchema } from "../types/schema";
+import type { Behavior, KeyboardConfig, MouseSettings } from "../types/schema";
+import { DEFAULT_KEY, DEFAULT_MOUSE_SETTINGS, GLOVE80_KEY_COUNT, KeyboardConfigSchema } from "../types/schema";
 
 export interface EditorState {
   config: KeyboardConfig;
@@ -18,10 +18,51 @@ export interface EditorActions {
   removeLayer: (index: number) => void;
   renameLayer: (index: number, name: string) => void;
   loadConfig: (json: unknown) => void;
-  patchConfig: (patch: Partial<Pick<KeyboardConfig, "macros" | "modMorphs" | "holdTaps" | "combos" | "conditionalLayers" | "hrmSettings" | "layers">>) => void;
+  patchConfig: (patch: Partial<Pick<KeyboardConfig, "macros" | "modMorphs" | "holdTaps" | "combos" | "conditionalLayers" | "hrmSettings" | "mouseSettings" | "layers">>) => void;
 }
 
 export type EditorStore = EditorState & EditorActions;
+
+/**
+ * Migrate raw parameterized mmv directions (e.g. "MOVE_Y(-300)") to the
+ * structured { direction, precision } form. Returns the extracted speed
+ * if any raw values were found, or undefined if no migration was needed.
+ */
+const RAW_MMV_PATTERN = /^MOVE_([XY])\((-?\d+)\)$/;
+const RAW_TO_DIRECTION: Record<string, string> = {
+  "Y_neg": "MOVE_UP",
+  "Y_pos": "MOVE_DOWN",
+  "X_neg": "MOVE_LEFT",
+  "X_pos": "MOVE_RIGHT",
+};
+
+function migrateRawMmv(config: KeyboardConfig): void {
+  let detectedSpeed: number | undefined;
+  for (const layer of config.layers) {
+    for (const key of layer.keys) {
+      for (const side of [key.tap, key.hold] as (Behavior | null)[]) {
+        if (!side || side.type !== "mmv") continue;
+        const m = RAW_MMV_PATTERN.exec(side.direction);
+        if (!m) continue;
+        const axis = m[1]!;
+        const value = parseInt(m[2]!, 10);
+        const sign = value < 0 ? "neg" : "pos";
+        const mapped = RAW_TO_DIRECTION[`${axis}_${sign}`];
+        if (mapped) {
+          side.direction = mapped;
+          side.precision = true;
+          detectedSpeed = Math.abs(value);
+        }
+      }
+    }
+  }
+  if (detectedSpeed !== undefined && !config.mouseSettings) {
+    config.mouseSettings = {
+      normalSpeed: DEFAULT_MOUSE_SETTINGS.normalSpeed,
+      precisionSpeed: detectedSpeed,
+    };
+  }
+}
 
 function createDefaultConfig(): KeyboardConfig {
   return {
@@ -85,6 +126,8 @@ export function createEditorStore() {
           data.holdTaps ??= [];
           data.combos ??= [];
           data.conditionalLayers ??= [];
+          // Migrate raw parameterized mmv values to precision fields
+          migrateRawMmv(data);
           set((state) => {
             state.config = data;
             state.activeLayerIndex = 0;

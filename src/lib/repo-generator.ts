@@ -61,10 +61,13 @@ export function detectPointingFeature(config: KeyboardConfig): boolean {
   return false;
 }
 
-function generateConf(config: KeyboardConfig): string {
+export function generateConf(config: KeyboardConfig): string {
   const lines: string[] = [];
   if (detectPointingFeature(config)) {
     lines.push("CONFIG_ZMK_POINTING=y");
+    if (config.mouseSettings) {
+      lines.push(`CONFIG_ZMK_POINTING_DEFAULT_MOVE_VAL=${config.mouseSettings.normalSpeed}`);
+    }
   }
   return lines.length > 0 ? lines.join("\n") + "\n" : "";
 }

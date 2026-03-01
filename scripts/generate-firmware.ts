@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, unlinkSync, existsSync } from "fs";
 import { KeyboardConfigSchema } from "@/types/schema";
 import { generateKeymap } from "@/lib/generator";
-import { detectPointingFeature } from "@/lib/repo-generator";
+import { generateConf, detectPointingFeature } from "@/lib/repo-generator";
 
 const CONFIG_PATH = "config.json";
 const KEYMAP_PATH = "config/glove80.keymap";
@@ -22,8 +22,9 @@ if (!result.ok) {
 writeFileSync(KEYMAP_PATH, result.keymap);
 console.log(`Wrote ${KEYMAP_PATH}`);
 
-if (detectPointingFeature(config)) {
-  writeFileSync(CONF_PATH, "CONFIG_ZMK_POINTING=y\n");
+const conf = generateConf(config);
+if (conf) {
+  writeFileSync(CONF_PATH, conf);
   console.log(`Wrote ${CONF_PATH}`);
 } else if (existsSync(CONF_PATH)) {
   unlinkSync(CONF_PATH);

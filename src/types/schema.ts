@@ -82,6 +82,7 @@ const OutSchema = z.object({
 const MmvSchema = z.object({
   type: z.literal("mmv"),
   direction: z.string().min(1),
+  precision: z.boolean().optional(),
 });
 
 // &msc SCRL_UP, SCRL_DOWN, SCRL_LEFT, SCRL_RIGHT
@@ -241,6 +242,11 @@ export const ConditionalLayerDefinitionSchema = z.object({
 // Keyboard Config (root)
 // =============================================================================
 
+export const MouseSettingsSchema = z.object({
+  normalSpeed: z.number().int().min(1),
+  precisionSpeed: z.number().int().min(1),
+});
+
 export const HrmSettingsSchema = z.object({
   flavor: z.enum(["balanced", "tap-preferred", "hold-preferred"]),
   tappingTermMs: z.number().int().min(0),
@@ -258,6 +264,7 @@ export const KeyboardConfigSchema = z.object({
   combos: z.array(ComboDefinitionSchema).optional(),
   conditionalLayers: z.array(ConditionalLayerDefinitionSchema).optional(),
   hrmSettings: HrmSettingsSchema.optional(),
+  mouseSettings: MouseSettingsSchema.optional(),
 });
 
 // =============================================================================
@@ -273,6 +280,7 @@ export type ModMorphDefinition = z.infer<typeof ModMorphDefinitionSchema>;
 export type HoldTapDefinition = z.infer<typeof HoldTapDefinitionSchema>;
 export type ComboDefinition = z.infer<typeof ComboDefinitionSchema>;
 export type ConditionalLayerDefinition = z.infer<typeof ConditionalLayerDefinitionSchema>;
+export type MouseSettings = z.infer<typeof MouseSettingsSchema>;
 export type HrmSettings = z.infer<typeof HrmSettingsSchema>;
 export type KeyboardConfig = z.infer<typeof KeyboardConfigSchema>;
 
@@ -281,6 +289,11 @@ export type KeyboardConfig = z.infer<typeof KeyboardConfigSchema>;
 // =============================================================================
 
 export const GLOVE80_KEY_COUNT = 80;
+
+export const DEFAULT_MOUSE_SETTINGS: MouseSettings = {
+  normalSpeed: 900,
+  precisionSpeed: 300,
+};
 
 export const DEFAULT_KEY: Key = {
   tap: { type: "trans" },

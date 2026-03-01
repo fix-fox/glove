@@ -255,6 +255,90 @@ describe("loadConfig", () => {
   });
 });
 
+describe("loadConfig mmv migration", () => {
+  let store: ReturnType<typeof createEditorStore>;
+  beforeEach(() => { store = createEditorStore(); });
+
+  it("migrates raw MOVE_Y(-300) to precision MOVE_UP", () => {
+    const config = {
+      name: "Test",
+      version: 1,
+      layers: [{
+        id: randomUUID(),
+        name: "Base",
+        keys: Array.from({ length: 80 }, (_, i) =>
+          i === 0
+            ? { tap: { type: "mmv" as const, direction: "MOVE_Y(-300)" }, hold: null }
+            : { tap: { type: "trans" as const }, hold: null },
+        ),
+      }],
+    };
+    store.getState().loadConfig(config);
+    const key = store.getState().config.layers[0]!.keys[0]!;
+    expect(key.tap).toEqual({ type: "mmv", direction: "MOVE_UP", precision: true });
+  });
+
+  it("migrates raw MOVE_X(300) to precision MOVE_RIGHT", () => {
+    const config = {
+      name: "Test",
+      version: 1,
+      layers: [{
+        id: randomUUID(),
+        name: "Base",
+        keys: Array.from({ length: 80 }, (_, i) =>
+          i === 0
+            ? { tap: { type: "mmv" as const, direction: "MOVE_X(300)" }, hold: null }
+            : { tap: { type: "trans" as const }, hold: null },
+        ),
+      }],
+    };
+    store.getState().loadConfig(config);
+    const key = store.getState().config.layers[0]!.keys[0]!;
+    expect(key.tap).toEqual({ type: "mmv", direction: "MOVE_RIGHT", precision: true });
+  });
+
+  it("sets mouseSettings from migrated speed", () => {
+    const config = {
+      name: "Test",
+      version: 1,
+      layers: [{
+        id: randomUUID(),
+        name: "Base",
+        keys: Array.from({ length: 80 }, (_, i) =>
+          i === 0
+            ? { tap: { type: "mmv" as const, direction: "MOVE_Y(500)" }, hold: null }
+            : { tap: { type: "trans" as const }, hold: null },
+        ),
+      }],
+    };
+    store.getState().loadConfig(config);
+    expect(store.getState().config.mouseSettings).toEqual({
+      normalSpeed: 900,
+      precisionSpeed: 500,
+    });
+  });
+
+  it("does not migrate normal MOVE_UP direction", () => {
+    const config = {
+      name: "Test",
+      version: 1,
+      layers: [{
+        id: randomUUID(),
+        name: "Base",
+        keys: Array.from({ length: 80 }, (_, i) =>
+          i === 0
+            ? { tap: { type: "mmv" as const, direction: "MOVE_UP" }, hold: null }
+            : { tap: { type: "trans" as const }, hold: null },
+        ),
+      }],
+    };
+    store.getState().loadConfig(config);
+    const key = store.getState().config.layers[0]!.keys[0]!;
+    expect(key.tap).toEqual({ type: "mmv", direction: "MOVE_UP" });
+    expect(store.getState().config.mouseSettings).toBeUndefined();
+  });
+});
+
 describe("undo/redo", () => {
   let store: ReturnType<typeof createEditorStore>;
 

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { behaviorToString, generateKeymap, sanitizeLayerName, validateConfig } from "./generator";
-import type { Key, KeyboardConfig, Layer } from "../types/schema";
+import type { Key, KeyboardConfig, Layer, MouseSettings } from "../types/schema";
 import { randomUUID } from "crypto";
 
 describe("behaviorToString", () => {
@@ -87,6 +87,24 @@ describe("behaviorToString", () => {
   it("generates &mmv with direction", () => {
     const key: Key = { tap: { type: "mmv", direction: "MOVE_UP" }, hold: null };
     expect(behaviorToString(key)).toBe("&mmv MOVE_UP");
+  });
+
+  it("generates &mmv with precision direction using default speed", () => {
+    const key: Key = { tap: { type: "mmv", direction: "MOVE_UP", precision: true }, hold: null };
+    expect(behaviorToString(key)).toBe("&mmv MOVE_Y(-300)");
+  });
+
+  it("generates &mmv with precision direction using custom speed", () => {
+    const key: Key = { tap: { type: "mmv", direction: "MOVE_DOWN", precision: true }, hold: null };
+    expect(behaviorToString(key, { normalSpeed: 900, precisionSpeed: 150 })).toBe("&mmv MOVE_Y(150)");
+  });
+
+  it("generates precision mmv for all four directions", () => {
+    const ms = { normalSpeed: 900, precisionSpeed: 200 };
+    expect(behaviorToString({ tap: { type: "mmv", direction: "MOVE_UP", precision: true }, hold: null }, ms)).toBe("&mmv MOVE_Y(-200)");
+    expect(behaviorToString({ tap: { type: "mmv", direction: "MOVE_DOWN", precision: true }, hold: null }, ms)).toBe("&mmv MOVE_Y(200)");
+    expect(behaviorToString({ tap: { type: "mmv", direction: "MOVE_LEFT", precision: true }, hold: null }, ms)).toBe("&mmv MOVE_X(-200)");
+    expect(behaviorToString({ tap: { type: "mmv", direction: "MOVE_RIGHT", precision: true }, hold: null }, ms)).toBe("&mmv MOVE_X(200)");
   });
 
   it("generates &msc with direction", () => {

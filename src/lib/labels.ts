@@ -223,8 +223,10 @@ export function behaviorLabel(
       return behavior.action;
     case "out":
       return behavior.action === "OUT_BLE" ? "BLE" : "USB";
-    case "mmv":
-      return behavior.direction.replace("MOVE_", "M_").replace("DOWN", "DN").replace("RIGHT", "RHT");
+    case "mmv": {
+      const base = behavior.direction.replace("MOVE_", "M_").replace("DOWN", "DN").replace("RIGHT", "RHT");
+      return behavior.precision ? `p${base}` : base;
+    }
     case "msc":
       return behavior.direction.replace("SCRL_", "SC_").replace("DOWN", "DN").replace("RIGHT", "RHT");
     case "mkp":
