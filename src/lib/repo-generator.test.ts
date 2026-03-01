@@ -44,7 +44,7 @@ describe("generateRepo", () => {
     expect(conf!.content).toContain("CONFIG_ZMK_POINTING=y");
   });
 
-  it("includes POINTING_DEFAULT_MOVE_VAL when mouseSettings present", () => {
+  it("emits #define ZMK_POINTING_DEFAULT_MOVE_VAL in keymap when mouseSettings present", () => {
     const config = makeConfig({
       mouseSettings: { normalSpeed: 600, precisionSpeed: 200 },
     });
@@ -56,12 +56,12 @@ describe("generateRepo", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
 
-    const conf = result.files.find((f) => f.path === "config/glove80.conf");
-    expect(conf).toBeDefined();
-    expect(conf!.content).toContain("CONFIG_ZMK_POINTING_DEFAULT_MOVE_VAL=600");
+    const keymap = result.files.find((f) => f.path === "config/glove80.keymap");
+    expect(keymap).toBeDefined();
+    expect(keymap!.content).toContain("#define ZMK_POINTING_DEFAULT_MOVE_VAL 600");
   });
 
-  it("omits POINTING_DEFAULT_MOVE_VAL when no mouseSettings", () => {
+  it("omits ZMK_POINTING_DEFAULT_MOVE_VAL define when no mouseSettings", () => {
     const config = makeConfig();
     config.layers[0]!.keys[0] = {
       tap: { type: "mmv", direction: "MOVE_UP" },
@@ -71,9 +71,9 @@ describe("generateRepo", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
 
-    const conf = result.files.find((f) => f.path === "config/glove80.conf");
-    expect(conf).toBeDefined();
-    expect(conf!.content).not.toContain("POINTING_DEFAULT_MOVE_VAL");
+    const keymap = result.files.find((f) => f.path === "config/glove80.keymap");
+    expect(keymap).toBeDefined();
+    expect(keymap!.content).not.toContain("ZMK_POINTING_DEFAULT_MOVE_VAL");
   });
 
   it("omits glove80.conf when no pointing behaviors", () => {

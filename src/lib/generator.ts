@@ -437,6 +437,10 @@ ${bindingsStr}
   });
 
   const features = detectFeatures(config);
+  const defines: string[] = [];
+  if (features.pointing && mouseSettings) {
+    defines.push(`#define ZMK_POINTING_DEFAULT_MOVE_VAL ${mouseSettings.normalSpeed}`);
+  }
   const includes = [
     "#include <behaviors.dtsi>",
     "#include <dt-bindings/zmk/keys.h>",
@@ -452,7 +456,8 @@ ${bindingsStr}
   const combosSection = generateCombosSection(config.combos ?? []);
   const condLayersSection = generateConditionalLayersSection(config.conditionalLayers ?? []);
 
-  const keymap = `${includes.join("\n")}
+  const preamble = defines.length > 0 ? defines.join("\n") + "\n\n" : "";
+  const keymap = `${preamble}${includes.join("\n")}
 
 ${overridesSection}/ {
 ${macrosSection}${behaviorsSection}${combosSection}${condLayersSection}    keymap {
