@@ -63,6 +63,7 @@ export function Toolbar() {
 
   return (
     <div
+      data-testid="toolbar"
       className="flex flex-wrap items-center gap-2"
       onClick={(e) => e.stopPropagation()}
     >

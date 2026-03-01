@@ -1,28 +1,36 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("keyboard layout", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/");
-    // Wait for the grid to render
-    await page.locator(".grid").first().waitFor();
-  });
+test.beforeEach(async ({ page }) => {
+  // Block save/flash API routes to prevent side effects
+  await page.route("**/api/save", (route) =>
+    route.fulfill({ status: 200, body: JSON.stringify({ ok: true }) }),
+  );
+  await page.route("**/api/flash", (route) =>
+    route.fulfill({ status: 200, body: "mocked" }),
+  );
 
-  test("default empty layout", async ({ page }) => {
-    await expect(page.locator(".grid").first()).toHaveScreenshot("default-layout.png");
-  });
+  await page.goto("/");
+  await page.getByTestId("layer-tabs").waitFor();
+});
 
-  test("key editor open", async ({ page }) => {
-    // Click a non-magic key to open the editor — use dispatchEvent
-    // to avoid click coordinates landing on the wrapper div
-    const firstKey = page.locator(".grid button").first();
-    await firstKey.dispatchEvent("click");
-    await page.getByTestId("key-editor-overlay").waitFor({ timeout: 5000 });
-    await expect(page).toHaveScreenshot("key-editor-open.png");
-  });
+test("default layout grid", async ({ page }) => {
+  await expect(page.locator(".grid").first()).toHaveScreenshot("default-layout.png");
+});
 
-  test("toolbar", async ({ page }) => {
-    // Toolbar is the first flex row
-    const toolbar = page.locator(".flex.flex-wrap.items-center").first();
-    await expect(toolbar).toHaveScreenshot("toolbar.png");
-  });
+test("toolbar", async ({ page }) => {
+  await expect(page.getByTestId("toolbar")).toHaveScreenshot("toolbar.png");
+});
+
+test("base layer shows magic positions", async ({ page }) => {
+  const grid = page.locator(".grid").first();
+  await expect(grid.locator("text=Magic").first()).toBeVisible();
+  await expect(page).toHaveScreenshot("base-layer-magic.png");
+});
+
+
+test("key editor open", async ({ page }) => {
+  const firstKey = page.locator(".grid button").first();
+  await firstKey.dispatchEvent("click");
+  await page.getByTestId("key-editor-overlay").waitFor({ timeout: 5000 });
+  await expect(page).toHaveScreenshot("key-editor-open.png");
 });

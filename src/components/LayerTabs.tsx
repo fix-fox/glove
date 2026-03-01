@@ -14,7 +14,7 @@ export function LayerTabs() {
     .filter(({ layer }) => !isModActiveLayer(layer));
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div data-testid="layer-tabs" className="flex items-center gap-2 flex-wrap">
       {visibleLayers.map(({ layer, idx }) => (
         <Button
           key={layer.id}
