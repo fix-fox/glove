@@ -100,7 +100,7 @@ export const KeyCap = memo(function KeyCap({
         flex flex-col items-center justify-center
         rounded-md border p-0.5
         text-[11px] leading-tight
-        h-full
+        w-full h-full
         cursor-pointer select-none
         transition-colors
         ${isSelected
