@@ -193,7 +193,7 @@ describe("ensureLtDef", () => {
     expect(result2.holdTaps).toHaveLength(1);
   });
 
-  it("uses custom hrmSettings when present", () => {
+  it("uses ltSettings when present (not hrmSettings)", () => {
     const config: KeyboardConfig = {
       ...makeConfig([makeLayer("Base")]),
       hrmSettings: {
@@ -202,11 +202,18 @@ describe("ensureLtDef", () => {
         quickTapMs: 200,
         requirePriorIdleMs: 100,
       },
+      ltSettings: {
+        flavor: "tap-preferred",
+        tappingTermMs: 200,
+        quickTapMs: 175,
+        requirePriorIdleMs: 0,
+      },
     };
     const result = ensureLtDef(config);
     const ht = result.holdTaps![0]!;
-    expect(ht.flavor).toBe("hold-preferred");
-    expect(ht.tappingTermMs).toBe(300);
+    expect(ht.flavor).toBe("tap-preferred");
+    expect(ht.tappingTermMs).toBe(200);
+    expect(ht.requirePriorIdleMs).toBe(0);
   });
 });
 

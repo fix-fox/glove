@@ -3,12 +3,17 @@
 // =============================================================================
 
 import type { KeyboardConfig, Layer, MacroDefinition, HoldTapDefinition, HrmSettings } from "../types/schema";
-import { DEFAULT_KEY, GLOVE80_KEY_COUNT } from "../types/schema";
+import { DEFAULT_KEY, DEFAULT_LT_SETTINGS, GLOVE80_KEY_COUNT } from "../types/schema";
 import { HRM_DEFAULTS, hrmSide, getHRMTriggerPositions } from "./hrm";
 
 /** Resolve effective HRM timing settings from config (or fallback to defaults). */
 export function getEffectiveHrmSettings(config: KeyboardConfig): HrmSettings {
   return config.hrmSettings ?? HRM_DEFAULTS;
+}
+
+/** Resolve effective layer-tap timing settings from config (or fallback to defaults). */
+export function getEffectiveLtSettings(config: KeyboardConfig): HrmSettings {
+  return config.ltSettings ?? DEFAULT_LT_SETTINGS;
 }
 
 export const MOD_ACTIVE_LAYER_NAME = "mod_active";
@@ -151,7 +156,7 @@ export const LT_DEF_NAME = "lt";
 export function ensureLtDef(config: KeyboardConfig): KeyboardConfig {
   const holdTaps = config.holdTaps ?? [];
   if (holdTaps.some((ht) => ht.name === LT_DEF_NAME)) return config;
-  const s = getEffectiveHrmSettings(config);
+  const s = getEffectiveLtSettings(config);
   const def: HoldTapDefinition = {
     id: crypto.randomUUID(),
     name: LT_DEF_NAME,
@@ -182,7 +187,7 @@ export function ensureLayerTapDef(
   if (holdTaps.some((ht) => ht.name === holdTapName)) {
     return { config, holdTapName };
   }
-  const s = getEffectiveHrmSettings(config);
+  const s = getEffectiveLtSettings(config);
   const def: HoldTapDefinition = {
     id: crypto.randomUUID(),
     name: holdTapName,

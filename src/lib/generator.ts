@@ -305,7 +305,7 @@ function generateHoldTapBlock(ht: HoldTapDefinition): string {
   if (ht.quickTapMs !== undefined) {
     lines.push(`${indent}quick-tap-ms = <${ht.quickTapMs}>;`);
   }
-  if (ht.requirePriorIdleMs !== undefined) {
+  if (ht.requirePriorIdleMs !== undefined && ht.requirePriorIdleMs > 0) {
     lines.push(`${indent}require-prior-idle-ms = <${ht.requirePriorIdleMs}>;`);
   }
   if (!isOverride) {

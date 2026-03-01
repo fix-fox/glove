@@ -264,6 +264,7 @@ export const KeyboardConfigSchema = z.object({
   combos: z.array(ComboDefinitionSchema).optional(),
   conditionalLayers: z.array(ConditionalLayerDefinitionSchema).optional(),
   hrmSettings: HrmSettingsSchema.optional(),
+  ltSettings: HrmSettingsSchema.optional(),
   mouseSettings: MouseSettingsSchema.optional(),
 });
 
@@ -289,6 +290,13 @@ export type KeyboardConfig = z.infer<typeof KeyboardConfigSchema>;
 // =============================================================================
 
 export const GLOVE80_KEY_COUNT = 80;
+
+export const DEFAULT_LT_SETTINGS: HrmSettings = {
+  flavor: "balanced",
+  tappingTermMs: 280,
+  quickTapMs: 175,
+  requirePriorIdleMs: 0,
+};
 
 export const DEFAULT_MOUSE_SETTINGS: MouseSettings = {
   normalSpeed: 900,

@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import type { HrmSettings, HoldTapDefinition, MouseSettings } from "@/types/schema";
-import { DEFAULT_MOUSE_SETTINGS } from "@/types/schema";
+import { DEFAULT_LT_SETTINGS, DEFAULT_MOUSE_SETTINGS } from "@/types/schema";
 import { editorStore, useEditorStore } from "@/lib/store";
 import { HRM_DEFAULTS } from "@/lib/hrm";
-import { getEffectiveHrmSettings, LT_DEF_NAME } from "@/lib/mod-active";
+import { getEffectiveHrmSettings, getEffectiveLtSettings, LT_DEF_NAME } from "@/lib/mod-active";
 import { isHRMName } from "@/lib/labels";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -29,8 +29,22 @@ const FLAVOR_OPTIONS: { value: HrmSettings["flavor"]; label: string }[] = [
   { value: "hold-preferred", label: "Hold-preferred" },
 ];
 
-function isAutoManagedHoldTap(ht: HoldTapDefinition): boolean {
-  return isHRMName(ht.name) || ht.name === LT_DEF_NAME;
+function isLtHoldTap(ht: HoldTapDefinition): boolean {
+  return ht.name === LT_DEF_NAME || ht.name.startsWith("lt_");
+}
+
+const INPUT_CLASS = "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm";
+
+function NumberInput({ value, onChange, min = 0 }: { value: number; onChange: (v: number) => void; min?: number }) {
+  return (
+    <input
+      type="number"
+      min={min}
+      value={value}
+      onChange={(e) => onChange(Math.max(min, parseInt(e.target.value) || min))}
+      className={INPUT_CLASS}
+    />
+  );
 }
 
 export function SettingsDialog({
@@ -41,13 +55,22 @@ export function SettingsDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const config = useEditorStore((s) => s.config);
-  const current = getEffectiveHrmSettings(config);
+  const currentHrm = getEffectiveHrmSettings(config);
+  const currentLt = getEffectiveLtSettings(config);
 
-  const [flavor, setFlavor] = useState(current.flavor);
-  const [tappingTermMs, setTappingTermMs] = useState(current.tappingTermMs);
-  const [quickTapMs, setQuickTapMs] = useState(current.quickTapMs);
-  const [requirePriorIdleMs, setRequirePriorIdleMs] = useState(current.requirePriorIdleMs);
+  // HRM state
+  const [hrmFlavor, setHrmFlavor] = useState(currentHrm.flavor);
+  const [hrmTappingTermMs, setHrmTappingTermMs] = useState(currentHrm.tappingTermMs);
+  const [hrmQuickTapMs, setHrmQuickTapMs] = useState(currentHrm.quickTapMs);
+  const [hrmPriorIdleMs, setHrmPriorIdleMs] = useState(currentHrm.requirePriorIdleMs);
 
+  // LT state
+  const [ltFlavor, setLtFlavor] = useState(currentLt.flavor);
+  const [ltTappingTermMs, setLtTappingTermMs] = useState(currentLt.tappingTermMs);
+  const [ltQuickTapMs, setLtQuickTapMs] = useState(currentLt.quickTapMs);
+  const [ltPriorIdleMs, setLtPriorIdleMs] = useState(currentLt.requirePriorIdleMs);
+
+  // Mouse state
   const currentMouse = config.mouseSettings ?? DEFAULT_MOUSE_SETTINGS;
   const [normalSpeed, setNormalSpeed] = useState(currentMouse.normalSpeed);
   const [precisionSpeed, setPrecisionSpeed] = useState(currentMouse.precisionSpeed);
@@ -56,11 +79,16 @@ export function SettingsDialog({
   useEffect(() => {
     if (open) {
       const c = editorStore.getState().config;
-      const s = getEffectiveHrmSettings(c);
-      setFlavor(s.flavor);
-      setTappingTermMs(s.tappingTermMs);
-      setQuickTapMs(s.quickTapMs);
-      setRequirePriorIdleMs(s.requirePriorIdleMs);
+      const hrm = getEffectiveHrmSettings(c);
+      setHrmFlavor(hrm.flavor);
+      setHrmTappingTermMs(hrm.tappingTermMs);
+      setHrmQuickTapMs(hrm.quickTapMs);
+      setHrmPriorIdleMs(hrm.requirePriorIdleMs);
+      const lt = getEffectiveLtSettings(c);
+      setLtFlavor(lt.flavor);
+      setLtTappingTermMs(lt.tappingTermMs);
+      setLtQuickTapMs(lt.quickTapMs);
+      setLtPriorIdleMs(lt.requirePriorIdleMs);
       const ms = c.mouseSettings ?? DEFAULT_MOUSE_SETTINGS;
       setNormalSpeed(ms.normalSpeed);
       setPrecisionSpeed(ms.precisionSpeed);
@@ -68,137 +96,137 @@ export function SettingsDialog({
   }, [open]);
 
   const handleSave = () => {
-    const newSettings: HrmSettings = {
-      flavor,
-      tappingTermMs,
-      quickTapMs,
-      requirePriorIdleMs,
+    const newHrm: HrmSettings = {
+      flavor: hrmFlavor,
+      tappingTermMs: hrmTappingTermMs,
+      quickTapMs: hrmQuickTapMs,
+      requirePriorIdleMs: hrmPriorIdleMs,
+    };
+    const newLt: HrmSettings = {
+      flavor: ltFlavor,
+      tappingTermMs: ltTappingTermMs,
+      quickTapMs: ltQuickTapMs,
+      requirePriorIdleMs: ltPriorIdleMs,
     };
 
-    // Update all existing auto-managed hold-tap definitions
+    // Apply matching settings to each auto-managed hold-tap definition
     const holdTaps = (editorStore.getState().config.holdTaps ?? []).map((ht) => {
-      if (!isAutoManagedHoldTap(ht)) return ht;
-      return {
-        ...ht,
-        flavor: newSettings.flavor,
-        tappingTermMs: newSettings.tappingTermMs,
-        quickTapMs: newSettings.quickTapMs,
-        requirePriorIdleMs: newSettings.requirePriorIdleMs,
-      };
+      if (isHRMName(ht.name)) {
+        return { ...ht, ...newHrm };
+      }
+      if (isLtHoldTap(ht)) {
+        return { ...ht, ...newLt };
+      }
+      return ht;
     });
 
     const newMouseSettings: MouseSettings = { normalSpeed, precisionSpeed };
 
     editorStore.getState().patchConfig({
-      hrmSettings: newSettings,
+      hrmSettings: newHrm,
+      ltSettings: newLt,
       holdTaps,
       mouseSettings: newMouseSettings,
     });
     onOpenChange(false);
   };
 
-  const isDefault =
-    flavor === HRM_DEFAULTS.flavor &&
-    tappingTermMs === HRM_DEFAULTS.tappingTermMs &&
-    quickTapMs === HRM_DEFAULTS.quickTapMs &&
-    requirePriorIdleMs === HRM_DEFAULTS.requirePriorIdleMs;
+  const handleResetHrm = () => {
+    setHrmFlavor(HRM_DEFAULTS.flavor);
+    setHrmTappingTermMs(HRM_DEFAULTS.tappingTermMs);
+    setHrmQuickTapMs(HRM_DEFAULTS.quickTapMs);
+    setHrmPriorIdleMs(HRM_DEFAULTS.requirePriorIdleMs);
+  };
 
-  const handleReset = () => {
-    setFlavor(HRM_DEFAULTS.flavor);
-    setTappingTermMs(HRM_DEFAULTS.tappingTermMs);
-    setQuickTapMs(HRM_DEFAULTS.quickTapMs);
-    setRequirePriorIdleMs(HRM_DEFAULTS.requirePriorIdleMs);
+  const handleResetLt = () => {
+    setLtFlavor(DEFAULT_LT_SETTINGS.flavor);
+    setLtTappingTermMs(DEFAULT_LT_SETTINGS.tappingTermMs);
+    setLtQuickTapMs(DEFAULT_LT_SETTINGS.quickTapMs);
+    setLtPriorIdleMs(DEFAULT_LT_SETTINGS.requirePriorIdleMs);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm">
+      <DialogContent className="max-w-sm max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          <h3 className="text-sm font-medium">HRM / Layer-tap</h3>
+          {/* ── HRM ── */}
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-medium">Home Row Mods</h3>
+            <Button variant="ghost" size="sm" className="text-xs h-6 px-2" onClick={handleResetHrm}>Reset</Button>
+          </div>
+
           <div className="flex flex-col gap-1.5">
             <Label>Flavor</Label>
-            <Select value={flavor} onValueChange={(v) => setFlavor(v as HrmSettings["flavor"])}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
+            <Select value={hrmFlavor} onValueChange={(v) => setHrmFlavor(v as HrmSettings["flavor"])}>
+              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {FLAVOR_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
+                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-
           <div className="flex flex-col gap-1.5">
             <Label>Tapping Term (ms)</Label>
-            <input
-              type="number"
-              min={0}
-              value={tappingTermMs}
-              onChange={(e) => setTappingTermMs(Math.max(0, parseInt(e.target.value) || 0))}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-            />
+            <NumberInput value={hrmTappingTermMs} onChange={setHrmTappingTermMs} />
           </div>
-
           <div className="flex flex-col gap-1.5">
             <Label>Quick Tap (ms)</Label>
-            <input
-              type="number"
-              min={0}
-              value={quickTapMs}
-              onChange={(e) => setQuickTapMs(Math.max(0, parseInt(e.target.value) || 0))}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-            />
+            <NumberInput value={hrmQuickTapMs} onChange={setHrmQuickTapMs} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label>Prior Idle (ms)</Label>
+            <NumberInput value={hrmPriorIdleMs} onChange={setHrmPriorIdleMs} />
+          </div>
+
+          {/* ── Layer-Tap ── */}
+          <div className="flex items-center justify-between mt-2">
+            <h3 className="text-sm font-medium">Layer-Tap</h3>
+            <Button variant="ghost" size="sm" className="text-xs h-6 px-2" onClick={handleResetLt}>Reset</Button>
           </div>
 
           <div className="flex flex-col gap-1.5">
+            <Label>Flavor</Label>
+            <Select value={ltFlavor} onValueChange={(v) => setLtFlavor(v as HrmSettings["flavor"])}>
+              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {FLAVOR_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label>Tapping Term (ms)</Label>
+            <NumberInput value={ltTappingTermMs} onChange={setLtTappingTermMs} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label>Quick Tap (ms)</Label>
+            <NumberInput value={ltQuickTapMs} onChange={setLtQuickTapMs} />
+          </div>
+          <div className="flex flex-col gap-1.5">
             <Label>Prior Idle (ms)</Label>
-            <input
-              type="number"
-              min={0}
-              value={requirePriorIdleMs}
-              onChange={(e) => setRequirePriorIdleMs(Math.max(0, parseInt(e.target.value) || 0))}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-            />
+            <NumberInput value={ltPriorIdleMs} onChange={setLtPriorIdleMs} />
           </div>
 
+          {/* ── Mouse Speed ── */}
           <h3 className="text-sm font-medium mt-2">Mouse Speed</h3>
 
           <div className="flex flex-col gap-1.5">
             <Label>Normal Speed</Label>
-            <input
-              type="number"
-              min={1}
-              value={normalSpeed}
-              onChange={(e) => setNormalSpeed(Math.max(1, parseInt(e.target.value) || 1))}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-            />
+            <NumberInput value={normalSpeed} onChange={setNormalSpeed} min={1} />
           </div>
-
           <div className="flex flex-col gap-1.5">
             <Label>Precision Speed</Label>
-            <input
-              type="number"
-              min={1}
-              value={precisionSpeed}
-              onChange={(e) => setPrecisionSpeed(Math.max(1, parseInt(e.target.value) || 1))}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-            />
+            <NumberInput value={precisionSpeed} onChange={setPrecisionSpeed} min={1} />
           </div>
 
           <div className="flex gap-2 justify-end">
-            <Button variant="outline" onClick={handleReset} disabled={isDefault}>
-              Reset
-            </Button>
-            <Button onClick={handleSave}>
-              Save
-            </Button>
+            <Button onClick={handleSave}>Save</Button>
           </div>
         </div>
       </DialogContent>
