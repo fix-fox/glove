@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Settings } from "lucide-react";
+import { useStore } from "zustand";
+import { Settings, Undo2, Redo2 } from "lucide-react";
 import { ExportDialog } from "./ExportDialog";
 import { ErrorDialog } from "./ErrorDialog";
 import { FlashDialog } from "./FlashDialog";
@@ -18,6 +19,9 @@ export function Toolbar() {
   const [flashRunning, setFlashRunning] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [errorOpen, setErrorOpen] = useState(false);
+
+  const canUndo = useStore(editorStore.temporal, (s) => s.pastStates.length > 0);
+  const canRedo = useStore(editorStore.temporal, (s) => s.futureStates.length > 0);
 
   const handleFlash = useCallback(async () => {
     setFlashLines([]);
@@ -62,6 +66,26 @@ export function Toolbar() {
       className="flex flex-wrap items-center gap-2"
       onClick={(e) => e.stopPropagation()}
     >
+      <div className="flex items-center gap-0.5">
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={!canUndo}
+          onClick={() => editorStore.temporal.getState().undo()}
+          title="Undo (Ctrl+Z)"
+        >
+          <Undo2 className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={!canRedo}
+          onClick={() => editorStore.temporal.getState().redo()}
+          title="Redo (Ctrl+Shift+Z)"
+        >
+          <Redo2 className="h-4 w-4" />
+        </Button>
+      </div>
       <SaveSplitButton
         onFlash={handleFlash}
         onExport={() => setExportOpen(true)}

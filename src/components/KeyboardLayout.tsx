@@ -82,6 +82,25 @@ export function KeyboardLayout() {
     setDragState(null);
   }, []);
 
+  // ── Undo / Redo shortcuts ───────────────────────────────────────────
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+
+      if (e.key === "z" && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+        e.preventDefault();
+        editorStore.temporal.getState().undo();
+      } else if (e.key === "z" && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+        e.preventDefault();
+        editorStore.temporal.getState().redo();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // ── Modifier tracking during drag ─────────────────────────────────────
 
   useEffect(() => {
