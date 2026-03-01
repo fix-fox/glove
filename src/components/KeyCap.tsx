@@ -42,7 +42,7 @@ export const KeyCap = memo(function KeyCap({
         className="
           relative flex flex-col items-center justify-center
           rounded-md border p-0.5
-          text-[11px] leading-tight aspect-square
+          text-[11px] leading-tight h-full
           select-none
           border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800
           text-muted-foreground
@@ -100,7 +100,7 @@ export const KeyCap = memo(function KeyCap({
         flex flex-col items-center justify-center
         rounded-md border p-0.5
         text-[11px] leading-tight
-        aspect-square
+        h-full
         cursor-pointer select-none
         transition-colors
         ${isSelected

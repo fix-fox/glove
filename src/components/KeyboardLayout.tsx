@@ -189,6 +189,7 @@ export function KeyboardLayout() {
           return (
             <div
               key={keyIndex}
+              className="aspect-square min-w-0"
               onDragOver={(e) => handleDragOver(e, keyIndex)}
               onDrop={(e) => handleDrop(e, keyIndex)}
             >
