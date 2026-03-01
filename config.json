@@ -6505,7 +6505,8 @@
         {
           "tap": {
             "type": "mmv",
-            "direction": "MOVE_Y(-300)"
+            "direction": "MOVE_UP",
+            "precision": true
           },
           "hold": null
         },
@@ -6572,21 +6573,24 @@
         {
           "tap": {
             "type": "mmv",
-            "direction": "MOVE_X(-300)"
+            "direction": "MOVE_LEFT",
+            "precision": true
           },
           "hold": null
         },
         {
           "tap": {
             "type": "mmv",
-            "direction": "MOVE_Y(300)"
+            "direction": "MOVE_DOWN",
+            "precision": true
           },
           "hold": null
         },
         {
           "tap": {
             "type": "mmv",
-            "direction": "MOVE_X(300)"
+            "direction": "MOVE_RIGHT",
+            "precision": true
           },
           "hold": null
         },
@@ -8205,9 +8209,9 @@
       "id": "7f5415f0-7ecd-4464-bb4d-2e5d58875767",
       "name": "lt",
       "flavor": "balanced",
-      "tappingTermMs": 280,
+      "tappingTermMs": 200,
       "quickTapMs": 175,
-      "requirePriorIdleMs": 150,
+      "requirePriorIdleMs": 0,
       "holdBinding": "&mo",
       "tapBinding": "&kp"
     },
@@ -8334,9 +8338,9 @@
       "id": "b36fe461-4e33-47d9-b69c-dd2a87e37cb2",
       "name": "lt_mm_bspc_shift_del",
       "flavor": "balanced",
-      "tappingTermMs": 280,
+      "tappingTermMs": 200,
       "quickTapMs": 175,
-      "requirePriorIdleMs": 150,
+      "requirePriorIdleMs": 0,
       "holdBinding": "&mo",
       "tapBinding": "&mm_bspc_shift_del"
     }
@@ -8402,5 +8406,21 @@
       ],
       "thenLayer": 14
     }
-  ]
+  ],
+  "mouseSettings": {
+    "normalSpeed": 900,
+    "precisionSpeed": 300
+  },
+  "ltSettings": {
+    "flavor": "balanced",
+    "tappingTermMs": 200,
+    "quickTapMs": 175,
+    "requirePriorIdleMs": 0
+  },
+  "hrmSettings": {
+    "flavor": "balanced",
+    "tappingTermMs": 280,
+    "quickTapMs": 175,
+    "requirePriorIdleMs": 150
+  }
 }
