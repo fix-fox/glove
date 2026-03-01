@@ -272,13 +272,14 @@ export function KeyEditor() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleDismiss();
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        handleOK();
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleDismiss]);
+  }, [handleOK]);
 
   if (selectedKeyIndex === null || !key || (activeLayerIndex === 0 && isMagicPosition(selectedKeyIndex))) return null;
 
