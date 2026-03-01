@@ -15,24 +15,13 @@ export function useAutoSave() {
       })
       .catch(() => { /* no saved config — use default */ });
 
-    // Auto-save on config changes (debounced 500ms)
-    let timeout: ReturnType<typeof setTimeout>;
-    const unsub = editorStore.subscribe((state, prevState) => {
-      if (state.config !== prevState.config) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          fetch("/api/config", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(state.config),
-          }).catch(() => { /* silently ignore save errors */ });
-        }, 500);
+    // Warn before closing with unsaved changes
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (editorStore.getState().isDirty) {
+        e.preventDefault();
       }
-    });
-
-    return () => {
-      clearTimeout(timeout);
-      unsub();
     };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, []);
 }

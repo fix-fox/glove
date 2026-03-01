@@ -7,10 +7,14 @@ import { MacroEditor } from "./MacroEditor";
 import { ComboEditor } from "./ComboEditor";
 import { ConditionalLayerEditor } from "./ConditionalLayerEditor";
 import { SettingsDialog } from "./SettingsDialog";
+import { editorStore, useEditorStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export function Toolbar() {
+  const isDirty = useEditorStore((s) => s.isDirty);
+  const [saving, setSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [macrosOpen, setMacrosOpen] = useState(false);
   const [combosOpen, setCombosOpen] = useState(false);
@@ -20,11 +24,46 @@ export function Toolbar() {
   const [errorOpen, setErrorOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
 
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveStatus(null);
+    try {
+      const res = await fetch("/api/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editorStore.getState().config),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        editorStore.getState().markClean();
+        setSaveStatus("Saved");
+        setTimeout(() => setSaveStatus(null), 2000);
+      } else {
+        setSaveStatus(`Error: ${data.error}`);
+      }
+    } catch (err) {
+      setSaveStatus("Save failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div
       className="flex flex-wrap items-center gap-2"
       onClick={(e) => e.stopPropagation()}
     >
+      <Button
+        variant={isDirty ? "default" : "outline"}
+        size="sm"
+        onClick={handleSave}
+        disabled={saving}
+      >
+        {saving ? "Saving..." : "Save"}
+      </Button>
+      {saveStatus && (
+        <span className="text-xs text-muted-foreground">{saveStatus}</span>
+      )}
       <Button variant="outline" size="sm" onClick={() => setMacrosOpen(true)}>
         Macros
       </Button>

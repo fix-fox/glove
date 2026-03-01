@@ -8,6 +8,7 @@ export interface EditorState {
   config: KeyboardConfig;
   activeLayerIndex: number;
   selectedKeyIndex: number | null;
+  isDirty: boolean;
 }
 
 export interface EditorActions {
@@ -19,6 +20,7 @@ export interface EditorActions {
   renameLayer: (index: number, name: string) => void;
   loadConfig: (json: unknown) => void;
   patchConfig: (patch: Partial<Pick<KeyboardConfig, "macros" | "modMorphs" | "holdTaps" | "combos" | "conditionalLayers" | "hrmSettings" | "mouseSettings" | "layers">>) => void;
+  markClean: () => void;
 }
 
 export type EditorStore = EditorState & EditorActions;
@@ -90,11 +92,13 @@ export function createEditorStore() {
         config: createDefaultConfig(),
         activeLayerIndex: 0,
         selectedKeyIndex: null,
+        isDirty: false,
 
         setActiveLayer: (index) => set((state) => { state.activeLayerIndex = index; }),
         selectKey: (index) => set((state) => { state.selectedKeyIndex = index; }),
         setKeyBehavior: (layerIndex, keyIndex, tap, hold) => set((state) => {
           state.config.layers[layerIndex]!.keys[keyIndex] = { tap, hold };
+          state.isDirty = true;
         }),
         addLayer: (name) => set((state) => {
           state.config.layers.push({
@@ -102,6 +106,7 @@ export function createEditorStore() {
             name,
             keys: Array.from({ length: GLOVE80_KEY_COUNT }, () => ({ ...DEFAULT_KEY })),
           });
+          state.isDirty = true;
         }),
         removeLayer: (index) => set((state) => {
           if (state.config.layers.length <= 1) return;
@@ -112,8 +117,9 @@ export function createEditorStore() {
             state.activeLayerIndex = state.config.layers.length - 1;
           }
           state.selectedKeyIndex = null;
+          state.isDirty = true;
         }),
-        renameLayer: (index, name) => set((state) => { state.config.layers[index]!.name = name; }),
+        renameLayer: (index, name) => set((state) => { state.config.layers[index]!.name = name; state.isDirty = true; }),
         loadConfig: (json) => {
           const result = KeyboardConfigSchema.safeParse(json);
           if (!result.success) {
@@ -132,11 +138,14 @@ export function createEditorStore() {
             state.config = data;
             state.activeLayerIndex = 0;
             state.selectedKeyIndex = null;
+            state.isDirty = false;
           });
         },
         patchConfig: (patch) => set((state) => {
           Object.assign(state.config, patch);
+          state.isDirty = true;
         }),
+        markClean: () => set((state) => { state.isDirty = false; }),
       })),
       {
         partialize: (state) => {
