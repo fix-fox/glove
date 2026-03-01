@@ -52,36 +52,34 @@ export function SettingsPanel({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[85vh] p-0 gap-0">
-        <div className="flex h-full">
-          {/* Sidebar */}
-          <nav className="w-48 shrink-0 border-r bg-muted/30 p-2 flex flex-col gap-1">
-            <DialogHeader className="px-2 py-3">
-              <DialogTitle className="text-base">Settings</DialogTitle>
-            </DialogHeader>
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.key}
-                onClick={() => setCategory(cat.key)}
-                className={cn(
-                  "text-sm text-left rounded-md px-3 py-2 transition-colors",
-                  category === cat.key
-                    ? "bg-accent text-accent-foreground font-medium"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
-                )}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </nav>
+      <DialogContent className="w-[50vw] h-[75vh] max-w-none sm:max-w-none p-0 gap-0 flex flex-row overflow-hidden">
+        {/* Sidebar */}
+        <nav className="w-48 shrink-0 border-r bg-muted/30 p-2 flex flex-col gap-1">
+          <DialogHeader className="px-2 py-3">
+            <DialogTitle className="text-base">Settings</DialogTitle>
+          </DialogHeader>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.key}
+              onClick={() => setCategory(cat.key)}
+              className={cn(
+                "text-sm text-left rounded-md px-3 py-2 transition-colors",
+                category === cat.key
+                  ? "bg-accent text-accent-foreground font-medium"
+                  : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
+              )}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </nav>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6">
-            <h2 className="text-lg font-semibold mb-4">
-              {CATEGORIES.find((c) => c.key === category)!.label}
-            </h2>
-            <CategoryContent category={category} />
-          </div>
+        {/* Content */}
+        <div className="flex-1 min-w-0 overflow-y-auto p-6">
+          <h2 className="text-lg font-semibold mb-4">
+            {CATEGORIES.find((c) => c.key === category)!.label}
+          </h2>
+          <CategoryContent category={category} />
         </div>
       </DialogContent>
     </Dialog>
