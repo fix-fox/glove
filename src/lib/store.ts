@@ -21,6 +21,7 @@ export interface EditorActions {
   renameLayer: (index: number, name: string) => void;
   loadConfig: (json: unknown) => void;
   patchConfig: (patch: Partial<Pick<KeyboardConfig, "macros" | "modMorphs" | "holdTaps" | "combos" | "conditionalLayers" | "hrmSettings" | "ltSettings" | "mouseSettings" | "layers">>) => void;
+  applyDragDrop: (layerIndex: number, sourceIndex: number, targetIndex: number, mode: "move" | "copy" | "swap") => void;
   markClean: () => void;
 }
 
@@ -102,6 +103,23 @@ export function createEditorStore() {
         },
         patchConfig: (patch) => set((state) => {
           Object.assign(state.config, patch);
+          state.isDirty = true;
+        }),
+        applyDragDrop: (layerIndex, sourceIndex, targetIndex, mode) => set((state) => {
+          const layer = state.config.layers[layerIndex]!;
+          const src = structuredClone(layer.keys[sourceIndex]!);
+          const tgt = structuredClone(layer.keys[targetIndex]!);
+          if (mode === "move") {
+            layer.keys[targetIndex] = src;
+            layer.keys[sourceIndex] = layerIndex === 0
+              ? { tap: { type: "none" }, hold: null }
+              : { tap: { type: "trans" }, hold: null };
+          } else if (mode === "copy") {
+            layer.keys[targetIndex] = src;
+          } else {
+            layer.keys[sourceIndex] = tgt;
+            layer.keys[targetIndex] = src;
+          }
           state.isDirty = true;
         }),
         markClean: () => set((state) => { state.isDirty = false; }),
