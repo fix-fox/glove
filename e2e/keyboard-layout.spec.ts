@@ -29,8 +29,11 @@ test("base layer shows magic positions", async ({ page }) => {
 
 
 test("key editor open", async ({ page }) => {
-  const firstKey = page.locator(".grid button").first();
-  await firstKey.dispatchEvent("click");
+  // Select key 5 (a regular key on layer 0) via click.
+  // Use a key in the middle of the grid to avoid edge issues.
+  // Key "Q" should be a safe non-magic, non-empty key.
+  const qKey = page.locator(".grid button", { hasText: "Q" }).first();
+  await qKey.click();
   await page.getByTestId("key-editor-overlay").waitFor({ timeout: 5000 });
   await expect(page).toHaveScreenshot("key-editor-open.png");
 });
