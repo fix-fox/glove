@@ -28,6 +28,14 @@ test("base layer shows magic positions", async ({ page }) => {
 });
 
 
+test("settings modal — HRM", async ({ page }) => {
+  await page.getByRole("button", { name: "Settings" }).click();
+  await page.getByRole("dialog").waitFor();
+  // Navigate to HRM tab
+  await page.getByRole("dialog").getByText("HRM", { exact: true }).click();
+  await expect(page.getByRole("dialog")).toHaveScreenshot("settings-hrm.png");
+});
+
 test("key editor open", async ({ page }) => {
   // Select key 5 (a regular key on layer 0) via click.
   // Use a key in the middle of the grid to avoid edge issues.
