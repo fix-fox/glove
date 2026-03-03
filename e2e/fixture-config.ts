@@ -4,7 +4,7 @@
  * Deterministic — no randomUUID, no dependency on saved config.
  */
 
-import type { KeyboardConfig } from "../src/types/schema";
+import type { Key, KeyboardConfig } from "../src/types/schema";
 
 const kp = (keyCode: string) => ({ tap: { type: "kp" as const, keyCode }, hold: null });
 const mo = (keyCode: string, layerIndex: number) => ({
@@ -16,7 +16,7 @@ const trans = { tap: { type: "trans" as const }, hold: null };
 
 // 80 keys per layer. Fill with a recognizable pattern on Base.
 function baseKeys() {
-  const keys = Array.from({ length: 80 }, () => ({ ...none }));
+  const keys: Key[] = Array.from({ length: 80 }, () => ({ ...none }));
   // Row 1: number row (indices 5-14 roughly, but use actual positions)
   // Just set a small cluster of keys for visual verification
   const qwerty = "QWERTYUIOP";
@@ -36,7 +36,7 @@ function baseKeys() {
 }
 
 function overlayKeys() {
-  const keys = Array.from({ length: 80 }, () => ({ ...trans }));
+  const keys: Key[] = Array.from({ length: 80 }, () => ({ ...trans }));
   // A few keys on the overlay layer
   keys[10] = kp("EXCL");
   keys[11] = kp("AT");
