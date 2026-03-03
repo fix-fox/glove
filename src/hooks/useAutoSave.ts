@@ -11,6 +11,7 @@ export function useAutoSave() {
       .then((data) => {
         if (data && !data.error) {
           editorStore.getState().loadConfig(data);
+          editorStore.temporal.getState().clear();
         }
       })
       .catch(() => { /* no saved config — use default */ });

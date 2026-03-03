@@ -127,8 +127,8 @@ export function createEditorStore() {
       })),
       {
         partialize: (state) => {
-          const { config, activeLayerIndex, selectedKeyIndex } = state;
-          return { config, activeLayerIndex, selectedKeyIndex };
+          const { config, activeLayerIndex } = state;
+          return { config, activeLayerIndex };
         },
         equality: (pastState, currentState) =>
           pastState.config === currentState.config,
