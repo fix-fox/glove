@@ -18,6 +18,7 @@ import type { ModMorphEntry } from "@/lib/mod-morph-utils";
 import { ensureModActiveLayer, ensureModActivateMacro, ensureHRMDef, ensureLtDef, ensureLayerTapDef } from "@/lib/mod-active";
 import { isMagicPosition } from "@/lib/magic";
 import { BehaviorPicker, KeycodeCombobox, ModifierToggles, LayerCombobox } from "./BehaviorPicker";
+import { Hint } from "./Hint";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -240,16 +241,29 @@ export function KeyEditor() {
 
   const [morphDialogOpen, setMorphDialogOpen] = useState(false);
   const [autoOpenKeycode, setAutoOpenKeycode] = useState(false);
+  const [autoFocusTap, setAutoOpenTap] = useState(false);
+  const [tapDropdownOpen, setTapDropdownOpen] = useState(false);
+  const [holdDropdownOpen, setHoldDropdownOpen] = useState(false);
+  const [keycodeOpen, setKeycodeOpen] = useState(false);
+  const anyDropdownOpenRef = useRef(false);
+  useEffect(() => {
+    anyDropdownOpenRef.current = tapDropdownOpen || holdDropdownOpen || keycodeOpen || morphDialogOpen;
+  }, [tapDropdownOpen, holdDropdownOpen, keycodeOpen, morphDialogOpen]);
 
   // Snapshot for cancel-on-dismiss
   const snapshotRef = useRef<KeyboardConfig | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const savedTemporalRef = useRef<any[]>([]);
 
-  // Take snapshot when dialog opens
+  // Take snapshot when dialog opens; auto-open tap dropdown
   useEffect(() => {
     if (selectedKeyIndex !== null) {
       snapshotRef.current = structuredClone(editorStore.getState().config);
+      savedTemporalRef.current = [...editorStore.temporal.getState().pastStates];
+      setAutoOpenTap(true);
     } else {
       snapshotRef.current = null;
+      setAutoOpenTap(false);
     }
   }, [selectedKeyIndex]);
 
@@ -260,11 +274,18 @@ export function KeyEditor() {
   }, []);
 
   const handleDismiss = useCallback(() => {
-    // Revert to snapshot, preserving the active layer
+    // Revert to snapshot, preserving the active layer and undo history
     if (snapshotRef.current) {
       const layerIdx = editorStore.getState().activeLayerIndex;
+      editorStore.temporal.getState().pause();
       editorStore.getState().loadConfig(snapshotRef.current);
       editorStore.getState().setActiveLayer(layerIdx);
+      editorStore.temporal.getState().resume();
+      // Restore undo history to pre-dialog state (discard intermediate entries)
+      editorStore.temporal.setState({
+        pastStates: savedTemporalRef.current,
+        futureStates: [],
+      });
     }
     snapshotRef.current = null;
     editorStore.getState().selectKey(null);
@@ -275,11 +296,50 @@ export function KeyEditor() {
       if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         handleOK();
+        return;
+      }
+
+      // Hint keys — suppress when typing in an input/textarea or holding modifiers
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      if (anyDropdownOpenRef.current) return;
+
+      switch (e.key) {
+        case "t":
+          e.preventDefault();
+          setTapDropdownOpen(true);
+          break;
+        case "h":
+          e.preventDefault();
+          setHoldDropdownOpen(true);
+          break;
+        case "k":
+          e.preventDefault();
+          setKeycodeOpen(true);
+          break;
+        case "m":
+          e.preventDefault();
+          setMorphDialogOpen(true);
+          break;
+        case "c": {
+          e.preventDefault();
+          const s = editorStore.getState();
+          if (s.selectedKeyIndex === null) break;
+          const isDefault = s.activeLayerIndex === 0;
+          const tap: Behavior = isDefault ? { type: "none" } : { type: "trans" };
+          s.setKeyBehavior(s.activeLayerIndex, s.selectedKeyIndex, tap, null);
+          break;
+        }
+        case "x":
+          e.preventDefault();
+          handleDismiss();
+          break;
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleOK]);
+  }, [handleOK, handleDismiss]);
 
   if (selectedKeyIndex === null || !key || (activeLayerIndex === 0 && isMagicPosition(selectedKeyIndex))) return null;
 
@@ -550,11 +610,14 @@ export function KeyEditor() {
             <BehaviorPicker
               value={derived.tapBehavior}
               onChange={handleTapChange}
-              label="Tap"
+              label={<Hint text="Tap" hintKey="t" />}
               layerNames={layerNames}
               macros={macros}
               modMorphs={modMorphs}
               hideParams={showKeycodeSection}
+              autoFocus={autoFocusTap}
+              typeDropdownOpen={tapDropdownOpen}
+              onTypeDropdownOpenChange={setTapDropdownOpen}
             />
 
             {/* Keycode picker + mod-morphs (shown for kp-like taps) */}
@@ -565,6 +628,8 @@ export function KeyEditor() {
                   onChange={(code) => { setAutoOpenKeycode(false); handleBaseKeyChange(code); }}
                   modifierOnly={false}
                   autoOpen={autoOpenKeycode}
+                  controlledOpen={keycodeOpen}
+                  onControlledOpenChange={setKeycodeOpen}
                 />
                 <ModifierToggles
                   keyCode={derived.baseKeyCode!}
@@ -597,7 +662,7 @@ export function KeyEditor() {
                   className="text-xs"
                   onClick={() => setMorphDialogOpen(true)}
                 >
-                  + Add Mod Morph
+                  + Add <Hint text="Mod Morph" hintKey="m" />
                 </Button>
               </>
             )}
@@ -613,6 +678,8 @@ export function KeyEditor() {
             onHoldTypeChange={handleHoldTypeChange}
             onModToggle={handleModToggle}
             onHRMToggle={handleHRMToggle}
+            selectOpen={holdDropdownOpen}
+            onSelectOpenChange={setHoldDropdownOpen}
             onLayerChange={(idx) => {
               if (derived.holdType !== "none" && derived.holdType !== "modifier") {
                 editorStore.getState().setKeyBehavior(
@@ -633,7 +700,7 @@ export function KeyEditor() {
 
           <div className="flex gap-2">
             <Button variant="outline" className="flex-1" onClick={handleClear}>
-              Clear
+              <Hint text="Clear" hintKey="c" />
             </Button>
             <Button className="flex-1" onClick={handleOK}>
               OK
@@ -695,6 +762,8 @@ function HoldSection({
   onModToggle,
   onHRMToggle,
   onLayerChange,
+  selectOpen,
+  onSelectOpenChange,
 }: {
   holdType: HoldType;
   holdMods: Set<HoldModType>;
@@ -705,12 +774,26 @@ function HoldSection({
   onModToggle: (mod: HoldModType) => void;
   onHRMToggle: (checked: boolean) => void;
   onLayerChange: (index: number) => void;
+  selectOpen?: boolean;
+  onSelectOpenChange?: (open: boolean) => void;
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-sm font-medium">Hold</span>
-      <Select value={holdType} onValueChange={(v) => onHoldTypeChange(v as HoldType)}>
-        <SelectTrigger className="w-full">
+      <span className="text-sm font-medium"><Hint text="Hold" hintKey="h" /></span>
+      <Select
+        value={holdType}
+        onValueChange={(v) => onHoldTypeChange(v as HoldType)}
+        {...(selectOpen != null ? { open: selectOpen } : {})}
+        {...(onSelectOpenChange != null ? { onOpenChange: onSelectOpenChange } : {})}
+      >
+        <SelectTrigger
+          className="w-full"
+          onKeyDown={(e) => {
+            if ("thkmcx".includes(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+              e.preventDefault();
+            }
+          }}
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

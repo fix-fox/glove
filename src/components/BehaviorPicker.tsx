@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import type { ReactNode } from "react";
+import { SearchIcon } from "lucide-react";
 import type { Behavior, MacroDefinition } from "@/types/schema";
 import { BEHAVIOR_TYPE_LABELS, defaultBehaviorForType } from "@/lib/behavior-defaults";
 import {
@@ -40,7 +42,7 @@ import { Button } from "@/components/ui/button";
 interface BehaviorPickerProps {
   value: Behavior | null;
   onChange: (behavior: Behavior | null) => void;
-  label: string;
+  label: ReactNode;
   layerNames: string[];
   restrictToHold?: boolean;
   macros?: MacroDefinition[];
@@ -49,6 +51,12 @@ interface BehaviorPickerProps {
   onHRMEnable?: (modCode: string) => void;
   /** When true, only show the type selector — skip the parameter widgets. */
   hideParams?: boolean;
+  /** Auto-focus the type dropdown trigger on mount. */
+  autoFocus?: boolean;
+  /** Controlled open state for the type dropdown. */
+  typeDropdownOpen?: boolean;
+  /** Callback when the type dropdown open state changes. */
+  onTypeDropdownOpenChange?: (open: boolean) => void;
 }
 
 interface TypeGroup {
@@ -133,6 +141,9 @@ export function BehaviorPicker({
   restrictToHold,
   macros = [],
   hideParams,
+  autoFocus,
+  typeDropdownOpen,
+  onTypeDropdownOpenChange,
 }: BehaviorPickerProps) {
   // Build a unique type key for custom behaviors
   const typeValue = value
@@ -161,6 +172,10 @@ export function BehaviorPicker({
       onChange(null);
       return;
     }
+    if (newType.startsWith("kp:")) {
+      onChange({ type: "kp", keyCode: newType.slice(3) });
+      return;
+    }
     if (newType.startsWith("macro:")) {
       onChange({ type: "macro", macroName: newType.slice(6) });
       return;
@@ -181,6 +196,10 @@ export function BehaviorPicker({
         onValueChange={handleTypeChange}
         groups={groups}
         displayLabel={displayLabel}
+        {...(autoFocus != null ? { autoFocus } : {})}
+        {...(typeDropdownOpen != null ? { controlledOpen: typeDropdownOpen } : {})}
+        {...(onTypeDropdownOpenChange != null ? { onControlledOpenChange: onTypeDropdownOpenChange } : {})}
+        {...(!restrictToHold ? { showKeycodes: true } : {})}
       />
       {value && !hideParams && (
         <BehaviorParams
@@ -198,49 +217,164 @@ export function BehaviorPicker({
 // BehaviorTypeCombobox
 // =============================================================================
 
+interface FilteredItem {
+  key: string;
+  label: string;
+  detail?: string | undefined;
+  heading?: string | undefined;
+  onSelect: () => void;
+}
+
 function BehaviorTypeCombobox({
   value,
   onValueChange,
   groups,
   displayLabel,
+  autoFocus,
+  controlledOpen,
+  onControlledOpenChange,
+  showKeycodes,
 }: {
   value: string;
   onValueChange: (type: string) => void;
   groups: TypeGroup[];
   displayLabel: string;
+  autoFocus?: boolean;
+  controlledOpen?: boolean;
+  onControlledOpenChange?: (open: boolean) => void;
+  showKeycodes?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = (v: boolean) => {
+    setInternalOpen(v);
+    onControlledOpenChange?.(v);
+  };
+  const [search, setSearch] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (autoFocus) triggerRef.current?.focus();
+  }, [autoFocus]);
+
+  useEffect(() => {
+    if (open) {
+      setSearch("");
+      setActiveIndex(0);
+      // Focus input after popover renders
+      requestAnimationFrame(() => inputRef.current?.focus());
+    }
+  }, [open]);
+
+  // Reset active index when search changes
+  useEffect(() => {
+    setActiveIndex(0);
+    listRef.current?.scrollTo(0, 0);
+  }, [search]);
+
+  // Build flat filtered item list
+  const q = search.toLowerCase();
+  const items: FilteredItem[] = [];
+
+  if (showKeycodes && q.length > 0) {
+    let count = 0;
+    for (const kc of ZMK_KEYCODES) {
+      if (count >= 10) break;
+      if (kc.code.toLowerCase().includes(q) || kc.label.toLowerCase().includes(q)) {
+        items.push({
+          key: `kc-${kc.code}`,
+          label: kc.label,
+          detail: kc.code,
+          heading: count === 0 ? "Keycodes" : undefined,
+          onSelect: () => { onValueChange(`kp:${kc.code}`); setOpen(false); },
+        });
+        count++;
+      }
+    }
+  }
+
+  for (const group of groups) {
+    let first = true;
+    for (const item of group.items) {
+      if (q && !item.label.toLowerCase().includes(q)) continue;
+      items.push({
+        key: item.value,
+        label: item.label,
+        heading: first ? group.heading : undefined,
+        onSelect: () => { onValueChange(item.value); setOpen(false); },
+      });
+      first = false;
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, items.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      items[activeIndex]?.onSelect();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setOpen(false);
+    }
+  };
+
+  // Scroll active item into view
+  useEffect(() => {
+    const el = listRef.current?.children[activeIndex] as HTMLElement | undefined;
+    el?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-start">
+        <Button ref={triggerRef} variant="outline" className="w-full justify-start">
           {displayLabel}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[250px] p-0" align="start">
-        <Command>
-          <CommandInput placeholder="Search..." />
-          <CommandList>
-            <CommandEmpty>No match.</CommandEmpty>
-            {groups.map((group, i) => (
-              <CommandGroup key={i} heading={group.heading}>
-                {group.items.map((item) => (
-                  <CommandItem
-                    key={item.value}
-                    value={item.label}
-                    onSelect={() => {
-                      onValueChange(item.value);
-                      setOpen(false);
-                    }}
-                  >
-                    {item.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            ))}
-          </CommandList>
-        </Command>
+        <div className="flex h-9 items-center gap-2 border-b px-3">
+          <SearchIcon className="size-4 shrink-0 opacity-50" />
+          <input
+            ref={inputRef}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Search..."
+            className="flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          />
+        </div>
+        <div ref={listRef} className="max-h-[300px] overflow-y-auto p-1">
+          {items.length === 0 && (
+            <p className="py-6 text-center text-sm">No match.</p>
+          )}
+          {items.map((item, i) => (
+            <div key={item.key}>
+              {item.heading && (
+                <p className="px-2 py-1.5 text-xs font-medium text-muted-foreground">{item.heading}</p>
+              )}
+              <button
+                type="button"
+                data-active={i === activeIndex || undefined}
+                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm cursor-default select-none data-[active]:bg-accent data-[active]:text-accent-foreground"
+                onPointerMove={() => setActiveIndex(i)}
+                onClick={item.onSelect}
+              >
+                <span>{item.label}</span>
+                {item.detail && (
+                  <span className="ml-auto text-xs text-muted-foreground">{item.detail}</span>
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
       </PopoverContent>
     </Popover>
   );
@@ -366,13 +500,22 @@ export function KeycodeCombobox({
   onChange,
   modifierOnly,
   autoOpen,
+  controlledOpen,
+  onControlledOpenChange,
 }: {
   value: string;
   onChange: (code: string) => void;
   modifierOnly: boolean;
   autoOpen?: boolean;
+  controlledOpen?: boolean;
+  onControlledOpenChange?: (open: boolean) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = (v: boolean) => {
+    setInternalOpen(v);
+    onControlledOpenChange?.(v);
+  };
 
   useEffect(() => {
     if (autoOpen) setOpen(true);
