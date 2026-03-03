@@ -8,6 +8,7 @@ import { ErrorDialog } from "./ErrorDialog";
 import { FlashDialog } from "./FlashDialog";
 import { SettingsPanel } from "./SettingsPanel";
 import { SaveSplitButton } from "./SaveSplitButton";
+import { ThemeToggle } from "./ThemeToggle";
 import { editorStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 
@@ -95,6 +96,7 @@ export function Toolbar() {
         <Settings className="h-4 w-4 mr-1.5" />
         Settings
       </Button>
+      <ThemeToggle />
 
       <SettingsPanel open={settingsOpen} onOpenChange={setSettingsOpen} />
       <ExportDialog open={exportOpen} onOpenChange={setExportOpen} />
