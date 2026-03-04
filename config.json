@@ -280,7 +280,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LA(LGUI)",
+            "param1": "LC(LGUI)",
             "param2": "G"
           },
           "hold": null
@@ -289,7 +289,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RA(RGUI)",
+            "param1": "LC(LGUI)",
             "param2": "M"
           },
           "hold": null
@@ -548,7 +548,7 @@
           },
           "hold": {
             "type": "kp",
-            "keyCode": "LG(LALT)"
+            "keyCode": "LC(LGUI)"
           }
         },
         {
@@ -1933,7 +1933,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LA(LGUI)",
+            "param1": "LC(LGUI)",
             "param2": "G"
           },
           "hold": null
@@ -1942,7 +1942,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RA(RGUI)",
+            "param1": "LC(LGUI)",
             "param2": "H"
           },
           "hold": null
