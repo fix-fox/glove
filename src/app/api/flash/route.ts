@@ -49,6 +49,12 @@ export async function POST(request: Request) {
         }
 
         // ── Wait for build ──
+        if (hasChanges) {
+          // Give GitHub time to queue the new workflow run so we don't
+          // pick up the previous (already-completed) run.
+          emit(controller, "Waiting for new build to start...");
+          await new Promise((r) => setTimeout(r, 5000));
+        }
         emit(controller, "Checking for workflow runs...");
 
         // Poll until we find a completed (or in-progress) run
