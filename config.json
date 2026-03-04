@@ -8016,8 +8016,8 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "LC(LS(LG(B)))"
+            "type": "macro",
+            "macroName": "flow_bookmark"
           },
           "hold": null
         },

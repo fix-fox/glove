@@ -361,7 +361,7 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp LG(N1)  &kp LG(N2)  &kp LG(N3)  &kp LG(N4)  &kp LG(N5)  &kp LG(N6)  &kp LG(N7)  &kp LG(N8)  &kp LG(N9)  &kp LG(N0)  &trans
-                &trans  &kp LC(LS(LG(Q)))  &kp LC(LS(LG(W)))  &kp LC(LS(LG(F)))  &kp LC(LS(LG(P)))  &kp LC(LS(LG(B)))  &kp LC(LS(LG(J)))  &kp LC(LS(LG(L)))  &kp LC(LS(LG(U)))  &kp LC(LS(LG(Y)))  &trans  &trans
+                &trans  &kp LC(LS(LG(Q)))  &kp LC(LS(LG(W)))  &kp LC(LS(LG(F)))  &kp LC(LS(LG(P)))  &flow_bookmark  &kp LC(LS(LG(J)))  &kp LC(LS(LG(L)))  &kp LC(LS(LG(U)))  &kp LC(LS(LG(Y)))  &trans  &trans
                 &trans  &kp LC(LS(LG(A)))  &kp LC(LS(LG(R)))  &kp LC(LS(LG(S)))  &kp LC(LS(LG(T)))  &kp LC(LS(LG(G)))  &kp LC(LS(LG(M)))  &kp LC(LS(LG(N)))  &kp LC(LS(LG(E)))  &kp LC(LS(LG(I)))  &kp LC(LS(LG(O)))  &trans
                 &trans  &kp LC(LS(LG(Z)))  &kp LC(LS(LG(X)))  &kp LC(LS(LG(C)))  &kp LC(LS(LG(D)))  &kp LC(LS(LG(V)))  &trans  &trans  &trans  &trans  &trans  &trans  &kp LC(LS(LG(K)))  &kp LC(LS(LG(H)))  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
