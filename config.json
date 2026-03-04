@@ -492,7 +492,8 @@
         },
         {
           "tap": {
-            "type": "none"
+            "type": "kp",
+            "keyCode": "ESC"
           },
           "hold": null
         },
@@ -579,7 +580,8 @@
         },
         {
           "tap": {
-            "type": "none"
+            "type": "kp",
+            "keyCode": "ESC"
           },
           "hold": null
         },
@@ -3404,7 +3406,8 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "kp",
+            "keyCode": "ESC"
           },
           "hold": null
         },
