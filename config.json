@@ -8080,7 +8080,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(LS(LG(R)))"
+            "keyCode": "LC(LG(R))"
           },
           "hold": null
         },
