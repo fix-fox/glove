@@ -197,9 +197,9 @@
                 &to 0  &to 10  &none  &none  &none  &none  &none  &none  &none  &kp LG(L)
                 &tog 3  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &none
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp SEMI  &none
-                &none  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &hml LC(LS(LGUI)) G  &hmr LC(LS(LGUI)) M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &none
+                &none  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &lt 15 G  &lt 15 M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &none
                 &none  &kp Z  &kp X  &kp C  &lt 11 D  &kp V  &lt 5 TAB  &lt 8 ESCAPE  &none  &none  &none  &lt 9 TAB  &kp K  &lt 11 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &none  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 4 0  &lt 9 DEL  &none  &kp PSCRN  &mt LC(LS(LGUI)) LC(SPACE)  &lt 6 SPACE  &kp ENTER  &tog 9  &none  &kp TILDE  &magic 1 0
+                &magic 1 0  &kp GRAVE  &none  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 4 0  &lt 9 DEL  &none  &kp PSCRN  &lt 15 LC(SPACE)  &lt 6 SPACE  &kp ENTER  &tog 9  &none  &kp TILDE  &magic 1 0
             >;
         };
 
@@ -230,7 +230,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp PERIOD  &kp COMMA  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &trans
-                &trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHIFT F  &hml LC(LS(LGUI)) G  &hmr LC(LS(LGUI)) H  &hmr RSHIFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &kp APOS
+                &trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHIFT F  &lt 15 G  &lt 15 H  &hmr RSHIFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &kp APOS
                 &trans  &kp Z  &kp X  &kp C  &lt 11 V  &kp B  &trans  &trans  &trans  &trans  &trans  &trans  &kp N  &lt 11 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
@@ -360,10 +360,10 @@
         apps {
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &kp LG(N1)  &kp LG(N2)  &kp LG(N3)  &kp LG(N4)  &kp LG(N5)  &kp LG(N6)  &kp LG(N7)  &kp LG(N8)  &kp LG(N9)  &kp LG(N0)  &trans
+                &trans  &kp LC(LS(LG(Q)))  &kp LC(LS(LG(W)))  &kp LC(LS(LG(F)))  &kp LC(LS(LG(P)))  &kp LC(LS(LG(B)))  &kp LC(LS(LG(J)))  &kp LC(LS(LG(L)))  &kp LC(LS(LG(U)))  &kp LC(LS(LG(Y)))  &trans  &trans
+                &trans  &kp LC(LS(LG(A)))  &kp LC(LS(LG(R)))  &kp LC(LS(LG(S)))  &kp LC(LS(LG(T)))  &kp LC(LS(LG(G)))  &kp LC(LS(LG(M)))  &kp LC(LS(LG(N)))  &kp LC(LS(LG(E)))  &kp LC(LS(LG(I)))  &kp LC(LS(LG(O)))  &trans
+                &trans  &kp LC(LS(LG(Z)))  &kp LC(LS(LG(X)))  &kp LC(LS(LG(C)))  &kp LC(LS(LG(D)))  &kp LC(LS(LG(V)))  &trans  &trans  &trans  &trans  &trans  &trans  &kp LC(LS(LG(K)))  &kp LC(LS(LG(H)))  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
