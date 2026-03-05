@@ -41,7 +41,7 @@ import { Button } from "@/components/ui/button";
 
 interface BehaviorPickerProps {
   value: Behavior | null;
-  onChange: (behavior: Behavior | null) => void;
+  onChange: (behavior: Behavior | null, opts?: { fromKeycodeSearch?: boolean }) => void;
   label: ReactNode;
   layerNames: string[];
   restrictToHold?: boolean;
@@ -173,7 +173,7 @@ export function BehaviorPicker({
       return;
     }
     if (newType.startsWith("kp:")) {
-      onChange({ type: "kp", keyCode: newType.slice(3) });
+      onChange({ type: "kp", keyCode: newType.slice(3) }, { fromKeycodeSearch: true });
       return;
     }
     if (newType.startsWith("macro:")) {

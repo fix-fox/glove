@@ -353,9 +353,9 @@ export function KeyEditor() {
   // ── Tap handlers ──────────────────────────────────────────────────────
 
   /** Change the tap behavior type (from BehaviorPicker). */
-  const handleTapChange = (tap: Behavior | null) => {
+  const handleTapChange = (tap: Behavior | null, opts?: { fromKeycodeSearch?: boolean }) => {
     if (!tap) return;
-    if (tap.type === "kp") setAutoOpenKeycode(true);
+    if (tap.type === "kp" && !opts?.fromKeycodeSearch) setAutoOpenKeycode(true);
     if (derived.isHRM) {
       // Switching tap type away from kp while HRM is on:
       // disable HRM, set new tap + keep modifiers as hold
