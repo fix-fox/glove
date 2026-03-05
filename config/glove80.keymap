@@ -196,7 +196,7 @@
             bindings = <
                 &to 0  &to 10  &none  &none  &none  &none  &none  &none  &none  &kp LG(L)
                 &tog 3  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &none
-                &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp SEMI  &none
+                &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LG(SEMI)  &none
                 &none  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &lt 15 G  &lt 15 M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &none
                 &none  &kp Z  &kp X  &kp C  &lt 11 D  &kp V  &lt 5 TAB  &lt 8 ESCAPE  &none  &none  &none  &lt 9 TAB  &kp K  &lt 11 H  &kp COMMA  &kp DOT  &kp FSLH  &none
                 &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 4 0  &lt 9 DEL  &none  &kp PSCRN  &lt 15 LC(SPACE)  &lt 6 SPACE  &kp ENTER  &tog 9  &kp ESC  &kp TILDE  &magic 1 0

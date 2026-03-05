@@ -224,7 +224,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "SEMI"
+            "keyCode": "LG(SEMI)"
           },
           "hold": null
         },
