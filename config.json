@@ -404,15 +404,23 @@
         },
         {
           "tap": {
-            "type": "none"
+            "type": "kp",
+            "keyCode": "CAPS"
           },
-          "hold": null
+          "hold": {
+            "type": "kp",
+            "keyCode": "LSHIFT"
+          }
         },
         {
           "tap": {
-            "type": "none"
+            "type": "kp",
+            "keyCode": "CAPS"
           },
-          "hold": null
+          "hold": {
+            "type": "kp",
+            "keyCode": "LSHIFT"
+          }
         },
         {
           "tap": {
