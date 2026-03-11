@@ -86,7 +86,7 @@
             #binding-cells = <1>;
             wait-ms = <0>;
             tap-ms = <0>;
-            bindings = <&macro_press &mo 13>, <&macro_param_1to1>, <&macro_press &kp MACRO_PLACEHOLDER>, <&macro_pause_for_release>, <&macro_param_1to1>, <&macro_release &kp MACRO_PLACEHOLDER>, <&macro_release &mo 13>;
+            bindings = <&macro_press &mo 12>, <&macro_param_1to1>, <&macro_press &kp MACRO_PLACEHOLDER>, <&macro_pause_for_release>, <&macro_param_1to1>, <&macro_release &kp MACRO_PLACEHOLDER>, <&macro_release &mo 12>;
         };
     };
 
@@ -152,12 +152,12 @@
 
         toggle_left_hand {
             key-positions = <52 69>;
-            bindings = <&tog 4>;
+            bindings = <&tog 14>;
         };
 
         mouse_toggle {
             key-positions = <74 57>;
-            bindings = <&tog 9>;
+            bindings = <&tog 8>;
         };
 
         caps_lock {
@@ -179,13 +179,13 @@
         compatible = "zmk,conditional-layers";
 
         hebrew_symbols {
-            if-layers = <3 6>;
-            then-layer = <7>;
+            if-layers = <3 5>;
+            then-layer = <6>;
         };
 
         english_alpha_when_mod {
-            if-layers = <3 13>;
-            then-layer = <14>;
+            if-layers = <3 12>;
+            then-layer = <13>;
         };
     };
 
@@ -194,12 +194,12 @@
 
         default {
             bindings = <
-                &to 0  &to 10  &none  &none  &none  &none  &none  &none  &none  &kp LG(L)
+                &to 0  &to 9  &none  &none  &none  &none  &none  &none  &none  &kp LG(L)
                 &tog 3  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &none
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LG(SEMI)  &none
                 &none  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &lt 15 G  &lt 15 M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &none
-                &none  &kp Z  &kp X  &kp C  &lt 11 D  &kp V  &lt 5 TAB  &lt 8 ESCAPE  &mt LSHIFT CAPS  &mt LSHIFT CAPS  &none  &lt 9 TAB  &kp K  &lt 11 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 4 0  &lt 9 DEL  &none  &kp PSCRN  &lt 15 LC(SPACE)  &lt 6 SPACE  &kp ENTER  &tog 9  &kp ESC  &kp TILDE  &magic 1 0
+                &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &mt LSHIFT CAPS  &mt LSHIFT CAPS  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
+                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &none  &kp PSCRN  &lt 15 LC(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
             >;
         };
 
@@ -231,19 +231,8 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp PERIOD  &kp COMMA  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &trans
                 &trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHIFT F  &lt 15 G  &lt 15 H  &hmr RSHIFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &kp APOS
-                &trans  &kp Z  &kp X  &kp C  &lt 11 V  &kp B  &trans  &trans  &trans  &trans  &trans  &trans  &kp N  &lt 11 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
+                &trans  &kp Z  &kp X  &kp C  &lt 10 V  &kp B  &trans  &trans  &trans  &trans  &trans  &trans  &kp N  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-            >;
-        };
-
-        cursor {
-            bindings = <
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &kp LA(F4)  &kp LC(W)  &kp LC(F)  &kp LC(P)  &kp LC(B)  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
-                &trans  &hml LGUI LC(A)  &hml LALT LC(R)  &hml LCTRL LC(S)  &hml LSHIFT LC(T)  &kp LC(G)  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
-                &kp LC(Y)  &kp LC(Z)  &kp LC(X)  &kp LC(C)  &kp LC(D)  &kp LC(V)  &trans  &trans  &trans  &trans  &trans  &kp ESCAPE  &trans  &kp HOME  &kp ESCAPE  &kp END  &trans  &trans
-                &trans  &trans  &trans  &trans  &kp DEL  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp LA(LC(V))  &trans  &trans  &trans  &trans
             >;
         };
 
@@ -297,8 +286,8 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_UP  &mmv MOVE_UP  &msc SCRL_DOWN  &trans  &trans
                 &trans  &trans  &trans  &kp LCTRL  &kp LEFT_SHIFT  &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans  &trans
-                &trans  &trans  &kp LC(X)  &kp LC(C)  &trans  &kp LC(V)  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_LEFT  &tog 9  &msc SCRL_RIGHT  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &mo 12  &trans  &trans  &trans  &trans  &mkp LCLK  &mkp LCLK  &mkp MCLK  &mkp RCLK  &trans  &trans
+                &trans  &trans  &kp LC(X)  &kp LC(C)  &trans  &kp LC(V)  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_LEFT  &tog 8  &msc SCRL_RIGHT  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &mo 11  &trans  &trans  &trans  &trans  &mkp LCLK  &mkp LCLK  &mkp MCLK  &mkp RCLK  &trans  &trans
             >;
         };
 
@@ -319,7 +308,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &gemini_tab  &trans  &trans  &kp COLON  &trans  &trans  &trans
-                &trans  &trans  &trans  &tog 9  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 9  &trans  &trans  &trans
+                &trans  &trans  &trans  &tog 8  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
@@ -354,6 +343,17 @@
                 &trans  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &hml LA(LGUI) G  &hmr RA(RGUI) M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &trans
                 &trans  &kp Z  &kp X  &kp C  &kp D  &kp V  &trans  &trans  &trans  &trans  &trans  &trans  &kp K  &kp H  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        cursor {
+            bindings = <
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &kp LA(F4)  &kp LC(W)  &kp LC(F)  &kp LC(P)  &kp LC(B)  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
+                &trans  &hml LGUI LC(A)  &hml LALT LC(R)  &hml LCTRL LC(S)  &hml LSHIFT LC(T)  &kp LC(G)  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
+                &kp LC(Y)  &kp LC(Z)  &kp LC(X)  &kp LC(C)  &kp LC(D)  &kp LC(V)  &trans  &trans  &trans  &trans  &trans  &kp ESCAPE  &trans  &kp HOME  &kp ESCAPE  &kp END  &trans  &trans
+                &trans  &trans  &trans  &trans  &kp DEL  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp LA(LC(V))  &trans  &trans  &trans  &trans
             >;
         };
 
