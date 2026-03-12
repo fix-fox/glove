@@ -7,6 +7,36 @@ REPO="fix-fox/glove"
 FIRMWARE_PATTERN="glove80_lh*.uf2"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
+FULL=false
+[[ "$1" == "--full" ]] && FULL=true
+
+wait_for_device() {
+    local timeout=$1
+    local elapsed=0
+    while ! cmd.exe /c "if exist D:\\ (exit 0) else (exit 1)" 2>/dev/null; do
+        sleep 1
+        elapsed=$((elapsed + 1))
+        if [ $elapsed -ge $timeout ]; then
+            echo ""
+            echo "Error: Timeout waiting for device at D:\\"
+            exit 1
+        fi
+        printf "\r  Waiting... %ds" $elapsed
+    done
+    echo ""
+}
+
+wait_for_disconnect() {
+    local timeout=$1
+    local elapsed=0
+    while cmd.exe /c "if exist D:\\ (exit 0) else (exit 1)" 2>/dev/null; do
+        sleep 1
+        elapsed=$((elapsed + 1))
+        if [ $elapsed -ge $timeout ]; then
+            break
+        fi
+    done
+}
 
 cd "$REPO_DIR"
 
@@ -77,7 +107,11 @@ echo "  Time:    $CREATED_HUMAN"
 echo "  Run:     https://github.com/$REPO/actions/runs/$RUN_ID"
 echo ""
 
-read -p "Download and flash this firmware? [Y/n] " -n 1 -r
+if $FULL; then
+    read -p "Download and flash BOTH halves? [Y/n] " -n 1 -r
+else
+    read -p "Download and flash this firmware? [Y/n] " -n 1 -r
+fi
 echo ""
 if [[ $REPLY =~ ^[Nn]$ ]]; then
     echo "Aborted."
@@ -103,33 +137,112 @@ fi
 
 echo "Found firmware: $(basename "$FIRMWARE_FILE")"
 
-# ── Flash ────────────────────────────────────────────────────────────────────
-echo ""
-echo "Put the LEFT hand in bootloader mode:"
-echo "  1. Hold the bottom-left key (magic key)"
-echo "  2. While holding, tap the top-left key"
-echo "  3. Release both — keyboard mounts as GLV80LHBOOT (D:)"
-echo ""
-echo "Waiting for device at D:\\ ..."
-
-TIMEOUT=60
-ELAPSED=0
-while ! cmd.exe /c "if exist D:\\ (exit 0) else (exit 1)" 2>/dev/null; do
-    sleep 1
-    ELAPSED=$((ELAPSED + 1))
-    if [ $ELAPSED -ge $TIMEOUT ]; then
-        echo ""
-        echo "Error: Timeout waiting for device at D:\\"
+if $FULL; then
+    RH_FIRMWARE_FILE=$(find "$TEMP_DIR" -name "glove80_rh*.uf2" -type f | head -1)
+    if [ -z "$RH_FIRMWARE_FILE" ]; then
+        echo "Error: Could not find right hand firmware (glove80_rh*.uf2)"
+        echo "Contents of download:"
+        find "$TEMP_DIR" -type f
         exit 1
     fi
-    printf "\r  Waiting... %ds" $ELAPSED
-done
-echo ""
+    echo "Found firmware: $(basename "$RH_FIRMWARE_FILE")"
+fi
 
-echo "Device detected! Copying firmware..."
-FIRMWARE_WIN_PATH=$(wslpath -w "$FIRMWARE_FILE")
-cmd.exe /c copy "$FIRMWARE_WIN_PATH" "D:\\" > /dev/null
+# ── Flash ────────────────────────────────────────────────────────────────────
+if $FULL; then
+    echo ""
+    echo "══════════════════════════════════════════════════════════════"
+    echo "  Full flash — both halves via power-up bootloader method"
+    echo "══════════════════════════════════════════════════════════════"
 
-echo ""
-echo "Firmware copied. The keyboard will reboot automatically."
-echo "Done!"
+    # === RIGHT HALF ===
+    echo ""
+    echo "── Step 1/2: Right Half ─────────────────────────────────────"
+    echo ""
+    echo "  1. Switch OFF the right half"
+    echo "  2. Connect USB-C cable to the right half"
+    echo "  3. Hold two keys: C3R3 + C6R6 (I + PgDn on default QWERTY)"
+    echo "  4. While holding, switch the right half ON"
+    echo "  5. Release — look for a slow pulsing red LED"
+    echo ""
+    echo "Waiting for bootloader device at D:\\ ..."
+
+    wait_for_device 120
+
+    echo "Device detected! Copying right-hand firmware..."
+    RH_WIN_PATH=$(wslpath -w "$RH_FIRMWARE_FILE")
+    cmd.exe /c copy "$RH_WIN_PATH" "D:\\" > /dev/null
+
+    echo "Right half done! Waiting for it to reboot..."
+    sleep 2
+    wait_for_disconnect 30
+
+    # === LEFT HALF ===
+    echo ""
+    echo "── Step 2/2: Left Half ──────────────────────────────────────"
+    echo ""
+    echo "  1. Disconnect USB from the right half"
+    echo "  2. Switch OFF the left half"
+    echo "  3. Connect USB-C cable to the left half"
+    echo "  4. Hold two keys: C6R6 + C3R3 (Magic + E on default QWERTY)"
+    echo "  5. While holding, switch the left half ON"
+    echo "  6. Release — look for a slow pulsing red LED"
+    echo ""
+    echo "Waiting for bootloader device at D:\\ ..."
+
+    wait_for_device 120
+
+    echo "Device detected! Copying left-hand firmware..."
+    FIRMWARE_WIN_PATH=$(wslpath -w "$FIRMWARE_FILE")
+    cmd.exe /c copy "$FIRMWARE_WIN_PATH" "D:\\" > /dev/null
+
+    echo ""
+    echo "══════════════════════════════════════════════════════════════"
+    echo "  Both halves flashed!"
+    echo "══════════════════════════════════════════════════════════════"
+
+    # ── Factory reset ────────────────────────────────────────────────
+    echo ""
+    echo "── Step 3/4: Factory Reset — Left Half ──────────────────────"
+    echo ""
+    echo "  1. Power OFF both halves"
+    echo "  2. Hold C6R6 + C3R2 (Magic + 3 on default QWERTY) on the left half"
+    echo "  3. While holding, switch the left half ON"
+    echo "  4. Keep holding for 5 seconds"
+    echo "  5. Power OFF the left half"
+    echo ""
+    echo "── Step 4/4: Factory Reset — Right Half ─────────────────────"
+    echo ""
+    echo "  1. Power OFF both halves"
+    echo "  2. Hold C6R6 + C3R2 (PgDn + 8 on default QWERTY) on the right half"
+    echo "  3. While holding, switch the right half ON"
+    echo "  4. Keep holding for 5 seconds"
+    echo "  5. Power OFF the right half"
+    echo ""
+    echo "── Re-pairing ───────────────────────────────────────────────"
+    echo ""
+    echo "  1. Power ON both halves simultaneously"
+    echo "  2. Press Magic + T to enable RGB — verify both halves light up"
+    echo "  3. Press Magic + T again to disable RGB"
+    echo "  4. Wait at least 1 minute for configuration to persist"
+    echo ""
+    echo "Done!"
+else
+    echo ""
+    echo "Put the LEFT hand in bootloader mode:"
+    echo "  1. Hold the bottom-left key (magic key)"
+    echo "  2. While holding, tap the top-left key"
+    echo "  3. Release both — keyboard mounts as GLV80LHBOOT (D:)"
+    echo ""
+    echo "Waiting for device at D:\\ ..."
+
+    wait_for_device 60
+
+    echo "Device detected! Copying firmware..."
+    FIRMWARE_WIN_PATH=$(wslpath -w "$FIRMWARE_FILE")
+    cmd.exe /c copy "$FIRMWARE_WIN_PATH" "D:\\" > /dev/null
+
+    echo ""
+    echo "Firmware copied. The keyboard will reboot automatically."
+    echo "Done!"
+fi
