@@ -5456,13 +5456,15 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "macro",
+            "macroName": "vim_q"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "macro",
+            "macroName": "vim_w"
           },
           "hold": null
         },
@@ -5611,7 +5613,8 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "macro",
+            "macroName": "vim_x"
           },
           "hold": null
         },
@@ -8714,6 +8717,99 @@
           "directive": "release",
           "bindings": [
             "&mo 12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "64471ad1-6134-451c-8f4a-68bd8d773edf",
+      "name": "vim_w",
+      "label": ":w",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp ESC"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp COLON"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp W"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp RET"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ed30db9c-0932-4eb0-87d7-74b318139746",
+      "name": "vim_q",
+      "label": ":q",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp ESC"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp COLON"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp Q"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp RET"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9abae799-788b-4890-9f9d-39af2b715121",
+      "name": "vim_x",
+      "label": ":x",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp ESC"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp COLON"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp X"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp RET"
           ]
         }
       ]

@@ -88,6 +88,24 @@
             tap-ms = <0>;
             bindings = <&macro_press &mo 12>, <&macro_param_1to1>, <&macro_press &kp MACRO_PLACEHOLDER>, <&macro_pause_for_release>, <&macro_param_1to1>, <&macro_release &kp MACRO_PLACEHOLDER>, <&macro_release &mo 12>;
         };
+
+        vim_w: vim_w {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp W>, <&macro_tap &kp RET>;
+        };
+
+        vim_q: vim_q {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp Q>, <&macro_tap &kp RET>;
+        };
+
+        vim_x: vim_x {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp X>, <&macro_tap &kp RET>;
+        };
     };
 
     behaviors {
@@ -306,9 +324,9 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
+                &trans  &vim_q  &vim_w  &trans  &trans  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &gemini_tab  &trans  &trans  &kp COLON  &trans  &trans  &trans
-                &trans  &trans  &trans  &tog 8  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
+                &trans  &trans  &vim_x  &tog 8  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
