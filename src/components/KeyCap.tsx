@@ -35,6 +35,10 @@ export const KeyCap = memo(function KeyCap({
   const holdTaps = useEditorStore((s) => s.config.holdTaps ?? []);
 
   const activeLayerIndex = useEditorStore((s) => s.activeLayerIndex);
+  const hebrewMode = useEditorStore((s) => {
+    const name = s.config.layers[s.activeLayerIndex]?.name ?? "";
+    return name.toLowerCase().includes("hebrew");
+  });
 
   if (activeLayerIndex === 0 && isMagicPosition(index)) {
     return (
@@ -53,7 +57,7 @@ export const KeyCap = memo(function KeyCap({
     );
   }
 
-  const tapLabel = key ? behaviorLabel(key.tap, layerNames, modMorphs, holdTaps) : "";
+  const tapLabel = key ? behaviorLabel(key.tap, layerNames, modMorphs, holdTaps, hebrewMode) : "";
 
   // Secondary label: explicit hold behavior, or hold-side of a hold_tap tap behavior
   let holdLabel = key?.hold ? behaviorLabel(key.hold, layerNames) : "";

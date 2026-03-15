@@ -35,6 +35,10 @@ export function KeyboardLayout() {
   const holdTaps = useEditorStore((s) => s.config.holdTaps ?? []);
   const activeLayerIndex = useEditorStore((s) => s.activeLayerIndex);
   const keys = useEditorStore((s) => s.config.layers[s.activeLayerIndex]?.keys);
+  const hebrewMode = useEditorStore((s) => {
+    const name = s.config.layers[s.activeLayerIndex]?.name ?? "";
+    return name.toLowerCase().includes("hebrew");
+  });
 
   // ── Handlers ──────────────────────────────────────────────────────────
 
@@ -127,7 +131,7 @@ export function KeyboardLayout() {
   function getLabels(keyIndex: number): { tap: string; hold: string } {
     const key = keys?.[keyIndex];
     if (!key) return { tap: "", hold: "" };
-    const tap = behaviorLabel(key.tap, layerNames, modMorphs, holdTaps);
+    const tap = behaviorLabel(key.tap, layerNames, modMorphs, holdTaps, hebrewMode);
     let hold = key.hold ? behaviorLabel(key.hold, layerNames) : "";
     if (!hold && key.tap.type === "hold_tap") {
       hold = holdTapSecondaryLabel(key.tap.name, key.tap.param1);

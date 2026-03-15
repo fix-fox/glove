@@ -225,3 +225,37 @@ export function searchKeycodes(query: string, keycodes: ZmkKeycode[] = ZMK_KEYCO
       k.category.toLowerCase().includes(lower),
   );
 }
+
+/** Hebrew keycodes — QWERTY code mapped to Hebrew character via OS Hebrew layout.
+ *  Kept separate from ZMK_KEYCODES to avoid polluting the default label map. */
+export const HEBREW_KEYCODES: ZmkKeycode[] = [
+  { code: "A", label: "\u05E9 shin", category: "Hebrew" },
+  { code: "B", label: "\u05E0 nun", category: "Hebrew" },
+  { code: "C", label: "\u05D1 bet", category: "Hebrew" },
+  { code: "D", label: "\u05D2 gimel", category: "Hebrew" },
+  { code: "E", label: "\u05E7 qof", category: "Hebrew" },
+  { code: "F", label: "\u05DB kaf", category: "Hebrew" },
+  { code: "G", label: "\u05E2 ayin", category: "Hebrew" },
+  { code: "H", label: "\u05D9 yod", category: "Hebrew" },
+  { code: "I", label: "\u05DF nun sofit", category: "Hebrew" },
+  { code: "J", label: "\u05D7 het", category: "Hebrew" },
+  { code: "K", label: "\u05DC lamed", category: "Hebrew" },
+  { code: "L", label: "\u05DA kaf sofit", category: "Hebrew" },
+  { code: "M", label: "\u05E6 tsade", category: "Hebrew" },
+  { code: "N", label: "\u05DE mem", category: "Hebrew" },
+  { code: "O", label: "\u05DD mem sofit", category: "Hebrew" },
+  { code: "P", label: "\u05E4 pe", category: "Hebrew" },
+  { code: "R", label: "\u05E8 resh", category: "Hebrew" },
+  { code: "S", label: "\u05D3 dalet", category: "Hebrew" },
+  { code: "T", label: "\u05D0 alef", category: "Hebrew" },
+  { code: "U", label: "\u05D5 vav", category: "Hebrew" },
+  { code: "V", label: "\u05D4 he", category: "Hebrew" },
+  { code: "X", label: "\u05E1 samekh", category: "Hebrew" },
+  { code: "Y", label: "\u05D8 tet", category: "Hebrew" },
+  { code: "Z", label: "\u05D6 zayin", category: "Hebrew" },
+  { code: "SEMI", label: "\u05E3 pe sofit", category: "Hebrew" },
+  { code: "COMMA", label: "\u05EA tav", category: "Hebrew" },
+  { code: "DOT", label: "\u05E5 tsade sofit", category: "Hebrew" },
+  { code: "FSLH", label: ". (period-heb)", category: "Hebrew" },
+  { code: "SQT", label: ", (comma-heb)", category: "Hebrew" },
+];

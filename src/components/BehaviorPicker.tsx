@@ -7,6 +7,7 @@ import type { Behavior, MacroDefinition } from "@/types/schema";
 import { BEHAVIOR_TYPE_LABELS, defaultBehaviorForType } from "@/lib/behavior-defaults";
 import {
   ZMK_KEYCODES,
+  HEBREW_KEYCODES,
   ZMK_MODIFIER_CODES,
   MODIFIER_WRAPPERS,
   parseModifiedKeyCode,
@@ -281,11 +282,12 @@ function BehaviorTypeCombobox({
 
   if (showKeycodes && q.length > 0) {
     let count = 0;
-    for (const kc of ZMK_KEYCODES) {
+    const allKeycodes = [...ZMK_KEYCODES, ...HEBREW_KEYCODES];
+    for (const kc of allKeycodes) {
       if (count >= 10) break;
       if (kc.code.toLowerCase().includes(q) || kc.label.toLowerCase().includes(q)) {
         items.push({
-          key: `kc-${kc.code}`,
+          key: `kc-${kc.category}-${kc.code}`,
           label: kc.label,
           detail: kc.code,
           heading: count === 0 ? "Keycodes" : undefined,
@@ -523,7 +525,7 @@ export function KeycodeCombobox({
 
   const keycodes = modifierOnly
     ? ZMK_KEYCODES.filter((k) => ZMK_MODIFIER_CODES.has(k.code))
-    : ZMK_KEYCODES;
+    : [...ZMK_KEYCODES, ...HEBREW_KEYCODES];
 
   // Parse out modifier wrappers so we display and select the base key
   const parsed = parseModifiedKeyCode(value);
@@ -558,7 +560,7 @@ export function KeycodeCombobox({
               <CommandGroup key={category} heading={category}>
                 {codes.map((kc) => (
                   <CommandItem
-                    key={kc.code}
+                    key={`${category}-${kc.code}`}
                     value={`${kc.code} ${kc.label}`}
                     onSelect={() => {
                       // Preserve any active modifier wrappers when selecting a new base key

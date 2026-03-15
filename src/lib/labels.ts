@@ -1,6 +1,7 @@
 import type { Behavior, HoldTapDefinition, ModMorphDefinition } from "../types/schema";
 import { ZMK_KEYCODES, isModifiedKeyCode, parseModifiedKeyCode } from "./keycodes";
 import { unpackModMorphChain } from "./mod-morph-utils";
+import { hebrewLabel } from "./hebrew";
 
 /** Override map: ZMK code -> display label. Checked before ZMK_KEYCODES lookup. */
 const DISPLAY_OVERRIDES: Record<string, string> = {
@@ -64,7 +65,13 @@ const KEYCODE_LABEL_MAP: ReadonlyMap<string, string> = new Map(
   ZMK_KEYCODES.map((k) => [k.code, k.label]),
 );
 
-export function keyCodeDisplayLabel(code: string): string {
+export function keyCodeDisplayLabel(code: string, hebrewMode?: boolean): string {
+  // In Hebrew mode, prefer Hebrew character labels for alpha/punct keys
+  if (hebrewMode) {
+    const heb = hebrewLabel(code);
+    if (heb !== undefined) return heb;
+  }
+
   // Check overrides first
   const override = DISPLAY_OVERRIDES[code];
   if (override !== undefined) return override;
@@ -73,7 +80,7 @@ export function keyCodeDisplayLabel(code: string): string {
   if (isModifiedKeyCode(code)) {
     const parsed = parseModifiedKeyCode(code);
     const modSymbols = parsed.mods.map((m) => MODIFIER_SYMBOLS[m] ?? m).join("");
-    const baseLabel = keyCodeDisplayLabel(parsed.key);
+    const baseLabel = keyCodeDisplayLabel(parsed.key, hebrewMode);
     return `${modSymbols}${baseLabel}`;
   }
 
@@ -130,14 +137,15 @@ function resolveHRMTapLabel(
   param2: string,
   holdTaps: HoldTapDefinition[],
   modMorphs: ModMorphDefinition[],
+  hebrewMode?: boolean,
 ): string {
   const htDef = holdTaps.find((d) => d.name === name);
   if (htDef && htDef.tapBinding !== "&kp") {
     const mmName = htDef.tapBinding.replace(/^&/, "");
     const unpacked = unpackModMorphChain({ type: "mod_morph", name: mmName }, modMorphs);
-    if (unpacked) return keyCodeDisplayLabel(unpacked.baseKeyCode);
+    if (unpacked) return keyCodeDisplayLabel(unpacked.baseKeyCode, hebrewMode);
   }
-  return keyCodeDisplayLabel(param2);
+  return keyCodeDisplayLabel(param2, hebrewMode);
 }
 
 /**
@@ -149,12 +157,13 @@ function holdTapTapLabel(
   param2: string,
   holdTaps: HoldTapDefinition[],
   modMorphs: ModMorphDefinition[],
+  hebrewMode?: boolean,
 ): string {
   if (name === "magic") return "magic-tap";
   if (isHRMName(name) || name.startsWith("mt_")) {
-    return resolveHRMTapLabel(name, param2, holdTaps, modMorphs);
+    return resolveHRMTapLabel(name, param2, holdTaps, modMorphs, hebrewMode);
   }
-  if (name.startsWith("lt")) return keyCodeDisplayLabel(param2);
+  if (name.startsWith("lt")) return keyCodeDisplayLabel(param2, hebrewMode);
   return name;
 }
 
@@ -189,11 +198,12 @@ export function behaviorLabel(
   layerNames?: string[],
   modMorphs?: ModMorphDefinition[],
   holdTaps?: HoldTapDefinition[],
+  hebrewMode?: boolean,
 ): string {
   const ln = (idx: number) => shortLayerName(layerNames?.[idx] ?? idx);
   switch (behavior.type) {
     case "kp":
-      return keyCodeDisplayLabel(behavior.keyCode);
+      return keyCodeDisplayLabel(behavior.keyCode, hebrewMode);
     case "mo":
       return `◇ ${ln(behavior.layerIndex)}`;
     case "to":
@@ -236,11 +246,11 @@ export function behaviorLabel(
     case "mod_morph": {
       if (modMorphs) {
         const unpacked = unpackModMorphChain(behavior, modMorphs);
-        if (unpacked) return keyCodeDisplayLabel(unpacked.baseKeyCode);
+        if (unpacked) return keyCodeDisplayLabel(unpacked.baseKeyCode, hebrewMode);
       }
       return behavior.name;
     }
     case "hold_tap":
-      return holdTapTapLabel(behavior.name, behavior.param2, holdTaps ?? [], modMorphs ?? []);
+      return holdTapTapLabel(behavior.name, behavior.param2, holdTaps ?? [], modMorphs ?? [], hebrewMode);
   }
 }
