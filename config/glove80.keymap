@@ -136,7 +136,7 @@
             #binding-cells = <2>;
             flavor = "balanced";
             tapping-term-ms = <280>;
-            quick-tap-ms = <175>;
+            quick-tap-ms = <0>;
             require-prior-idle-ms = <50>;
             bindings = <&mod_activate>, <&kp>;
             hold-trigger-key-positions = <5 6 7 8 9 16 17 18 19 20 21 28 29 30 31 32 33 40 41 42 43 44 45 58 59 60 61 62 63 75 76 77 78 79 72 73 74 55 56 57 52 69>;
@@ -148,7 +148,7 @@
             #binding-cells = <2>;
             flavor = "balanced";
             tapping-term-ms = <280>;
-            quick-tap-ms = <175>;
+            quick-tap-ms = <0>;
             require-prior-idle-ms = <50>;
             bindings = <&mod_activate>, <&kp>;
             hold-trigger-key-positions = <4 3 2 1 0 15 14 13 12 11 10 27 26 25 24 23 22 39 38 37 36 35 34 51 50 49 48 47 46 68 67 66 65 64 71 70 69 54 53 52 57 74>;
@@ -203,6 +203,16 @@
 
         english_alpha_when_mod {
             if-layers = <3 12>;
+            then-layer = <13>;
+        };
+
+        hebrew_alt_symbols {
+            if-layers = <16 5>;
+            then-layer = <6>;
+        };
+
+        english_alpha_when_mod_alt {
+            if-layers = <16 12>;
             then-layer = <13>;
         };
     };
@@ -382,6 +392,17 @@
                 &trans  &kp LC(LS(LG(Q)))  &kp LC(LS(LG(W)))  &kp LC(LS(LG(F)))  &kp LC(LS(LG(P)))  &flow_bookmark  &kp LC(LS(LG(J)))  &kp LC(LS(LG(L)))  &kp LC(LS(LG(U)))  &kp LC(LS(LG(Y)))  &trans  &trans
                 &trans  &kp LC(LS(LG(A)))  &kp LC(LG(R))  &kp LC(LS(LG(S)))  &kp LC(LS(LG(T)))  &kp LC(LS(LG(G)))  &kp LC(LS(LG(M)))  &kp LC(LS(LG(N)))  &kp LC(LS(LG(E)))  &kp LC(LS(LG(I)))  &kp LC(LS(LG(O)))  &trans
                 &trans  &kp LC(LS(LG(Z)))  &kp LC(LS(LG(X)))  &kp LC(LS(LG(C)))  &kp LC(LS(LG(D)))  &kp LC(LS(LG(V)))  &trans  &trans  &trans  &trans  &trans  &trans  &kp LC(LS(LG(K)))  &kp LC(LS(LG(H)))  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        hebrew_alt {
+            bindings = <
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &kp P  &kp B  &kp O  &kp E  &kp J  &kp N  &kp S  &kp Z  &kp F  &kp X  &trans
+                &trans  &hml LGUI COMMA  &hml LALT R  &hml LCTRL K  &hml LSHIFT H  &lt 15 G  &lt 15 C  &hmr RSHIFT V  &hmr RCTRL U  &hmr RALT T  &hmr RGUI A  &trans
+                &trans  &kp SEMI  &kp I  &kp Y  &lt 10 D  &kp PERIOD  &trans  &trans  &trans  &trans  &trans  &trans  &kp L  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
