@@ -123,6 +123,13 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        mm_pscrn_ctrl_clipboard: mm_pscrn_ctrl_clipboard {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp PSCRN>, <&kp LG(LC(LS(V)))>;
+            mods = <(MOD_LCTL|MOD_RCTL)>;
+        };
+
         magic: magic {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -227,7 +234,7 @@
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LG(SEMI)  &none
                 &none  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &lt 15 G  &lt 15 M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &none
                 &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &mt LSHIFT CAPS  &mt LSHIFT CAPS  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &none  &kp PSCRN  &lt 15 LC(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
+                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &none  &mm_pscrn_ctrl_clipboard  &lt 15 LC(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
             >;
         };
 
