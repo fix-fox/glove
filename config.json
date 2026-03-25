@@ -5765,8 +5765,7 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "clipboard_history"
+            "type": "trans"
           },
           "hold": null
         },

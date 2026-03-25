@@ -343,7 +343,7 @@
                 &trans  &vim_q  &vim_w  &trans  &trans  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &gemini_tab  &trans  &trans  &kp COLON  &trans  &trans  &trans
                 &trans  &trans  &vim_x  &tog 8  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &clipboard_history  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
