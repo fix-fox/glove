@@ -5765,8 +5765,8 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "LC(LS(LG(V)))"
+            "type": "macro",
+            "macroName": "clipboard_history"
           },
           "hold": null
         },
@@ -9355,6 +9355,55 @@
           "directive": "tap",
           "bindings": [
             "&kp RET"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "da0f70b0-0f81-48b2-9804-9a7561e87079",
+      "name": "clipboard_history",
+      "label": "CLIP_HIST",
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LGUI"
+          ]
+        },
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp V"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LSHFT"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LGUI"
           ]
         }
       ]

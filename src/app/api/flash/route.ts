@@ -49,32 +49,41 @@ export async function POST(request: Request) {
         }
 
         // ── Wait for build ──
-        if (hasChanges) {
-          // Give GitHub time to queue the new workflow run so we don't
-          // pick up the previous (already-completed) run.
-          emit(controller, "Waiting for new build to start...");
-          await new Promise((r) => setTimeout(r, 5000));
-        }
-        emit(controller, "Checking for workflow runs...");
+        // Get the HEAD sha so we can match the correct workflow run
+        const headSha = hasChanges
+          ? await run("git", ["rev-parse", "HEAD"])
+          : "";
 
-        // Poll until we find a completed (or in-progress) run
+        emit(controller, "Waiting for build...");
+
+        // Poll until we find a completed run matching our commit
         let runId = "";
         let conclusion = "";
         for (let attempt = 0; attempt < 120; attempt++) {
           const json = await run("gh", [
             "run", "list", "--repo", REPO, "--workflow", "build.yml",
-            "--limit", "1", "--json", "databaseId,status,conclusion",
+            "--limit", "5", "--json", "databaseId,status,conclusion,headSha",
           ]);
-          const runs = JSON.parse(json);
-          if (runs.length === 0) {
-            emit(controller, "No workflow runs found. Waiting...");
+          const runs = JSON.parse(json) as Array<{
+            databaseId: number; status: string; conclusion: string; headSha: string;
+          }>;
+
+          // If we pushed, only consider the run for our commit
+          const target = headSha
+            ? runs.find((r) => r.headSha === headSha)
+            : runs[0];
+
+          if (!target) {
+            if (attempt % 6 === 0) {
+              emit(controller, "Waiting for GitHub to start the build...");
+            }
             await new Promise((r) => setTimeout(r, 5000));
             continue;
           }
-          const latest = runs[0];
-          runId = String(latest.databaseId);
-          if (latest.status === "completed") {
-            conclusion = latest.conclusion;
+
+          runId = String(target.databaseId);
+          if (target.status === "completed") {
+            conclusion = target.conclusion;
             break;
           }
           if (attempt === 0) {
