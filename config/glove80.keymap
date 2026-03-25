@@ -129,13 +129,6 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
-        mm_pscrn_ctrl_clipboard: mm_pscrn_ctrl_clipboard {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&kp PSCRN>, <&clipboard_history>;
-            mods = <(MOD_LCTL|MOD_RCTL)>;
-        };
-
         magic: magic {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -240,7 +233,7 @@
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LG(SEMI)  &none
                 &none  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &lt 15 G  &lt 15 M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &none
                 &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &mt LSHIFT CAPS  &mt LSHIFT CAPS  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &none  &mm_pscrn_ctrl_clipboard  &lt 15 LC(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
+                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &none  &kp PSCRN  &lt 15 LC(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
             >;
         };
 
@@ -350,7 +343,7 @@
                 &trans  &vim_q  &vim_w  &trans  &trans  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &gemini_tab  &trans  &trans  &kp COLON  &trans  &trans  &trans
                 &trans  &trans  &vim_x  &tog 8  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &clipboard_history  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
