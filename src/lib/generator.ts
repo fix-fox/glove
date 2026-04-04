@@ -76,6 +76,10 @@ export function behaviorToString(key: Key, mouseSettings?: MouseSettings): strin
 
   // Layer-tap: hold is a layer behavior
   if (key.hold.type === "mo" || key.hold.type === "to" || key.hold.type === "sl" || key.hold.type === "tog") {
+    // If tap is none/trans, just emit the hold behavior directly
+    if (key.tap.type === "none" || key.tap.type === "trans") {
+      return `&${key.hold.type} ${key.hold.layerIndex}`;
+    }
     if (key.tap.type === "kp") {
       return `&lt ${key.hold.layerIndex} ${key.tap.keyCode}`;
     }
