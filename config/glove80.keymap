@@ -112,6 +112,12 @@
             #binding-cells = <0>;
             bindings = <&macro_press &kp LGUI>, <&macro_press &kp LCTRL>, <&macro_press &kp LSHFT>, <&macro_tap &kp V>, <&macro_release &kp LSHFT>, <&macro_release &kp LCTRL>, <&macro_release &kp LGUI>;
         };
+
+        type_2digits: type_2digits {
+            compatible = "zmk,behavior-macro-two-param";
+            #binding-cells = <2>;
+            bindings = <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>, <&macro_param_2to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
+        };
     };
 
     behaviors {
@@ -410,6 +416,17 @@
                 &trans  &hml LGUI COMMA  &hml LALT R  &hml LCTRL K  &hml LSHIFT H  &lt 15 G  &lt 15 C  &hmr RSHIFT V  &hmr RCTRL U  &hmr RALT T  &hmr RGUI A  &trans
                 &trans  &kp SEMI  &kp I  &kp Y  &lt 10 D  &kp PERIOD  &trans  &trans  &trans  &trans  &trans  &trans  &kp L  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        key_index {
+            bindings = <
+                &kp N0  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9
+                &type_2digits N1 N0  &type_2digits N1 N1  &type_2digits N1 N2  &type_2digits N1 N3  &type_2digits N1 N4  &type_2digits N1 N5  &type_2digits N1 N6  &type_2digits N1 N7  &type_2digits N1 N8  &type_2digits N1 N9  &type_2digits N2 N0  &type_2digits N2 N1
+                &type_2digits N2 N2  &type_2digits N2 N3  &type_2digits N2 N4  &type_2digits N2 N5  &type_2digits N2 N6  &type_2digits N2 N7  &type_2digits N2 N8  &type_2digits N2 N9  &type_2digits N3 N0  &type_2digits N3 N1  &type_2digits N3 N2  &type_2digits N3 N3
+                &type_2digits N3 N4  &type_2digits N3 N5  &type_2digits N3 N6  &type_2digits N3 N7  &type_2digits N3 N8  &type_2digits N3 N9  &type_2digits N4 N0  &type_2digits N4 N1  &type_2digits N4 N2  &type_2digits N4 N3  &type_2digits N4 N4  &type_2digits N4 N5
+                &type_2digits N4 N6  &type_2digits N4 N7  &type_2digits N4 N8  &type_2digits N4 N9  &type_2digits N5 N0  &type_2digits N5 N1  &type_2digits N5 N2  &type_2digits N5 N3  &type_2digits N5 N4  &type_2digits N5 N5  &type_2digits N5 N6  &type_2digits N5 N7  &type_2digits N5 N8  &type_2digits N5 N9  &type_2digits N6 N0  &type_2digits N6 N1  &type_2digits N6 N2  &type_2digits N6 N3
+                &type_2digits N6 N4  &type_2digits N6 N5  &type_2digits N6 N6  &type_2digits N6 N7  &type_2digits N6 N8  &type_2digits N6 N9  &type_2digits N7 N0  &type_2digits N7 N1  &type_2digits N7 N2  &type_2digits N7 N3  &type_2digits N7 N4  &type_2digits N7 N5  &type_2digits N7 N6  &type_2digits N7 N7  &type_2digits N7 N8  &type_2digits N7 N9
             >;
         };
     };

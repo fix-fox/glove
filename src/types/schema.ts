@@ -101,6 +101,8 @@ const MkpSchema = z.object({
 const MacroBehaviorSchema = z.object({
   type: z.literal("macro"),
   macroName: z.string().min(1),
+  param: z.string().min(1).optional(),
+  param2: z.string().min(1).optional(),
 });
 
 // &mod_morph_name — references a user-defined mod-morph
@@ -170,13 +172,14 @@ export const MacroStepSchema = z.discriminatedUnion("directive", [
   z.object({ directive: z.literal("release"), bindings: z.array(z.string().min(1)).min(1) }),
   z.object({ directive: z.literal("pause_for_release") }),
   z.object({ directive: z.literal("param_1to1") }),
+  z.object({ directive: z.literal("param_2to1") }),
 ]);
 
 export const MacroDefinitionSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1),
   label: z.string().optional(),
-  bindingCells: z.literal(1).optional(),
+  bindingCells: z.union([z.literal(1), z.literal(2)]).optional(),
   waitMs: z.number().int().min(0).optional(),
   tapMs: z.number().int().min(0).optional(),
   steps: z.array(MacroStepSchema).min(1),

@@ -8913,6 +8913,712 @@
           "hold": null
         }
       ]
+    },
+    {
+      "id": "55a0f387-4ca9-45e6-bbf2-4bf565218954",
+      "name": "key_index",
+      "keys": [
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "kp",
+            "keyCode": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N1",
+            "param2": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N2",
+            "param2": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N3",
+            "param2": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N4",
+            "param2": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N5",
+            "param2": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N6",
+            "param2": "N9"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N0"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N1"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N2"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N3"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N4"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N5"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N6"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N7"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N8"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "type_2digits",
+            "param": "N7",
+            "param2": "N9"
+          },
+          "hold": null
+        }
+      ]
     }
   ],
   "macros": [
@@ -9403,6 +10109,32 @@
           "directive": "release",
           "bindings": [
             "&kp LGUI"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3e363e06-d74a-4165-8af9-2a10deb35f55",
+      "name": "type_2digits",
+      "label": "##",
+      "bindingCells": 2,
+      "steps": [
+        {
+          "directive": "param_1to1"
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp MACRO_PLACEHOLDER"
+          ]
+        },
+        {
+          "directive": "param_2to1"
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp MACRO_PLACEHOLDER"
           ]
         }
       ]

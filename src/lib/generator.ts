@@ -56,8 +56,12 @@ function tapBehaviorToString(behavior: Behavior, mouseSettings?: MouseSettings):
       return `&msc ${behavior.direction}`;
     case "mkp":
       return `&mkp ${behavior.button}`;
-    case "macro":
-      return `&${behavior.macroName}`;
+    case "macro": {
+      const parts = [`&${behavior.macroName}`];
+      if (behavior.param) parts.push(behavior.param);
+      if (behavior.param2) parts.push(behavior.param2);
+      return parts.join(" ");
+    }
     case "mod_morph":
       return `&${behavior.name}`;
     case "hold_tap":
@@ -220,7 +224,10 @@ export type GeneratorResult =
 function generateMacroBlock(macro: MacroDefinition): string {
   const lines: string[] = [];
   lines.push(`        ${macro.name}: ${macro.name} {`);
-  if (macro.bindingCells === 1) {
+  if (macro.bindingCells === 2) {
+    lines.push(`            compatible = "zmk,behavior-macro-two-param";`);
+    lines.push(`            #binding-cells = <2>;`);
+  } else if (macro.bindingCells === 1) {
     lines.push(`            compatible = "zmk,behavior-macro-one-param";`);
     lines.push(`            #binding-cells = <1>;`);
   } else {
@@ -251,6 +258,9 @@ function generateMacroBlock(macro: MacroDefinition): string {
         break;
       case "param_1to1":
         bindings.push(`<&macro_param_1to1>`);
+        break;
+      case "param_2to1":
+        bindings.push(`<&macro_param_2to1>`);
         break;
     }
   }
