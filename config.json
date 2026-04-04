@@ -342,10 +342,7 @@
           "tap": {
             "type": "none"
           },
-          "hold": {
-            "type": "mo",
-            "layerIndex": 17
-          }
+          "hold": null
         },
         {
           "tap": {
@@ -546,7 +543,10 @@
           "tap": {
             "type": "none"
           },
-          "hold": null
+          "hold": {
+            "type": "mo",
+            "layerIndex": 17
+          }
         },
         {
           "tap": {
