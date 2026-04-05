@@ -281,20 +281,14 @@
             "type": "kp",
             "keyCode": "G"
           },
-          "hold": {
-            "type": "mo",
-            "layerIndex": 15
-          }
+          "hold": null
         },
         {
           "tap": {
             "type": "kp",
             "keyCode": "M"
           },
-          "hold": {
-            "type": "mo",
-            "layerIndex": 15
-          }
+          "hold": null
         },
         {
           "tap": {
