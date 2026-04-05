@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generate ZMK firmware, push, build via GitHub Actions, and flash to Glove80.
+# Generate ZMK firmware, build (locally or via GitHub Actions), and flash to Glove80.
 
 set -e
 
@@ -8,7 +8,16 @@ FIRMWARE_PATTERN="glove80_lh*.uf2"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 FULL=false
-[[ "$1" == "--full" ]] && FULL=true
+MODE="local"  # default to local Docker build
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --full)   FULL=true; shift ;;
+        --local)  MODE="local"; shift ;;
+        --remote) MODE="remote"; shift ;;
+        *) echo "Usage: $0 [--local|--remote] [--full]"; exit 1 ;;
+    esac
+done
 
 wait_for_device() {
     local timeout=$1
@@ -44,108 +53,118 @@ cd "$REPO_DIR"
 echo "Generating firmware files..."
 npm run generate-firmware --silent
 
-# ── Check for changes ────────────────────────────────────────────────────────
-CHANGED_FILES="config/glove80.keymap config/glove80.conf"
-CHANGES=$(git diff --name-only -- $CHANGED_FILES 2>/dev/null)
-UNTRACKED=$(git ls-files --others --exclude-standard -- $CHANGED_FILES 2>/dev/null)
-ALL_CHANGES=$(echo -e "${CHANGES}\n${UNTRACKED}" | sed '/^$/d' | sort -u)
+# ── Build firmware ───────────────────────────────────────────────────────────
+TEMP_DIR=$(mktemp -d)
+cleanup() { rm -rf "$TEMP_DIR"; }
+trap cleanup EXIT
 
-if [ -n "$ALL_CHANGES" ]; then
+if [ "$MODE" = "local" ]; then
+    # ── Local Docker build ──
+    "$SCRIPT_DIR/zmk-docker-build.sh" --board glove80_lh --output-dir "$TEMP_DIR"
+    FIRMWARE_FILE="$TEMP_DIR/glove80_lh-zmk.uf2"
+
+    if $FULL; then
+        "$SCRIPT_DIR/zmk-docker-build.sh" --board glove80_rh --output-dir "$TEMP_DIR"
+        RH_FIRMWARE_FILE="$TEMP_DIR/glove80_rh-zmk.uf2"
+    fi
+else
+    # ── Remote build via GitHub Actions ──
+    CHANGED_FILES="config/glove80.keymap config/glove80.conf"
+    CHANGES=$(git diff --name-only -- $CHANGED_FILES 2>/dev/null)
+    UNTRACKED=$(git ls-files --others --exclude-standard -- $CHANGED_FILES 2>/dev/null)
+    ALL_CHANGES=$(echo -e "${CHANGES}\n${UNTRACKED}" | sed '/^$/d' | sort -u)
+
+    if [ -n "$ALL_CHANGES" ]; then
+        echo ""
+        echo "Changed files:"
+        for f in $ALL_CHANGES; do
+            echo "  $f"
+        done
+        echo ""
+        git diff -- $CHANGED_FILES 2>/dev/null
+        echo ""
+        read -p "Commit and push? [Y/n] " -n 1 -r
+        echo ""
+        if [[ $REPLY =~ ^[Nn]$ ]]; then
+            echo "Aborted."
+            exit 0
+        fi
+        git add -- $CHANGED_FILES 2>/dev/null
+        git commit -m "keymap: update from configurator"
+        git push
+    else
+        echo "No keymap changes — checking latest build."
+    fi
+
     echo ""
-    echo "Changed files:"
-    for f in $ALL_CHANGES; do
-        echo "  $f"
-    done
+    echo "Checking for workflow runs..."
+
+    RUN_INFO=$(gh run list --repo "$REPO" --workflow build.yml --limit 1 --json databaseId,status,conclusion,headBranch,createdAt,displayTitle)
+    RUN_ID=$(echo "$RUN_INFO" | jq -r '.[0].databaseId')
+    STATUS=$(echo "$RUN_INFO" | jq -r '.[0].status')
+    CONCLUSION=$(echo "$RUN_INFO" | jq -r '.[0].conclusion')
+    BRANCH=$(echo "$RUN_INFO" | jq -r '.[0].headBranch')
+    CREATED_AT=$(echo "$RUN_INFO" | jq -r '.[0].createdAt')
+    TITLE=$(echo "$RUN_INFO" | jq -r '.[0].displayTitle')
+
+    CREATED_HUMAN=$(date -d "$CREATED_AT" "+%Y-%m-%d %H:%M:%S" 2>/dev/null || echo "$CREATED_AT")
+
+    if [ "$STATUS" = "in_progress" ] || [ "$STATUS" = "queued" ]; then
+        echo "Build in progress: $TITLE"
+        echo "Waiting for build to complete..."
+        gh run watch "$RUN_ID" --repo "$REPO" --exit-status
+        CONCLUSION=$(gh run view "$RUN_ID" --repo "$REPO" --json conclusion -q '.conclusion')
+    fi
+
+    if [ "$CONCLUSION" != "success" ]; then
+        echo "Error: Latest build failed (status: $CONCLUSION)"
+        echo "Check: https://github.com/$REPO/actions/runs/$RUN_ID"
+        exit 1
+    fi
+
     echo ""
-    git diff -- $CHANGED_FILES 2>/dev/null
+    echo "=== Latest successful build ==="
+    echo "  Commit:  $TITLE"
+    echo "  Branch:  $BRANCH"
+    echo "  Time:    $CREATED_HUMAN"
+    echo "  Run:     https://github.com/$REPO/actions/runs/$RUN_ID"
     echo ""
-    read -p "Commit and push? [Y/n] " -n 1 -r
+
+    if $FULL; then
+        read -p "Download and flash BOTH halves? [Y/n] " -n 1 -r
+    else
+        read -p "Download and flash this firmware? [Y/n] " -n 1 -r
+    fi
     echo ""
     if [[ $REPLY =~ ^[Nn]$ ]]; then
         echo "Aborted."
         exit 0
     fi
-    git add -- $CHANGED_FILES 2>/dev/null
-    git commit -m "keymap: update from configurator"
-    git push
-else
-    echo "No keymap changes — checking latest build."
-fi
 
-# ── Wait for build ───────────────────────────────────────────────────────────
-echo ""
-echo "Checking for workflow runs..."
+    echo "Downloading firmware artifact..."
+    gh run download "$RUN_ID" --repo "$REPO" --dir "$TEMP_DIR"
 
-RUN_INFO=$(gh run list --repo "$REPO" --workflow build.yml --limit 1 --json databaseId,status,conclusion,headBranch,createdAt,displayTitle)
-RUN_ID=$(echo "$RUN_INFO" | jq -r '.[0].databaseId')
-STATUS=$(echo "$RUN_INFO" | jq -r '.[0].status')
-CONCLUSION=$(echo "$RUN_INFO" | jq -r '.[0].conclusion')
-BRANCH=$(echo "$RUN_INFO" | jq -r '.[0].headBranch')
-CREATED_AT=$(echo "$RUN_INFO" | jq -r '.[0].createdAt')
-TITLE=$(echo "$RUN_INFO" | jq -r '.[0].displayTitle')
+    FIRMWARE_FILE=$(find "$TEMP_DIR" -name "$FIRMWARE_PATTERN" -type f | head -1)
 
-CREATED_HUMAN=$(date -d "$CREATED_AT" "+%Y-%m-%d %H:%M:%S" 2>/dev/null || echo "$CREATED_AT")
-
-if [ "$STATUS" = "in_progress" ] || [ "$STATUS" = "queued" ]; then
-    echo "Build in progress: $TITLE"
-    echo "Waiting for build to complete..."
-    gh run watch "$RUN_ID" --repo "$REPO" --exit-status
-    CONCLUSION=$(gh run view "$RUN_ID" --repo "$REPO" --json conclusion -q '.conclusion')
-fi
-
-if [ "$CONCLUSION" != "success" ]; then
-    echo "Error: Latest build failed (status: $CONCLUSION)"
-    echo "Check: https://github.com/$REPO/actions/runs/$RUN_ID"
-    exit 1
-fi
-
-echo ""
-echo "=== Latest successful build ==="
-echo "  Commit:  $TITLE"
-echo "  Branch:  $BRANCH"
-echo "  Time:    $CREATED_HUMAN"
-echo "  Run:     https://github.com/$REPO/actions/runs/$RUN_ID"
-echo ""
-
-if $FULL; then
-    read -p "Download and flash BOTH halves? [Y/n] " -n 1 -r
-else
-    read -p "Download and flash this firmware? [Y/n] " -n 1 -r
-fi
-echo ""
-if [[ $REPLY =~ ^[Nn]$ ]]; then
-    echo "Aborted."
-    exit 0
-fi
-
-# ── Download firmware ────────────────────────────────────────────────────────
-TEMP_DIR=$(mktemp -d)
-cleanup() { rm -rf "$TEMP_DIR"; }
-trap cleanup EXIT
-
-echo "Downloading firmware artifact..."
-gh run download "$RUN_ID" --repo "$REPO" --dir "$TEMP_DIR"
-
-FIRMWARE_FILE=$(find "$TEMP_DIR" -name "$FIRMWARE_PATTERN" -type f | head -1)
-
-if [ -z "$FIRMWARE_FILE" ]; then
-    echo "Error: Could not find left hand firmware ($FIRMWARE_PATTERN)"
-    echo "Contents of download:"
-    find "$TEMP_DIR" -type f
-    exit 1
-fi
-
-echo "Found firmware: $(basename "$FIRMWARE_FILE")"
-
-if $FULL; then
-    RH_FIRMWARE_FILE=$(find "$TEMP_DIR" -name "glove80_rh*.uf2" -type f | head -1)
-    if [ -z "$RH_FIRMWARE_FILE" ]; then
-        echo "Error: Could not find right hand firmware (glove80_rh*.uf2)"
+    if [ -z "$FIRMWARE_FILE" ]; then
+        echo "Error: Could not find left hand firmware ($FIRMWARE_PATTERN)"
         echo "Contents of download:"
         find "$TEMP_DIR" -type f
         exit 1
     fi
-    echo "Found firmware: $(basename "$RH_FIRMWARE_FILE")"
+
+    echo "Found firmware: $(basename "$FIRMWARE_FILE")"
+
+    if $FULL; then
+        RH_FIRMWARE_FILE=$(find "$TEMP_DIR" -name "glove80_rh*.uf2" -type f | head -1)
+        if [ -z "$RH_FIRMWARE_FILE" ]; then
+            echo "Error: Could not find right hand firmware (glove80_rh*.uf2)"
+            echo "Contents of download:"
+            find "$TEMP_DIR" -type f
+            exit 1
+        fi
+        echo "Found firmware: $(basename "$RH_FIRMWARE_FILE")"
+    fi
 fi
 
 # ── Flash ────────────────────────────────────────────────────────────────────

@@ -2,6 +2,9 @@ import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { mkdtemp } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { isDockerAvailable, localBuild } from "@/lib/local-build";
 
 const exec = promisify(execFile);
 const REPO = "fix-fox/glove";
@@ -17,6 +20,136 @@ function emit(controller: ReadableStreamDefaultController, msg: string) {
   controller.enqueue(new TextEncoder().encode(msg + "\n"));
 }
 
+async function buildLocal(controller: ReadableStreamDefaultController): Promise<string> {
+  const tmpDir = await mkdtemp(join(tmpdir(), "zmk-"));
+  const firmwarePath = await localBuild({
+    board: "glove80_lh",
+    outputDir: tmpDir,
+    onProgress: (line) => emit(controller, `[local] ${line}`),
+  });
+  emit(controller, `Found firmware: ${firmwarePath.split("/").pop()}`);
+  return firmwarePath;
+}
+
+async function buildRemote(controller: ReadableStreamDefaultController): Promise<string> {
+  // ── Git commit + push ──
+  await run("git", ["add", "config.json", "config/glove80.keymap", "config/glove80.conf"]);
+  let hasChanges = false;
+  try {
+    await run("git", ["diff", "--cached", "--quiet"]);
+  } catch {
+    hasChanges = true;
+  }
+
+  if (hasChanges) {
+    emit(controller, "Committing changes...");
+    await run("git", ["commit", "-m", "keymap: update from configurator"]);
+    emit(controller, "Pushing to GitHub...");
+    await run("git", ["push"]);
+    emit(controller, "Pushed.");
+  } else {
+    emit(controller, "No changes to commit.");
+  }
+
+  // ── Wait for build ──
+  const headSha = hasChanges
+    ? await run("git", ["rev-parse", "HEAD"])
+    : "";
+
+  emit(controller, "Waiting for build...");
+
+  let runId = "";
+  let conclusion = "";
+  for (let attempt = 0; attempt < 120; attempt++) {
+    const json = await run("gh", [
+      "run", "list", "--repo", REPO, "--workflow", "build.yml",
+      "--limit", "5", "--json", "databaseId,status,conclusion,headSha",
+    ]);
+    const runs = JSON.parse(json) as Array<{
+      databaseId: number; status: string; conclusion: string; headSha: string;
+    }>;
+
+    const target = headSha
+      ? runs.find((r) => r.headSha === headSha)
+      : runs[0];
+
+    if (!target) {
+      if (attempt % 6 === 0) {
+        emit(controller, "Waiting for GitHub to start the build...");
+      }
+      await new Promise((r) => setTimeout(r, 5000));
+      continue;
+    }
+
+    runId = String(target.databaseId);
+    if (target.status === "completed") {
+      conclusion = target.conclusion;
+      break;
+    }
+    if (attempt === 0) {
+      emit(controller, `Build in progress (run ${runId})...`);
+    }
+    if (attempt % 6 === 5) {
+      emit(controller, `Still building... (${(attempt + 1) * 5}s)`);
+    }
+    await new Promise((r) => setTimeout(r, 5000));
+  }
+
+  if (!runId) {
+    throw new Error("Timed out waiting for build.");
+  }
+
+  if (conclusion !== "success") {
+    throw new Error(`Build failed (${conclusion}). See: https://github.com/${REPO}/actions/runs/${runId}`);
+  }
+
+  emit(controller, "Build succeeded!");
+
+  // ── Download firmware ──
+  emit(controller, "Downloading firmware artifact...");
+  const tmpDir = await run("mktemp", ["-d"]);
+  await run("gh", ["run", "download", runId, "--repo", REPO, "--dir", tmpDir]);
+
+  const files = await run("find", [tmpDir, "-name", "glove80_lh*.uf2", "-type", "f"]);
+  const firmwareFile = files.split("\n")[0]!.trim();
+  if (!firmwareFile) {
+    await run("rm", ["-rf", tmpDir]);
+    throw new Error("Could not find left hand firmware (glove80_lh*.uf2)");
+  }
+  emit(controller, `Found firmware: ${firmwareFile.split("/").pop()}`);
+  return firmwareFile;
+}
+
+async function waitForDevice(controller: ReadableStreamDefaultController): Promise<void> {
+  emit(controller, "");
+  emit(controller, "Put the LEFT hand in bootloader mode:");
+  emit(controller, "  1. Hold the bottom-left key (magic key)");
+  emit(controller, "  2. While holding, tap the top-left key");
+  emit(controller, "  3. Release both — keyboard mounts as GLV80LHBOOT (D:)");
+  emit(controller, "");
+  emit(controller, "Waiting for device at D:\\ ...");
+
+  for (let elapsed = 0; elapsed < 60; elapsed++) {
+    try {
+      await run("cmd.exe", ["/c", "if exist D:\\ (exit 0) else (exit 1)"], { timeout: 5000 });
+      return;
+    } catch {
+      // Not found yet
+    }
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+  throw new Error("Timeout waiting for device at D:\\");
+}
+
+async function flashDevice(controller: ReadableStreamDefaultController, firmwarePath: string): Promise<void> {
+  emit(controller, "Device detected! Copying firmware...");
+  const winPath = await run("wslpath", ["-w", firmwarePath]);
+  await run("cmd.exe", ["/c", `copy ${winPath} D:\\`]);
+  emit(controller, "");
+  emit(controller, "Firmware copied. The keyboard will reboot automatically.");
+  emit(controller, "Done!");
+}
+
 export async function POST(request: Request) {
   const config = await request.json();
 
@@ -29,137 +162,19 @@ export async function POST(request: Request) {
         await run("npx", ["tsx", "scripts/generate-firmware.ts"]);
         emit(controller, "Generated firmware files.");
 
-        // ── Git commit + push ──
-        await run("git", ["add", "config.json", "config/glove80.keymap", "config/glove80.conf"]);
-        let hasChanges = false;
-        try {
-          await run("git", ["diff", "--cached", "--quiet"]);
-        } catch {
-          hasChanges = true;
-        }
+        // ── Build firmware ──
+        const useLocal = await isDockerAvailable();
+        let firmwarePath: string;
 
-        if (hasChanges) {
-          emit(controller, "Committing changes...");
-          await run("git", ["commit", "-m", "keymap: update from configurator"]);
-          emit(controller, "Pushing to GitHub...");
-          await run("git", ["push"]);
-          emit(controller, "Pushed.");
+        if (useLocal) {
+          firmwarePath = await buildLocal(controller);
         } else {
-          emit(controller, "No changes to commit.");
+          firmwarePath = await buildRemote(controller);
         }
 
-        // ── Wait for build ──
-        // Get the HEAD sha so we can match the correct workflow run
-        const headSha = hasChanges
-          ? await run("git", ["rev-parse", "HEAD"])
-          : "";
-
-        emit(controller, "Waiting for build...");
-
-        // Poll until we find a completed run matching our commit
-        let runId = "";
-        let conclusion = "";
-        for (let attempt = 0; attempt < 120; attempt++) {
-          const json = await run("gh", [
-            "run", "list", "--repo", REPO, "--workflow", "build.yml",
-            "--limit", "5", "--json", "databaseId,status,conclusion,headSha",
-          ]);
-          const runs = JSON.parse(json) as Array<{
-            databaseId: number; status: string; conclusion: string; headSha: string;
-          }>;
-
-          // If we pushed, only consider the run for our commit
-          const target = headSha
-            ? runs.find((r) => r.headSha === headSha)
-            : runs[0];
-
-          if (!target) {
-            if (attempt % 6 === 0) {
-              emit(controller, "Waiting for GitHub to start the build...");
-            }
-            await new Promise((r) => setTimeout(r, 5000));
-            continue;
-          }
-
-          runId = String(target.databaseId);
-          if (target.status === "completed") {
-            conclusion = target.conclusion;
-            break;
-          }
-          if (attempt === 0) {
-            emit(controller, `Build in progress (run ${runId})...`);
-          }
-          if (attempt % 6 === 5) {
-            emit(controller, `Still building... (${(attempt + 1) * 5}s)`);
-          }
-          await new Promise((r) => setTimeout(r, 5000));
-        }
-
-        if (!runId) {
-          emit(controller, "ERROR: Timed out waiting for build.");
-          controller.close();
-          return;
-        }
-
-        if (conclusion !== "success") {
-          emit(controller, `ERROR: Build failed (${conclusion}). See: https://github.com/${REPO}/actions/runs/${runId}`);
-          controller.close();
-          return;
-        }
-
-        emit(controller, "Build succeeded!");
-
-        // ── Download firmware ──
-        emit(controller, "Downloading firmware artifact...");
-        const tmpDir = await run("mktemp", ["-d"]);
-        await run("gh", ["run", "download", runId, "--repo", REPO, "--dir", tmpDir]);
-
-        const files = await run("find", [tmpDir, "-name", "glove80_lh*.uf2", "-type", "f"]);
-        const firmwareFile = files.split("\n")[0]!.trim();
-        if (!firmwareFile) {
-          emit(controller, "ERROR: Could not find left hand firmware (glove80_lh*.uf2)");
-          await run("rm", ["-rf", tmpDir]);
-          controller.close();
-          return;
-        }
-        emit(controller, `Found firmware: ${firmwareFile.split("/").pop()}`);
-
-        // ── Wait for device ──
-        emit(controller, "");
-        emit(controller, "Put the LEFT hand in bootloader mode:");
-        emit(controller, "  1. Hold the bottom-left key (magic key)");
-        emit(controller, "  2. While holding, tap the top-left key");
-        emit(controller, "  3. Release both — keyboard mounts as GLV80LHBOOT (D:)");
-        emit(controller, "");
-        emit(controller, "Waiting for device at D:\\ ...");
-
-        let deviceFound = false;
-        for (let elapsed = 0; elapsed < 60; elapsed++) {
-          try {
-            await run("cmd.exe", ["/c", "if exist D:\\ (exit 0) else (exit 1)"], { timeout: 5000 });
-            deviceFound = true;
-            break;
-          } catch {
-            // Not found yet
-          }
-          await new Promise((r) => setTimeout(r, 1000));
-        }
-
-        if (!deviceFound) {
-          emit(controller, "ERROR: Timeout waiting for device at D:\\");
-          await run("rm", ["-rf", tmpDir]);
-          controller.close();
-          return;
-        }
-
-        emit(controller, "Device detected! Copying firmware...");
-        const winPath = await run("wslpath", ["-w", firmwareFile]);
-        await run("cmd.exe", ["/c", `copy ${winPath} D:\\`]);
-        emit(controller, "");
-        emit(controller, "Firmware copied. The keyboard will reboot automatically.");
-        emit(controller, "Done!");
-
-        await run("rm", ["-rf", tmpDir]);
+        // ── Flash ──
+        await waitForDevice(controller);
+        await flashDevice(controller, firmwarePath);
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
         emit(controller, `ERROR: ${message}`);

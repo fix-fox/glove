@@ -12,7 +12,8 @@
     "start": "next start",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "generate-firmware": "tsx scripts/generate-firmware.ts"
+    "generate-firmware": "tsx scripts/generate-firmware.ts",
+    "build-firmware": "bash scripts/zmk-docker-build.sh"
   },
   "keywords": [],
   "author": "",
