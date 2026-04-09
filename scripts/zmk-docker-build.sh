@@ -44,13 +44,17 @@ docker run --rm \
         set -e
         if [ ! -f .west/config ]; then
             echo 'Initializing west workspace...'
-            west init -l config/
+            west init -l config/ >/dev/null 2>&1
         fi
         echo 'Updating west modules...'
-        west update
-        west zephyr-export
+        west update 2>/dev/null
+        west zephyr-export >/dev/null 2>&1
         echo 'Building firmware...'
-        west build -s zmk/app -b ${BOARD} -d build/${BOARD} -- -DZMK_CONFIG=/workspace/config
+        if ! west build -s zmk/app -b ${BOARD} -d build/${BOARD} -- -DZMK_CONFIG=/workspace/config > /tmp/build.log 2>&1; then
+            echo 'Build failed:'
+            cat /tmp/build.log
+            exit 1
+        fi
         cp build/${BOARD}/zephyr/zmk.uf2 /output/${BOARD}-zmk.uf2
         echo 'Build complete.'
     "
