@@ -200,7 +200,7 @@ function StepRow({
         </SelectContent>
       </Select>
 
-      {step.directive !== "pause_for_release" && step.directive !== "param_1to1" && (
+      {step.directive !== "pause_for_release" && step.directive !== "param_1to1" && step.directive !== "param_2to1" && (
         <input
           type="text"
           className="flex-1 border rounded px-2 py-1 text-sm font-mono"
