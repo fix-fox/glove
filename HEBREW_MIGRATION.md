@@ -17,7 +17,7 @@ changes.
 
 Move the top-4 frequency letters to home row. After: 53.7% home row.
 
-- [ ] **Swap 1: י yod (11.06%) to L-index home**
+- [x] **Swap 1: י yod (11.06%) to L-index home**
   Swap pos 38(כ) <-> pos 40(י). Unlocks: י on strongest finger.
   Home row: 36.2% (no net change, but י moves from lt15 to LSHIFT HRM)
 
