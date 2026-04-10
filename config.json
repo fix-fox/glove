@@ -5474,7 +5474,8 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "macro",
+            "macroName": "v_space_ctrl_t"
           },
           "hold": null
         },
@@ -10133,6 +10134,43 @@
           "directive": "tap",
           "bindings": [
             "&kp MACRO_PLACEHOLDER"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "30c2864b-4a20-444d-ba10-73437df5fd29",
+      "name": "v_space_ctrl_t",
+      "label": "v ⌃T",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp V"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp SPACE"
+          ]
+        },
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp T"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LCTRL"
           ]
         }
       ]

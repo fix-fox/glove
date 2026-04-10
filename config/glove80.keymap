@@ -118,6 +118,12 @@
             #binding-cells = <2>;
             bindings = <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>, <&macro_param_2to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
         };
+
+        v_space_ctrl_t: v_space_ctrl_t {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp V>, <&macro_tap &kp SPACE>, <&macro_press &kp LCTRL>, <&macro_tap &kp T>, <&macro_release &kp LCTRL>;
+        };
     };
 
     behaviors {
@@ -346,7 +352,7 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &vim_q  &vim_w  &trans  &trans  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
+                &trans  &vim_q  &vim_w  &trans  &v_space_ctrl_t  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &gemini_tab  &trans  &trans  &kp COLON  &trans  &trans  &trans
                 &trans  &trans  &vim_x  &tog 8  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
