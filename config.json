@@ -6336,13 +6336,15 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "kp",
+            "keyCode": "X"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "kp",
+            "keyCode": "X"
           },
           "hold": null
         },
