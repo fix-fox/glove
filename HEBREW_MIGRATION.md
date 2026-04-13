@@ -21,7 +21,7 @@ Move the top-4 frequency letters to home row. After: 53.7% home row.
   Swap pos 38(כ) <-> pos 40(י). Unlocks: י on strongest finger.
   Home row: 36.2% (no net change, but י moves from lt15 to LSHIFT HRM)
 
-- [ ] **Swap 2: ה he (10.87%) to R-index home**
+- [x] **Swap 2: ה he (10.87%) to R-index home**
   Swap pos 41(ח) <-> pos 50(ה). Unlocks: הי/יה alternation (3.20% bigram, cross-hand).
   Home row: 44.6% (+8.4%)
 

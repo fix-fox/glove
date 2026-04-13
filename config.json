@@ -1963,7 +1963,7 @@
             "type": "hold_tap",
             "name": "hmr",
             "param1": "RSHIFT",
-            "param2": "J"
+            "param2": "V"
           },
           "hold": null
         },
@@ -2031,7 +2031,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "V"
+            "keyCode": "J"
           },
           "hold": {
             "type": "mo",
@@ -10143,7 +10143,7 @@
     {
       "id": "30c2864b-4a20-444d-ba10-73437df5fd29",
       "name": "v_space_ctrl_t",
-      "label": "v ⌃T",
+      "label": "v \u2303T",
       "steps": [
         {
           "directive": "tap",
