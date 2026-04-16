@@ -10226,7 +10226,7 @@
       "flavor": "balanced",
       "tappingTermMs": 280,
       "quickTapMs": 0,
-      "requirePriorIdleMs": 50,
+      "requirePriorIdleMs": 100,
       "holdBinding": "&mod_activate",
       "tapBinding": "&kp",
       "holdTriggerKeyPositions": [
@@ -10281,7 +10281,7 @@
       "flavor": "balanced",
       "tappingTermMs": 280,
       "quickTapMs": 0,
-      "requirePriorIdleMs": 50,
+      "requirePriorIdleMs": 100,
       "holdBinding": "&mod_activate",
       "tapBinding": "&kp",
       "holdTriggerKeyPositions": [
@@ -10425,7 +10425,7 @@
     "flavor": "balanced",
     "tappingTermMs": 280,
     "quickTapMs": 0,
-    "requirePriorIdleMs": 50
+    "requirePriorIdleMs": 100
   },
   "ltSettings": {
     "flavor": "balanced",
