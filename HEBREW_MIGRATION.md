@@ -25,7 +25,7 @@ Move the top-4 frequency letters to home row. After: 53.7% home row.
   Swap pos 41(ח) <-> pos 50(ה). Unlocks: הי/יה alternation (3.20% bigram, cross-hand).
   Home row: 44.6% (+8.4%)
 
-- [ ] **Swap 3: ו vav (10.38%) to R-middle home**
+- [x] **Swap 3: ו vav (10.38%) to R-middle home**
   Swap pos 42(ל) <-> pos 29(ו). Unlocks: הו/וה inward roll on right hand (2.29% bigram).
   Home row: 47.6% (+3.0%)
 

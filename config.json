@@ -1865,7 +1865,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "U"
+            "keyCode": "K"
           },
           "hold": null
         },
@@ -1972,7 +1972,7 @@
             "type": "hold_tap",
             "name": "hmr",
             "param1": "RCTRL",
-            "param2": "K"
+            "param2": "U"
           },
           "hold": null
         },
