@@ -29,7 +29,7 @@ Move the top-4 frequency letters to home row. After: 53.7% home row.
   Swap pos 42(ל) <-> pos 29(ו). Unlocks: הו/וה inward roll on right hand (2.29% bigram).
   Home row: 47.6% (+3.0%)
 
-- [ ] **Swap 4: ל lamed (7.39%) to L-middle home**
+- [x] **Swap 4: ל lamed (7.39%) to L-middle home**
   Swap pos 37(ג) <-> pos 29(ל). Unlocks: לי outward roll on left hand (0.95% bigram).
   Home row: 53.7% (+6.1%)
 
