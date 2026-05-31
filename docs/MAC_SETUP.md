@@ -1,0 +1,128 @@
+# Mac Setup Checklist (Glove80 migration)
+
+Run this after the `mac-migration` branch is flashed. Terse on purpose — hand it to a Claude
+session on the new Mac. Background and rationale: `docs/superpowers/specs/2026-05-31-macos-migration-design.md`.
+
+The keyboard now emits **Mac-correct modifiers** (middle finger = Cmd). macOS software handles
+the rest: the terminal Cmd↔Ctrl swap, window switching, clipboard, and input switching.
+
+## 1. Flash the firmware
+
+- [ ] Merge `mac-migration` → `main` (only after you've confirmed it works) or just flash from the branch.
+- [ ] Build/download the `.uf2` (GitHub Actions or local build).
+- [ ] Put each half into bootloader (Magic + … per MoErgo docs) and drag the `.uf2` onto the
+      `GLV80LHBOOT` / `GLV80RHBOOT` drive.
+- [ ] **Mac gotchas:** needs macOS **Ventura 13.1+** to drag-copy the UF2. If you get **Error -43**,
+      shorten the UF2 filename. The half rebooting *before* macOS confirms the copy is **normal**.
+- [ ] **Bluetooth on M4 / older-Intel Macs:** if BLE won't connect, set advanced config
+      `BLE_CTLR_PHY_2M=n` in the MoErgo Layout Editor and use the latest production firmware. (USB is unaffected.)
+
+## 2. Install helper apps
+
+```bash
+brew install --cask karabiner-elements alt-tab maccy
+```
+
+## 3. Karabiner-Elements — terminal-only Cmd↔Ctrl swap
+
+This is the core feature: in a terminal, the middle finger acts as **Ctrl** (and the pinky as
+**Cmd**, so `Cmd+V` paste / `Cmd+T` tab still work). Everywhere else, the keyboard's modifiers
+pass through unchanged.
+
+- [ ] Grant Karabiner the Input Monitoring / Accessibility permissions it requests.
+- [ ] Find the Glove80's device IDs: **Karabiner-EventViewer → Devices**, note `vendor_id` /
+      `product_id`. (Scoping to the device keeps the laptop's built-in keyboard unaffected.)
+- [ ] Find your terminal's bundle ID if not iTerm2: EventViewer → "Frontmost Application".
+- [ ] Add a complex modification. Edit
+      `~/.config/karabiner/assets/complex_modifications/glove80-terminal-swap.json`, fill in the
+      `vendor_id`/`product_id`, then enable all its rules in Settings → Complex Modifications.
+
+```json
+{
+  "title": "Glove80 — terminal Cmd/Ctrl swap",
+  "rules": [
+    {
+      "description": "Glove80: in iTerm2, swap Cmd<->Ctrl (middle=Ctrl, pinky=Cmd)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
+            { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
+          ],
+          "from": { "key_code": "left_command", "modifiers": { "optional": ["any"] } },
+          "to": [{ "key_code": "left_control" }]
+        },
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
+            { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
+          ],
+          "from": { "key_code": "left_control", "modifiers": { "optional": ["any"] } },
+          "to": [{ "key_code": "left_command" }]
+        },
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
+            { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
+          ],
+          "from": { "key_code": "right_command", "modifiers": { "optional": ["any"] } },
+          "to": [{ "key_code": "right_control" }]
+        },
+        {
+          "type": "basic",
+          "conditions": [
+            { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
+            { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
+          ],
+          "from": { "key_code": "right_control", "modifiers": { "optional": ["any"] } },
+          "to": [{ "key_code": "right_command" }]
+        }
+      ]
+    }
+  ]
+}
+```
+
+- [ ] To add more terminals later (Ghostty/WezTerm/kitty/Alacritty), append their bundle IDs to
+      each `bundle_identifiers` array (find via EventViewer).
+- [ ] **VS Code caveat:** Karabiner can't tell the VS Code editor from its integrated terminal
+      (same bundle ID). Leave VS Code **out** of this rule; handle terminal-in-VSCode via VS Code's
+      own `keybindings.json` if needed.
+
+## 4. AltTab — Windows-style window switching
+
+- [ ] Open AltTab, grant Accessibility + Screen Recording permissions.
+- [ ] Set the trigger to **Option+Tab** (Option physically sits where Alt was — preserves
+      `Alt+Tab` muscle memory). Appearance: Thumbnails.
+
+## 5. Maccy — clipboard history (Win+V equivalent)
+
+- [ ] Set the popup hotkey to **Option+Shift+V**. (This matches the keyboard's
+      `clipboard_history` macro and the `cursor`-layer paste-from-clipboard key, and is immune to
+      the terminal Cmd↔Ctrl swap, so it behaves the same in and out of the terminal.)
+
+## 6. macOS settings
+
+- [ ] **Input switching (English ↔ Hebrew):** Settings → Keyboard → Input Sources → Edit →
+      enable **"Use Caps Lock to switch to and from Hebrew."** The `lang_toggle` key taps Caps Lock
+      (OS input switch) and toggles the keyboard's Hebrew layer together.
+- [ ] **Launcher (Raycast / Alfred / Spotlight):** set the invoke hotkey to **Option+Space**.
+      The dedicated launcher thumb key and the `flow_bookmark` macro both emit Option+Space
+      (swap-immune → consistent in and out of the terminal).
+- [ ] **Emoji picker:** confirm Ctrl+Cmd+Space opens it (macOS default; matches the remapped `Win+;` key).
+- [ ] Optional: Settings → Keyboard → "Use F1, F2 as standard function keys" if you want plain F-keys.
+
+## 7. Verify (smoke test)
+
+1. GUI app: `Cmd+C` / `Cmd+V` / `Cmd+S` on the **middle** finger.
+2. iTerm2: `Ctrl+C` interrupt + `Ctrl+R` on the **middle** finger; `Cmd+V` paste on the **pinky**.
+3. Built-in laptop keyboard is **not** swapped in iTerm2 (device scoping works).
+4. `Option+Tab` → AltTab window switcher.
+5. Caps Lock → input source switches **and** Hebrew layer toggles.
+6. Maccy via `Option+Shift+V`; launcher via `Option+Space` (both inside and outside iTerm2).
+7. Macros: `delete_to_bol`/`delete_to_eol`/`select_line`, `gemini_tab` (Chrome new tab),
+   `flow_bookmark`, `v_space_ctrl_t` (→ `Ctrl+T` inside the terminal).
+8. Special keys: lock (`Ctrl+Cmd+Q`), emoji (`Ctrl+Cmd+Space`), Print Screen (`Cmd+Shift+5`).

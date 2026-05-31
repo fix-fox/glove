@@ -10,6 +10,17 @@ const file = join(root, 'config.json');
 const raw = readFileSync(file, 'utf8');
 const cfg = JSON.parse(raw);
 
+// One-shot guard: the CAGS swap is symmetric (its own inverse), so re-running would
+// silently revert the home-row mods. Bail if config.json is already migrated. The
+// launcher thumb key being LA(SPACE) (set only by this script) is the sentinel.
+const alreadyMigrated = (cfg.layers || []).some(
+  (l) => l.name === 'default' && (l.keys || []).some((k) => k.tap && k.tap.keyCode === 'LA(SPACE)'),
+);
+if (alreadyMigrated) {
+  console.error('config.json already migrated to macOS (found LA(SPACE) launcher key). Refusing to re-run.');
+  process.exit(1);
+}
+
 const counts = { hrm: 0, lcToLg: 0, special: 0, macros: 0 };
 
 // 4.1 CAGS: swap GUI<->CTRL on home-row hold-tap modifiers (exact match only,
