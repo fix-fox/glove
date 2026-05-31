@@ -48,37 +48,37 @@
         lang_toggle: lang_toggle {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp SPACE>, <&macro_release &kp LGUI>, <&macro_tap &tog 3>;
+            bindings = <&macro_tap &kp CAPS>, <&macro_tap &tog 3>;
         };
 
         delete_to_bol: delete_to_bol {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &kp LSHFT>, <&macro_tap &kp HOME>, <&macro_release &kp LSHFT>, <&macro_tap &kp BSPC>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp BSPC>, <&macro_release &kp LGUI>;
         };
 
         delete_to_eol: delete_to_eol {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &kp LSHFT>, <&macro_tap &kp END>, <&macro_release &kp LSHFT>, <&macro_tap &kp BSPC>;
+            bindings = <&macro_press &kp LCTRL>, <&macro_tap &kp K>, <&macro_release &kp LCTRL>;
         };
 
         select_line: select_line {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &kp HOME>, <&macro_press &kp LSHFT>, <&macro_tap &kp END>, <&macro_release &kp LSHFT>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp LEFT>, <&macro_release &kp LGUI>, <&macro_press &kp LSHFT>, <&macro_press &kp LGUI>, <&macro_tap &kp RIGHT>, <&macro_release &kp LGUI>, <&macro_release &kp LSHFT>;
         };
 
         gemini_tab: gemini_tab {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &kp LCTRL>, <&macro_tap &kp T>, <&macro_release &kp LCTRL>, <&macro_tap &kp AT>, <&macro_tap &kp G>, <&macro_tap &kp E>, <&macro_tap &kp M>, <&macro_tap &kp I>, <&macro_tap &kp N>, <&macro_tap &kp I>, <&macro_tap &kp TAB>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp T>, <&macro_release &kp LGUI>, <&macro_tap &kp AT>, <&macro_tap &kp G>, <&macro_tap &kp E>, <&macro_tap &kp M>, <&macro_tap &kp I>, <&macro_tap &kp N>, <&macro_tap &kp I>, <&macro_tap &kp TAB>;
         };
 
         flow_bookmark: flow_bookmark {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &kp LCTRL>, <&macro_tap &kp SPACE>, <&macro_release &kp LCTRL>, <&macro_tap &kp B &kp SPACE>;
+            bindings = <&macro_press &kp LALT>, <&macro_tap &kp SPACE>, <&macro_release &kp LALT>, <&macro_tap &kp B &kp SPACE>;
         };
 
         mod_activate: mod_activate {
@@ -110,7 +110,7 @@
         clipboard_history: clipboard_history {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI>, <&macro_press &kp LCTRL>, <&macro_press &kp LSHFT>, <&macro_tap &kp V>, <&macro_release &kp LSHFT>, <&macro_release &kp LCTRL>, <&macro_release &kp LGUI>;
+            bindings = <&macro_press &kp LALT>, <&macro_press &kp LSHFT>, <&macro_tap &kp V>, <&macro_release &kp LSHFT>, <&macro_release &kp LALT>;
         };
 
         type_2digits: type_2digits {
@@ -122,7 +122,7 @@
         v_space_ctrl_t: v_space_ctrl_t {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &kp V>, <&macro_tap &kp SPACE>, <&macro_press &kp LCTRL>, <&macro_tap &kp T>, <&macro_release &kp LCTRL>;
+            bindings = <&macro_tap &kp V>, <&macro_tap &kp SPACE>, <&macro_press &kp LGUI>, <&macro_tap &kp T>, <&macro_release &kp LGUI>;
         };
     };
 
@@ -240,12 +240,12 @@
 
         default {
             bindings = <
-                &to 0  &to 9  &none  &none  &none  &none  &none  &none  &none  &kp LG(L)
+                &to 0  &to 9  &none  &none  &none  &none  &none  &none  &none  &kp LC(LG(Q))
                 &tog 3  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &none
-                &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LG(SEMI)  &none
-                &none  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &kp G  &kp M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &none
+                &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LC(LG(SPACE))  &none
+                &none  &hml LCTRL A  &hml LALT R  &hml LGUI S  &hml LSHIFT T  &kp G  &kp M  &hmr RSHIFT N  &hmr RGUI E  &hmr RALT I  &hmr RCTRL O  &none
                 &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &mt LSHIFT CAPS  &mt LSHIFT CAPS  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 17  &kp PSCRN  &lt 15 LC(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
+                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 17  &kp LG(LS(N5))  &lt 15 LA(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
             >;
         };
 
@@ -276,7 +276,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp PERIOD  &kp COMMA  &kp E  &kp R  &kp T  &kp Y  &kp D  &kp I  &kp O  &kp P  &trans
-                &trans  &hml LGUI A  &hml LALT S  &hml LCTRL K  &hml LSHIFT H  &lt 15 G  &lt 15 F  &hmr RSHIFT V  &hmr RCTRL U  &hmr RALT L  &hmr RGUI SEMI  &kp APOS
+                &trans  &hml LCTRL A  &hml LALT S  &hml LGUI K  &hml LSHIFT H  &lt 15 G  &lt 15 F  &hmr RSHIFT V  &hmr RGUI U  &hmr RALT L  &hmr RCTRL SEMI  &kp APOS
                 &trans  &kp Z  &kp X  &kp C  &lt 10 J  &kp B  &trans  &trans  &trans  &trans  &trans  &trans  &kp N  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
@@ -298,7 +298,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &kp COLON  &kp ESC  &trans  &kp CARET  &kp AMPS  &kp STAR  &kp PIPE  &trans  &trans
-                &trans  &kp BSLH  &kp EQUAL  &kp MINUS  &kp UNDER  &kp GRAVE  &kp SQT  &kp DOUBLE_QUOTES  &hmr RCTRL PLUS  &kp TILDE  &kp FSLH  &trans
+                &trans  &kp BSLH  &kp EQUAL  &kp MINUS  &kp UNDER  &kp GRAVE  &kp SQT  &kp DOUBLE_QUOTES  &hmr RGUI PLUS  &kp TILDE  &kp FSLH  &trans
                 &trans  &kp LESS_THAN  &kp LEFT_BRACE  &kp LBKT  &kp LEFT_PARENTHESIS  &kp SEMI  &trans  &trans  &trans  &trans  &trans  &trans  &kp COLON  &kp RIGHT_PARENTHESIS  &kp RBKT  &kp RIGHT_BRACE  &kp GREATER_THAN  &trans
                 &trans  &trans  &trans  &trans  &trans  &kp BSPC  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
@@ -321,7 +321,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &kp C_VOLUME_DOWN  &kp C_MUTE  &kp C_VOLUME_UP  &kp C_BRIGHTNESS_INC  &trans  &kp F7  &kp F8  &kp F9  &kp F10  &trans
                 &trans  &trans  &kp C_PREV  &kp C_PLAY_PAUSE  &kp C_NEXT  &kp C_BRIGHTNESS_DEC  &trans  &kp F4  &kp F5  &kp F6  &kp F11  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp PRINTSCREEN  &trans  &kp F1  &kp F2  &kp F3  &kp F12  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp LG(LS(N5))  &trans  &kp F1  &kp F2  &kp F3  &kp F12  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp LEFT_ALT  &trans  &trans  &trans  &trans  &trans
             >;
         };
@@ -332,7 +332,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_UP  &mmv MOVE_UP  &msc SCRL_DOWN  &trans  &trans
                 &trans  &trans  &trans  &kp LCTRL  &kp LEFT_SHIFT  &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans  &trans
-                &trans  &trans  &kp LC(X)  &kp LC(C)  &trans  &kp LC(V)  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_LEFT  &tog 8  &msc SCRL_RIGHT  &trans  &trans
+                &trans  &trans  &kp LG(X)  &kp LG(C)  &trans  &kp LG(V)  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_LEFT  &tog 8  &msc SCRL_RIGHT  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &mo 11  &trans  &trans  &trans  &trans  &mkp LCLK  &mkp LCLK  &mkp MCLK  &mkp RCLK  &trans  &trans
             >;
         };
@@ -386,7 +386,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &trans  &trans
-                &trans  &hml LGUI A  &hml LALT R  &hml LCTRL S  &hml LSHIFT T  &hml LA(LGUI) G  &hmr RA(RGUI) M  &hmr RSHIFT N  &hmr RCTRL E  &hmr RALT I  &hmr RGUI O  &trans
+                &trans  &hml LCTRL A  &hml LALT R  &hml LGUI S  &hml LSHIFT T  &hml LA(LGUI) G  &hmr RA(RGUI) M  &hmr RSHIFT N  &hmr RGUI E  &hmr RALT I  &hmr RCTRL O  &trans
                 &trans  &kp Z  &kp X  &kp C  &kp D  &kp V  &trans  &trans  &trans  &trans  &trans  &trans  &kp K  &kp H  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
@@ -396,10 +396,10 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &kp LA(F4)  &kp LC(W)  &kp LC(F)  &kp LC(P)  &kp LC(B)  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
-                &trans  &hml LGUI LC(A)  &hml LALT LC(R)  &hml LCTRL LC(S)  &hml LSHIFT LC(T)  &kp LC(G)  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
-                &kp LC(Y)  &kp LC(Z)  &kp LC(X)  &kp LC(C)  &kp LC(D)  &kp LC(V)  &trans  &trans  &trans  &trans  &trans  &kp ESCAPE  &trans  &kp HOME  &kp ESCAPE  &kp END  &trans  &trans
-                &trans  &trans  &trans  &trans  &kp DEL  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp LA(LC(V))  &trans  &trans  &trans  &trans
+                &trans  &kp LG(Q)  &kp LG(W)  &kp LG(F)  &kp LG(P)  &kp LG(B)  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
+                &trans  &hml LCTRL LG(A)  &hml LALT LG(R)  &hml LGUI LG(S)  &hml LSHIFT LG(T)  &kp LG(G)  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
+                &kp LG(Y)  &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(D)  &kp LG(V)  &trans  &trans  &trans  &trans  &trans  &kp ESCAPE  &trans  &kp HOME  &kp ESCAPE  &kp END  &trans  &trans
+                &trans  &trans  &trans  &trans  &kp DEL  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp LA(LS(V))  &trans  &trans  &trans  &trans
             >;
         };
 
@@ -419,7 +419,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp P  &kp B  &kp O  &kp E  &kp J  &kp N  &kp S  &kp Z  &kp F  &kp X  &trans
-                &trans  &hml LGUI COMMA  &hml LALT R  &hml LCTRL K  &hml LSHIFT H  &lt 15 G  &lt 15 C  &hmr RSHIFT V  &hmr RCTRL U  &hmr RALT T  &hmr RGUI A  &trans
+                &trans  &hml LCTRL COMMA  &hml LALT R  &hml LGUI K  &hml LSHIFT H  &lt 15 G  &lt 15 C  &hmr RSHIFT V  &hmr RGUI U  &hmr RALT T  &hmr RCTRL A  &trans
                 &trans  &kp SEMI  &kp I  &kp Y  &lt 10 D  &kp PERIOD  &trans  &trans  &trans  &trans  &trans  &trans  &kp L  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;

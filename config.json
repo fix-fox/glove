@@ -65,7 +65,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LG(L)"
+            "keyCode": "LC(LG(Q))"
           },
           "hold": null
         },
@@ -224,7 +224,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LG(SEMI)"
+            "keyCode": "LC(LG(SPACE))"
           },
           "hold": null
         },
@@ -244,7 +244,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LGUI",
+            "param1": "LCTRL",
             "param2": "A"
           },
           "hold": null
@@ -262,7 +262,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LCTRL",
+            "param1": "LGUI",
             "param2": "S"
           },
           "hold": null
@@ -303,7 +303,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RCTRL",
+            "param1": "RGUI",
             "param2": "E"
           },
           "hold": null
@@ -321,7 +321,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RGUI",
+            "param1": "RCTRL",
             "param2": "O"
           },
           "hold": null
@@ -545,14 +545,14 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "PSCRN"
+            "keyCode": "LG(LS(N5))"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(SPACE)"
+            "keyCode": "LA(SPACE)"
           },
           "hold": {
             "type": "mo",
@@ -1906,7 +1906,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LGUI",
+            "param1": "LCTRL",
             "param2": "A"
           },
           "hold": null
@@ -1924,7 +1924,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LCTRL",
+            "param1": "LGUI",
             "param2": "K"
           },
           "hold": null
@@ -1971,7 +1971,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RCTRL",
+            "param1": "RGUI",
             "param2": "U"
           },
           "hold": null
@@ -1989,7 +1989,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RGUI",
+            "param1": "RCTRL",
             "param2": "SEMI"
           },
           "hold": null
@@ -2999,7 +2999,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RCTRL",
+            "param1": "RGUI",
             "param2": "PLUS"
           },
           "hold": null
@@ -4094,7 +4094,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "PRINTSCREEN"
+            "keyCode": "LG(LS(N5))"
           },
           "hold": null
         },
@@ -4540,14 +4540,14 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(X)"
+            "keyCode": "LG(X)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(C)"
+            "keyCode": "LG(C)"
           },
           "hold": null
         },
@@ -4560,7 +4560,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(V)"
+            "keyCode": "LG(V)"
           },
           "hold": null
         },
@@ -7021,7 +7021,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LGUI",
+            "param1": "LCTRL",
             "param2": "A"
           },
           "hold": null
@@ -7039,7 +7039,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LCTRL",
+            "param1": "LGUI",
             "param2": "S"
           },
           "hold": null
@@ -7084,7 +7084,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RCTRL",
+            "param1": "RGUI",
             "param2": "E"
           },
           "hold": null
@@ -7102,7 +7102,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RGUI",
+            "param1": "RCTRL",
             "param2": "O"
           },
           "hold": null
@@ -7471,35 +7471,35 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LA(F4)"
+            "keyCode": "LG(Q)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(W)"
+            "keyCode": "LG(W)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(F)"
+            "keyCode": "LG(F)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(P)"
+            "keyCode": "LG(P)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(B)"
+            "keyCode": "LG(B)"
           },
           "hold": null
         },
@@ -7552,8 +7552,8 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LGUI",
-            "param2": "LC(A)"
+            "param1": "LCTRL",
+            "param2": "LG(A)"
           },
           "hold": null
         },
@@ -7562,7 +7562,7 @@
             "type": "hold_tap",
             "name": "hml",
             "param1": "LALT",
-            "param2": "LC(R)"
+            "param2": "LG(R)"
           },
           "hold": null
         },
@@ -7570,8 +7570,8 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LCTRL",
-            "param2": "LC(S)"
+            "param1": "LGUI",
+            "param2": "LG(S)"
           },
           "hold": null
         },
@@ -7580,14 +7580,14 @@
             "type": "hold_tap",
             "name": "hml",
             "param1": "LSHIFT",
-            "param2": "LC(T)"
+            "param2": "LG(T)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(G)"
+            "keyCode": "LG(G)"
           },
           "hold": null
         },
@@ -7633,42 +7633,42 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(Y)"
+            "keyCode": "LG(Y)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(Z)"
+            "keyCode": "LG(Z)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(X)"
+            "keyCode": "LG(X)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(C)"
+            "keyCode": "LG(C)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(D)"
+            "keyCode": "LG(D)"
           },
           "hold": null
         },
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LC(V)"
+            "keyCode": "LG(V)"
           },
           "hold": null
         },
@@ -7819,7 +7819,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LA(LC(V))"
+            "keyCode": "LA(LS(V))"
           },
           "hold": null
         },
@@ -8599,7 +8599,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LGUI",
+            "param1": "LCTRL",
             "param2": "COMMA"
           },
           "hold": null
@@ -8617,7 +8617,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hml",
-            "param1": "LCTRL",
+            "param1": "LGUI",
             "param2": "K"
           },
           "hold": null
@@ -8664,7 +8664,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RCTRL",
+            "param1": "RGUI",
             "param2": "U"
           },
           "hold": null
@@ -8682,7 +8682,7 @@
           "tap": {
             "type": "hold_tap",
             "name": "hmr",
-            "param1": "RGUI",
+            "param1": "RCTRL",
             "param2": "A"
           },
           "hold": null
@@ -9711,21 +9711,9 @@
       "label": "LANG_TOGGLE",
       "steps": [
         {
-          "directive": "press",
-          "bindings": [
-            "&kp LGUI"
-          ]
-        },
-        {
           "directive": "tap",
           "bindings": [
-            "&kp SPACE"
-          ]
-        },
-        {
-          "directive": "release",
-          "bindings": [
-            "&kp LGUI"
+            "&kp CAPS"
           ]
         },
         {
@@ -9743,25 +9731,19 @@
         {
           "directive": "press",
           "bindings": [
-            "&kp LSHFT"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp HOME"
-          ]
-        },
-        {
-          "directive": "release",
-          "bindings": [
-            "&kp LSHFT"
+            "&kp LGUI"
           ]
         },
         {
           "directive": "tap",
           "bindings": [
             "&kp BSPC"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LGUI"
           ]
         }
       ]
@@ -9773,25 +9755,19 @@
         {
           "directive": "press",
           "bindings": [
-            "&kp LSHFT"
+            "&kp LCTRL"
           ]
         },
         {
           "directive": "tap",
           "bindings": [
-            "&kp END"
+            "&kp K"
           ]
         },
         {
           "directive": "release",
           "bindings": [
-            "&kp LSHFT"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp BSPC"
+            "&kp LCTRL"
           ]
         }
       ]
@@ -9801,9 +9777,21 @@
       "name": "select_line",
       "steps": [
         {
+          "directive": "press",
+          "bindings": [
+            "&kp LGUI"
+          ]
+        },
+        {
           "directive": "tap",
           "bindings": [
-            "&kp HOME"
+            "&kp LEFT"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LGUI"
           ]
         },
         {
@@ -9813,9 +9801,21 @@
           ]
         },
         {
+          "directive": "press",
+          "bindings": [
+            "&kp LGUI"
+          ]
+        },
+        {
           "directive": "tap",
           "bindings": [
-            "&kp END"
+            "&kp RIGHT"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LGUI"
           ]
         },
         {
@@ -9833,7 +9833,7 @@
         {
           "directive": "press",
           "bindings": [
-            "&kp LCTRL"
+            "&kp LGUI"
           ]
         },
         {
@@ -9845,7 +9845,7 @@
         {
           "directive": "release",
           "bindings": [
-            "&kp LCTRL"
+            "&kp LGUI"
           ]
         },
         {
@@ -9906,7 +9906,7 @@
         {
           "directive": "press",
           "bindings": [
-            "&kp LCTRL"
+            "&kp LALT"
           ]
         },
         {
@@ -9918,7 +9918,7 @@
         {
           "directive": "release",
           "bindings": [
-            "&kp LCTRL"
+            "&kp LALT"
           ]
         },
         {
@@ -10073,13 +10073,7 @@
         {
           "directive": "press",
           "bindings": [
-            "&kp LGUI"
-          ]
-        },
-        {
-          "directive": "press",
-          "bindings": [
-            "&kp LCTRL"
+            "&kp LALT"
           ]
         },
         {
@@ -10103,13 +10097,7 @@
         {
           "directive": "release",
           "bindings": [
-            "&kp LCTRL"
-          ]
-        },
-        {
-          "directive": "release",
-          "bindings": [
-            "&kp LGUI"
+            "&kp LALT"
           ]
         }
       ]
@@ -10160,7 +10148,7 @@
         {
           "directive": "press",
           "bindings": [
-            "&kp LCTRL"
+            "&kp LGUI"
           ]
         },
         {
@@ -10172,7 +10160,7 @@
         {
           "directive": "release",
           "bindings": [
-            "&kp LCTRL"
+            "&kp LGUI"
           ]
         }
       ]
