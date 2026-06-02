@@ -9712,9 +9712,21 @@
       "label": "LANG_TOGGLE",
       "steps": [
         {
+          "directive": "press",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
           "directive": "tap",
           "bindings": [
-            "&kp CAPS"
+            "&kp SPACE"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LCTRL"
           ]
         },
         {

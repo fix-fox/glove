@@ -95,9 +95,11 @@ swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C
 
 ## 6. macOS settings
 
-- [ ] **Input switching (English ↔ Hebrew):** Settings → Keyboard → Input Sources → Edit →
-      enable **"Use Caps Lock to switch to and from Hebrew."** The `lang_toggle` key taps Caps Lock
-      (OS input switch) and toggles the keyboard's Hebrew layer together.
+- [ ] **Input switching (English ↔ Hebrew):** ensure **"Select the previous input source" is
+      Ctrl+Space** (macOS default; Settings → Keyboard → Keyboard Shortcuts → Input Sources). The
+      `lang_toggle` key emits **Ctrl+Space** (OS input switch) and toggles the keyboard's Hebrew layer
+      together. Assumes exactly two input sources (English + Hebrew). Caps-Lock switching is *not* used
+      — macOS ignores a quick Caps Lock tap, so a macro tap of it was unreliable.
 - [ ] **Launcher (Raycast / Alfred / Spotlight):** set the invoke hotkey to **Option+Space**.
       The dedicated launcher thumb key and the `flow_bookmark` macro both emit Option+Space
       (swap-immune → consistent in and out of the terminal).
@@ -112,7 +114,7 @@ swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C
 3. No Karabiner swap active by default — middle = Cmd and pinky = Ctrl behave the same in and out
    of the terminal.
 4. `Option+Tab` → AltTab window switcher.
-5. Caps Lock → input source switches **and** Hebrew layer toggles.
+5. `lang_toggle` key (emits Ctrl+Space) → input source switches **and** Hebrew layer toggles.
 6. Maccy via `Option+Shift+V`; launcher via `Option+Space` (both inside and outside iTerm2).
 7. Macros: `delete_to_bol`/`delete_to_eol`/`select_line`, `gemini_tab` (Chrome new tab),
    `flow_bookmark`, `v_space_ctrl_t` (→ `Ctrl+T` inside the terminal).

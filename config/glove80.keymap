@@ -48,7 +48,7 @@
         lang_toggle: lang_toggle {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &kp CAPS>, <&macro_tap &tog 3>;
+            bindings = <&macro_press &kp LCTRL>, <&macro_tap &kp SPACE>, <&macro_release &kp LCTRL>, <&macro_tap &tog 3>;
         };
 
         delete_to_bol: delete_to_bol {

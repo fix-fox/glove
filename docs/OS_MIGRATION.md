@@ -48,7 +48,7 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 
 | Macro | macOS (now) | Windows/Linux |
 |---|---|---|
-| `lang_toggle` | tap `CAPS`, `&tog 3` | press `LGUI`, tap `SPACE`, release `LGUI`, `&tog 3` (Win+Space) |
+| `lang_toggle` | press `LCTRL`, tap `SPACE`, release `LCTRL`, `&tog 3` (Ctrl+Space) | press `LGUI`, tap `SPACE`, release `LGUI`, `&tog 3` (Win+Space) |
 | `delete_to_bol` | `Cmd+Backspace` | `Shift+Home`, `Backspace` |
 | `delete_to_eol` | `Ctrl+K` | `Shift+End`, `Backspace` |
 | `select_line` | `Cmd+Left`, `Shift+Cmd+Right` | `Home`, `Shift+End` |
