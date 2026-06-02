@@ -104,6 +104,10 @@ swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C
       The dedicated launcher thumb key and the `flow_bookmark` macro both emit Option+Space
       (swap-immune → consistent in and out of the terminal).
 - [ ] **Emoji picker:** confirm Ctrl+Cmd+Space opens it (macOS default; matches the remapped `Win+;` key).
+- [ ] **Dictation:** Settings → Keyboard → **Dictation → On**, then set **Shortcut → "Press Control
+      Key Twice."** This is **not** the macOS default (the default is *Press Globe/Fn twice*, which the
+      keyboard can't emit), so it must be set explicitly. The dictation key (Apps layer, key 69) emits a
+      double-tap of Control to match it.
 - [ ] Optional: Settings → Keyboard → "Use F1, F2 as standard function keys" if you want plain F-keys.
 
 ## 7. Verify (smoke test)
@@ -120,6 +124,6 @@ swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C
    `flow_bookmark`, `v_space_ctrl_t` (→ `Ctrl+T` inside the terminal).
 8. Special keys: lock (`Ctrl+Cmd+Q`), emoji (`Ctrl+Cmd+Space`), Print Screen (`Cmd+Shift+5`).
 9. Dictation: hold the launcher thumb (`Option+Space` key) to reach the Apps layer, tap key 69 →
-   the macOS dictation overlay (microphone) appears. Uses the default "Press Control Key Twice"
-   trigger; if it does nothing, check System Settings → Keyboard → Dictation → Shortcut is still
-   set to the Control double-tap.
+   the macOS dictation overlay (microphone) appears. Requires the Dictation shortcut set to "Press
+   Control Key Twice" (see §6) — this is **not** the macOS default, so if nothing happens that
+   setting is the first thing to check.
