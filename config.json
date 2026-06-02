@@ -8305,7 +8305,8 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "macro",
+            "macroName": "dictation"
           },
           "hold": null
         },
@@ -10161,6 +10162,25 @@
           "directive": "release",
           "bindings": [
             "&kp LGUI"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c59722a2-be23-4409-9b0a-c36450ef8d61",
+      "name": "dictation",
+      "label": "DICTATION",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp LCTRL"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp LCTRL"
           ]
         }
       ]

@@ -124,6 +124,12 @@
             #binding-cells = <0>;
             bindings = <&macro_tap &kp V>, <&macro_tap &kp SPACE>, <&macro_press &kp LGUI>, <&macro_tap &kp T>, <&macro_release &kp LGUI>;
         };
+
+        dictation: dictation {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LCTRL>, <&macro_tap &kp LCTRL>;
+        };
     };
 
     behaviors {
@@ -410,7 +416,7 @@
                 &trans  &kp LC(LS(LG(Q)))  &kp LC(LS(LG(W)))  &kp LC(LS(LG(F)))  &kp LC(LS(LG(P)))  &flow_bookmark  &kp LC(LS(LG(J)))  &kp LC(LS(LG(L)))  &kp LC(LS(LG(U)))  &kp LC(LS(LG(Y)))  &trans  &trans
                 &trans  &kp LC(LS(LG(A)))  &kp LC(LG(R))  &kp LC(LS(LG(S)))  &kp LC(LS(LG(T)))  &kp LC(LS(LG(G)))  &kp LC(LS(LG(M)))  &kp LC(LS(LG(N)))  &kp LC(LS(LG(E)))  &kp LC(LS(LG(I)))  &kp LC(LS(LG(O)))  &trans
                 &trans  &kp LC(LS(LG(Z)))  &kp LC(LS(LG(X)))  &kp LC(LS(LG(C)))  &kp LC(LS(LG(D)))  &kp LC(LS(LG(V)))  &trans  &trans  &trans  &trans  &trans  &trans  &kp LC(LS(LG(K)))  &kp LC(LS(LG(H)))  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &dictation  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
