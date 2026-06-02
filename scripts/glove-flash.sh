@@ -194,7 +194,7 @@ if $FULL; then
     wait_for_device "$RH_VOL" 120
 
     echo "Device detected! Copying right-hand firmware..."
-    cp "$RH_FIRMWARE_FILE" "$RH_VOL/"
+    cp "$RH_FIRMWARE_FILE" "$RH_VOL/" || true
 
     echo "Right half done! Waiting for it to reboot..."
     echo "(macOS may warn 'Disk not ejected properly' — that's normal.)"
@@ -217,7 +217,7 @@ if $FULL; then
     wait_for_device "$LH_VOL" 120
 
     echo "Device detected! Copying left-hand firmware..."
-    cp "$FIRMWARE_FILE" "$LH_VOL/"
+    cp "$FIRMWARE_FILE" "$LH_VOL/" || true
     echo "(macOS may warn 'Disk not ejected properly' — that's normal.)"
 
     echo ""
@@ -263,7 +263,7 @@ else
     wait_for_device "$LH_VOL" 60
 
     echo "Device detected! Copying firmware..."
-    cp "$FIRMWARE_FILE" "$LH_VOL/"
+    cp "$FIRMWARE_FILE" "$LH_VOL/" || true
 
     echo ""
     echo "Firmware copied (macOS may warn 'Disk not ejected properly' — normal)."
