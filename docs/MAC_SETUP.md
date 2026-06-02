@@ -117,3 +117,7 @@ swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C
 7. Macros: `delete_to_bol`/`delete_to_eol`/`select_line`, `gemini_tab` (Chrome new tab),
    `flow_bookmark`, `v_space_ctrl_t` (→ `Ctrl+T` inside the terminal).
 8. Special keys: lock (`Ctrl+Cmd+Q`), emoji (`Ctrl+Cmd+Space`), Print Screen (`Cmd+Shift+5`).
+9. Dictation: hold the launcher thumb (`Option+Space` key) to reach the Apps layer, tap key 69 →
+   the macOS dictation overlay (microphone) appears. Uses the default "Press Control Key Twice"
+   trigger; if it does nothing, check System Settings → Keyboard → Dictation → Shortcut is still
+   set to the Control double-tap.

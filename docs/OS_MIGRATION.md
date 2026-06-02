@@ -56,6 +56,7 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 | `gemini_tab` | `Cmd+T` + `@gemini⇥` | `Ctrl+T` + `@gemini⇥` |
 | `flow_bookmark` | `Option+Space` + `b ` | `Ctrl+Space` + `b ` |
 | `v_space_ctrl_t` | `v ` + `Cmd+T` | `v ` + `Ctrl+T` |
+| `dictation` | double-tap `LCTRL` (macOS "Press Control twice") | no direct equivalent — bind to the target OS's dictation/speech shortcut, or remove the key |
 
 ## macOS software to disable when leaving the Mac
 
@@ -65,6 +66,13 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 - **AltTab** — Windows/Linux have native Alt+Tab; uninstall or leave (harmless).
 - **Maccy** — Windows has native Win+V; Linux varies. Adjust the `clipboard_history` macro to match.
 - **Caps-Lock input switch** — re-point `lang_toggle` to the OS's language shortcut.
+
+## Flash script (`scripts/glove-flash.sh`)
+
+Rewritten **macOS-only**: it detects the bootloader halves at `/Volumes/GLV80LHBOOT` /
+`/Volumes/GLV80RHBOOT` and copies the UF2 with `cp`. To flash from Windows/WSL again, restore the
+pre-rewrite version from git history (the commit "build: rewrite glove-flash.sh for macOS") — that
+version polled `cmd.exe /c "if exist D:\"` and copied via `wslpath` + `cmd.exe /c copy ... D:\`.
 
 ## Notes left unchanged (OS-neutral, no revert needed)
 
