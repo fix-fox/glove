@@ -398,7 +398,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp LG(Q)  &kp LG(W)  &kp LG(F)  &kp LG(P)  &kp LG(B)  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
                 &trans  &hml LCTRL LG(A)  &hml LALT LG(R)  &hml LGUI LG(S)  &hml LSHIFT LG(T)  &kp LG(G)  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
-                &kp LG(Y)  &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(D)  &kp LG(V)  &trans  &trans  &trans  &trans  &trans  &kp ESCAPE  &trans  &kp HOME  &kp ESCAPE  &kp END  &trans  &trans
+                &kp LG(Y)  &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(D)  &kp LG(V)  &trans  &trans  &trans  &trans  &trans  &kp ESCAPE  &trans  &kp LG(LEFT)  &kp ESCAPE  &kp LG(RIGHT)  &trans  &trans
                 &trans  &trans  &trans  &trans  &kp DEL  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp LA(LS(V))  &trans  &trans  &trans  &trans
             >;
         };

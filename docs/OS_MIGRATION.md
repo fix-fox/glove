@@ -34,6 +34,7 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 | Mac (now) | Windows/Linux | Where |
 |---|---|---|
 | `LG(C/V/X/Z/Y/A/S/F/T/W/R/P/B/D/G)` | `LC(...)` | cursor layer taps |
+| `LG(LEFT)` / `LG(RIGHT)` (line start/end) | `HOME` / `END` | cursor layer nav keys |
 | `LG(C/V/X)` | `LC(...)` | mouse layer taps |
 | `LG(Q)` (quit) | `LA(F4)` (Alt+F4 close) | cursor layer |
 | `LA(LS(V))` (Maccy paste) | `LA(LC(V))` (Win paste-special) | cursor layer |
@@ -58,8 +59,9 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 
 ## macOS software to disable when leaving the Mac
 
-- **Karabiner-Elements** — disable/remove the "Glove80 — terminal Cmd/Ctrl swap" complex
-  modification (or uninstall). Without it, the keyboard's modifiers pass through unchanged.
+- **Karabiner-Elements** — if you added any per-combo terminal swaps (`MAC_SETUP.md` §3),
+  disable/remove them (or uninstall). With none, there's nothing to undo — modifiers already pass
+  through unchanged.
 - **AltTab** — Windows/Linux have native Alt+Tab; uninstall or leave (harmless).
 - **Maccy** — Windows has native Win+V; Linux varies. Adjust the `clipboard_history` macro to match.
 - **Caps-Lock input switch** — re-point `lang_toggle` to the OS's language shortcut.

@@ -23,26 +23,42 @@ the rest: the terminal Cmd↔Ctrl swap, window switching, clipboard, and input s
 brew install --cask karabiner-elements alt-tab maccy
 ```
 
-## 3. Karabiner-Elements — terminal-only Cmd↔Ctrl swap
+## 3. Karabiner-Elements — optional per-combo terminal swaps
 
-This is the core feature: in a terminal, the middle finger acts as **Ctrl** (and the pinky as
-**Cmd**, so `Cmd+V` paste / `Cmd+T` tab still work). Everywhere else, the keyboard's modifiers
-pass through unchanged.
+**Default: no Karabiner rule.** With CAGS home-row mods the **pinky = Ctrl** and the
+**middle finger = Cmd**, and modifiers pass through unchanged in every app — so both terminal and
+GUI shortcuts already work without a swap:
 
-- [ ] Grant Karabiner the Input Monitoring / Accessibility permissions it requests.
-- [ ] Find the Glove80's device IDs: **Karabiner-EventViewer → Devices**, note `vendor_id` /
-      `product_id`. (Scoping to the device keeps the laptop's built-in keyboard unaffected.)
-- [ ] Find your terminal's bundle ID if not iTerm2: EventViewer → "Frontmost Application".
-- [ ] Add a complex modification. Edit
-      `~/.config/karabiner/assets/complex_modifications/glove80-terminal-swap.json`, fill in the
-      `vendor_id`/`product_id`, then enable all its rules in Settings → Complex Modifications.
+- Shell control keys on the **pinky**: `Ctrl+C` interrupt, `Ctrl+R` search, `Ctrl+A`/`Ctrl+E`
+  line start/end, `Ctrl+D`, `Ctrl+L`, `Ctrl+U`/`Ctrl+W`/`Ctrl+K`.
+- iTerm2's native Cmd shortcuts on the **middle finger**, identical to every GUI app:
+  `Cmd+T` tab, `Cmd+W` close, `Cmd+C`/`Cmd+V` copy/paste, `Cmd+F` find.
+
+> Earlier revisions used a *global* iTerm Cmd↔Ctrl swap. That broke native Cmd shortcuts (e.g.
+> `Cmd+T` became `Ctrl+T`) and forced the Cmd/Ctrl fingers to swap roles per-app. Dropped — start
+> with no swap; add only the surgical per-combo rules below if a specific combo feels wrong.
+
+### Optional: individual per-combo swaps
+
+Add a rule only if muscle memory keeps reaching for the **Cmd/middle** position when you want a
+shell Ctrl behavior in the terminal. Remap *that one combo*, not the whole modifier. **Cost:** the
+swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C` loses iTerm
+`Cmd+C` = copy; rely on mouse-select auto-copy instead).
+
+- [ ] Grant Karabiner Input Monitoring / Accessibility permissions (only when you add a rule).
+- [ ] Scope to the Glove80 via `device_if`: find `vendor_id`/`product_id` in **Karabiner-EventViewer
+      → Devices**, so the laptop's built-in keyboard is unaffected.
+- [ ] Find your terminal's bundle ID (EventViewer → "Frontmost Application"); iTerm2 is
+      `com.googlecode.iterm2`.
+- [ ] One combo per manipulator. Template for `Cmd+C → Ctrl+C` in iTerm2, in
+      `~/.config/karabiner/assets/complex_modifications/glove80-terminal-swap.json`:
 
 ```json
 {
-  "title": "Glove80 — terminal Cmd/Ctrl swap",
+  "title": "Glove80 — per-combo terminal swaps",
   "rules": [
     {
-      "description": "Glove80: in iTerm2, swap Cmd<->Ctrl (middle=Ctrl, pinky=Cmd)",
+      "description": "Glove80: Cmd+C -> Ctrl+C in iTerm2",
       "manipulators": [
         {
           "type": "basic",
@@ -50,35 +66,8 @@ pass through unchanged.
             { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
             { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
           ],
-          "from": { "key_code": "left_command", "modifiers": { "optional": ["any"] } },
-          "to": [{ "key_code": "left_control" }]
-        },
-        {
-          "type": "basic",
-          "conditions": [
-            { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
-            { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
-          ],
-          "from": { "key_code": "left_control", "modifiers": { "optional": ["any"] } },
-          "to": [{ "key_code": "left_command" }]
-        },
-        {
-          "type": "basic",
-          "conditions": [
-            { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
-            { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
-          ],
-          "from": { "key_code": "right_command", "modifiers": { "optional": ["any"] } },
-          "to": [{ "key_code": "right_control" }]
-        },
-        {
-          "type": "basic",
-          "conditions": [
-            { "type": "frontmost_application_if", "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"] },
-            { "type": "device_if", "identifiers": [{ "vendor_id": 0, "product_id": 0 }] }
-          ],
-          "from": { "key_code": "right_control", "modifiers": { "optional": ["any"] } },
-          "to": [{ "key_code": "right_command" }]
+          "from": { "key_code": "c", "modifiers": { "mandatory": ["left_command"] } },
+          "to": [{ "key_code": "c", "modifiers": ["left_control"] }]
         }
       ]
     }
@@ -86,11 +75,11 @@ pass through unchanged.
 }
 ```
 
-- [ ] To add more terminals later (Ghostty/WezTerm/kitty/Alacritty), append their bundle IDs to
-      each `bundle_identifiers` array (find via EventViewer).
+- [ ] Add more combos: one manipulator each (copy the block, change `from`/`to` `key_code`).
+- [ ] Add more terminals: append their bundle IDs to `bundle_identifiers`.
 - [ ] **VS Code caveat:** Karabiner can't tell the VS Code editor from its integrated terminal
-      (same bundle ID). Leave VS Code **out** of this rule; handle terminal-in-VSCode via VS Code's
-      own `keybindings.json` if needed.
+      (same bundle ID). Leave VS Code **out** of these rules; handle terminal-in-VSCode via VS
+      Code's own `keybindings.json` if needed.
 
 ## 4. AltTab — Windows-style window switching
 
@@ -118,8 +107,10 @@ pass through unchanged.
 ## 7. Verify (smoke test)
 
 1. GUI app: `Cmd+C` / `Cmd+V` / `Cmd+S` on the **middle** finger.
-2. iTerm2: `Ctrl+C` interrupt + `Ctrl+R` on the **middle** finger; `Cmd+V` paste on the **pinky**.
-3. Built-in laptop keyboard is **not** swapped in iTerm2 (device scoping works).
+2. iTerm2: `Ctrl+C` interrupt + `Ctrl+R` on the **pinky**; `Cmd+T` new tab + `Cmd+V` paste on the
+   **middle** finger (native, identical to GUI apps).
+3. No Karabiner swap active by default — middle = Cmd and pinky = Ctrl behave the same in and out
+   of the terminal.
 4. `Option+Tab` → AltTab window switcher.
 5. Caps Lock → input source switches **and** Hebrew layer toggles.
 6. Maccy via `Option+Shift+V`; launcher via `Option+Space` (both inside and outside iTerm2).

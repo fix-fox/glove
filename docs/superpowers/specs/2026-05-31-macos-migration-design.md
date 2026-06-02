@@ -4,6 +4,14 @@
 **Branch:** `mac-migration` (merge to `main` only after testing on the Mac)
 **Status:** Design approved; pending spec review → implementation plan
 
+> **Superseded (2026-06-02), §4.2 terminal swap:** The global iTerm Cmd↔Ctrl swap (core
+> requirement below: "inside the terminal the middle finger = Ctrl") was dropped. It broke iTerm's
+> native Cmd shortcuts (`Cmd+T`, etc.) and made the Cmd/Ctrl fingers swap roles per-app. New model:
+> **no swap** — middle = Cmd everywhere (iTerm-native shortcuts), pinky = Ctrl everywhere (shell
+> control keys), with *optional* per-combo terminal swaps added only as needed. See `MAC_SETUP.md` §3.
+> Cursor-layer `HOME`/`END` also became `Cmd+Left`/`Cmd+Right` (Mac line nav). The keymap is
+> unaffected by the swap change; this is Karabiner-config-only.
+
 ## 1. Goal & context
 
 The user is replacing a Windows laptop with a Mac. The Glove80 keymap is currently
