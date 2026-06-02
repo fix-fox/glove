@@ -19,15 +19,19 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+LH_VOL="/Volumes/GLV80LHBOOT"
+RH_VOL="/Volumes/GLV80RHBOOT"
+
 wait_for_device() {
-    local timeout=$1
+    local vol=$1
+    local timeout=$2
     local elapsed=0
-    while ! cmd.exe /c "if exist D:\\ (exit 0) else (exit 1)" 2>/dev/null; do
+    while [ ! -d "$vol" ]; do
         sleep 1
         elapsed=$((elapsed + 1))
         if [ $elapsed -ge $timeout ]; then
             echo ""
-            echo "Error: Timeout waiting for device at D:\\"
+            echo "Error: Timeout waiting for bootloader volume at $vol"
             exit 1
         fi
         printf "\r  Waiting... %ds" $elapsed
@@ -36,9 +40,10 @@ wait_for_device() {
 }
 
 wait_for_disconnect() {
-    local timeout=$1
+    local vol=$1
+    local timeout=$2
     local elapsed=0
-    while cmd.exe /c "if exist D:\\ (exit 0) else (exit 1)" 2>/dev/null; do
+    while [ -d "$vol" ]; do
         sleep 1
         elapsed=$((elapsed + 1))
         if [ $elapsed -ge $timeout ]; then
@@ -184,17 +189,17 @@ if $FULL; then
     echo "  4. While holding, switch the right half ON"
     echo "  5. Release — look for a slow pulsing red LED"
     echo ""
-    echo "Waiting for bootloader device at D:\\ ..."
+    echo "Waiting for bootloader volume at $RH_VOL ..."
 
-    wait_for_device 120
+    wait_for_device "$RH_VOL" 120
 
     echo "Device detected! Copying right-hand firmware..."
-    RH_WIN_PATH=$(wslpath -w "$RH_FIRMWARE_FILE")
-    cmd.exe /c copy "$RH_WIN_PATH" "D:\\" > /dev/null
+    cp "$RH_FIRMWARE_FILE" "$RH_VOL/"
 
     echo "Right half done! Waiting for it to reboot..."
+    echo "(macOS may warn 'Disk not ejected properly' — that's normal.)"
     sleep 2
-    wait_for_disconnect 30
+    wait_for_disconnect "$RH_VOL" 30
 
     # === LEFT HALF ===
     echo ""
@@ -207,13 +212,13 @@ if $FULL; then
     echo "  5. While holding, switch the left half ON"
     echo "  6. Release — look for a slow pulsing red LED"
     echo ""
-    echo "Waiting for bootloader device at D:\\ ..."
+    echo "Waiting for bootloader volume at $LH_VOL ..."
 
-    wait_for_device 120
+    wait_for_device "$LH_VOL" 120
 
     echo "Device detected! Copying left-hand firmware..."
-    FIRMWARE_WIN_PATH=$(wslpath -w "$FIRMWARE_FILE")
-    cmd.exe /c copy "$FIRMWARE_WIN_PATH" "D:\\" > /dev/null
+    cp "$FIRMWARE_FILE" "$LH_VOL/"
+    echo "(macOS may warn 'Disk not ejected properly' — that's normal.)"
 
     echo ""
     echo "══════════════════════════════════════════════════════════════"
@@ -251,17 +256,17 @@ else
     echo "Put the LEFT hand in bootloader mode:"
     echo "  1. Hold the bottom-left key (magic key)"
     echo "  2. While holding, tap the top-left key"
-    echo "  3. Release both — keyboard mounts as GLV80LHBOOT (D:)"
+    echo "  3. Release both — keyboard mounts as GLV80LHBOOT ($LH_VOL)"
     echo ""
-    echo "Waiting for device at D:\\ ..."
+    echo "Waiting for bootloader volume at $LH_VOL ..."
 
-    wait_for_device 60
+    wait_for_device "$LH_VOL" 60
 
     echo "Device detected! Copying firmware..."
-    FIRMWARE_WIN_PATH=$(wslpath -w "$FIRMWARE_FILE")
-    cmd.exe /c copy "$FIRMWARE_WIN_PATH" "D:\\" > /dev/null
+    cp "$FIRMWARE_FILE" "$LH_VOL/"
 
     echo ""
-    echo "Firmware copied. The keyboard will reboot automatically."
+    echo "Firmware copied (macOS may warn 'Disk not ejected properly' — normal)."
+    echo "The keyboard will reboot automatically."
     echo "Done!"
 fi
