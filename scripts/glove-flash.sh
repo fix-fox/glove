@@ -59,7 +59,11 @@ echo "Generating firmware files..."
 npm run generate-firmware --silent
 
 # ── Build firmware ───────────────────────────────────────────────────────────
-TEMP_DIR=$(mktemp -d)
+# Keep the temp dir under $HOME: the local Docker build mounts it into the
+# container as the output dir, and colima / Docker Desktop on macOS only share
+# $HOME by default. A /tmp or /var/folders mktemp dir (the system default) is
+# not shared into the VM, so the built .uf2 would never reach the host.
+TEMP_DIR=$(mktemp -d "${HOME}/.glove-flash.XXXXXX")
 cleanup() { rm -rf "$TEMP_DIR"; }
 trap cleanup EXIT
 
