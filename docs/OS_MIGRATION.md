@@ -71,8 +71,10 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 
 Rewritten **macOS-only**: it detects the bootloader halves at `/Volumes/GLV80LHBOOT` /
 `/Volumes/GLV80RHBOOT` and copies the UF2 with `cp`. To flash from Windows/WSL again, restore the
-pre-rewrite version from git history (the commit "build: rewrite glove-flash.sh for macOS") — that
-version polled `cmd.exe /c "if exist D:\"` and copied via `wslpath` + `cmd.exe /c copy ... D:\`.
+version of the script from *before* the rewrite — i.e. the parent of the commit
+"build: rewrite glove-flash.sh for macOS". Find it with `git log --oneline -- scripts/glove-flash.sh`,
+then check out the pre-rewrite file, e.g. `git checkout <rewrite-commit>^ -- scripts/glove-flash.sh`.
+That pre-rewrite version polled `cmd.exe /c "if exist D:\"` and copied via `wslpath` + `cmd.exe /c copy ... D:\`.
 
 ## Notes left unchanged (OS-neutral, no revert needed)
 
