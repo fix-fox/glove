@@ -10161,7 +10161,7 @@
         {
           "directive": "press",
           "bindings": [
-            "&kp LGUI"
+            "&kp LCTRL"
           ]
         },
         {
@@ -10173,7 +10173,7 @@
         {
           "directive": "release",
           "bindings": [
-            "&kp LGUI"
+            "&kp LCTRL"
           ]
         }
       ]

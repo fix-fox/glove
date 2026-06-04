@@ -122,7 +122,7 @@
         v_space_ctrl_t: v_space_ctrl_t {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &kp V>, <&macro_tap &kp SPACE>, <&macro_press &kp LGUI>, <&macro_tap &kp T>, <&macro_release &kp LGUI>;
+            bindings = <&macro_tap &kp V>, <&macro_tap &kp SPACE>, <&macro_press &kp LCTRL>, <&macro_tap &kp T>, <&macro_release &kp LCTRL>;
         };
 
         dictation: dictation {
