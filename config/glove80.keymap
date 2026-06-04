@@ -130,6 +130,12 @@
             #binding-cells = <0>;
             bindings = <&macro_tap &kp LCTRL>, <&macro_tap &kp LCTRL>;
         };
+
+        copy_url: copy_url {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp L>, <&macro_tap &kp C>, <&macro_release &kp LGUI>;
+        };
     };
 
     behaviors {
@@ -360,7 +366,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &vim_q  &vim_w  &trans  &v_space_ctrl_t  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &gemini_tab  &trans  &trans  &kp COLON  &trans  &trans  &trans
-                &trans  &trans  &vim_x  &tog 8  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
+                &trans  &trans  &vim_x  &copy_url  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };

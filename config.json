@@ -5619,8 +5619,8 @@
         },
         {
           "tap": {
-            "type": "tog",
-            "layerIndex": 8
+            "type": "macro",
+            "macroName": "copy_url"
           },
           "hold": null
         },
@@ -10193,6 +10193,37 @@
           "directive": "tap",
           "bindings": [
             "&kp LCTRL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4708-9a0b-1c2d3e4f5a6b",
+      "name": "copy_url",
+      "label": "COPY_URL",
+      "steps": [
+        {
+          "directive": "press",
+          "bindings": [
+            "&kp LGUI"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp L"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp C"
+          ]
+        },
+        {
+          "directive": "release",
+          "bindings": [
+            "&kp LGUI"
           ]
         }
       ]
