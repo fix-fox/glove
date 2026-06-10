@@ -1,0 +1,5 @@
+#!/bin/bash
+# Global launcher for the Glove80 keymap REPL.
+# Install: ln -sf ~/glove/scripts/glove ~/.local/bin/glove
+cd "$(dirname "$(readlink -f "$0")")/.." || exit 1
+exec node --no-deprecation --import=tsx scripts/repl.ts "$@"
