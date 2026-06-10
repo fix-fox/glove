@@ -6,6 +6,7 @@ import { KeyboardConfigSchema } from "@/types/schema";
 import { migrateConfig } from "@/lib/migrations";
 import { dispatch } from "@/lib/repl/dispatch";
 import { complete } from "@/lib/repl/complete";
+import { cyan, dim } from "@/lib/repl/color";
 
 const config = KeyboardConfigSchema.parse(JSON.parse(readFileSync("config.json", "utf-8")));
 migrateConfig(config);
@@ -23,7 +24,7 @@ function run(line: string): boolean {
     }
     return true;
   }
-  if (result.text) console.log(result.text);
+  if (result.text) console.log(`\n${result.text}\n`);
   return true;
 }
 
@@ -32,12 +33,12 @@ if (args.length > 0) {
   // One-shot mode: npm run repl -- find Cmd+C
   run(args.join(" "));
 } else {
-  console.log("Glove80 keymap REPL (read-only). Tab completes; `help` for commands, `quit` to exit.");
+  console.log(dim("Glove80 keymap REPL (read-only). Tab completes; `help` for commands, `quit` to exit."));
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     completer: (line: string) => complete(config, line),
-    prompt: "glove> ",
+    prompt: cyan("glove> "),
   });
   rl.prompt();
   rl.on("line", (line) => {
