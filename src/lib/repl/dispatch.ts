@@ -117,14 +117,14 @@ export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
       const def = (config.macros ?? []).find((m) => m.name === args[0]);
       if (def) return out(macroDetail(def));
       const names = (config.macros ?? []).map((m) => m.name).join(", ");
-      return out(`Unknown macro "${args[0]}". Macros: ${names}`);
+      return out(`Unknown macro "${args[0]}". ${names ? `Macros: ${names}` : "No macros defined."}`);
     }
     case "combo": {
       if (args.length !== 1) return out(USAGE.combo);
       const def = (config.combos ?? []).find((c) => c.name === args[0]);
       if (def) return out(comboDetail(config, def));
       const names = (config.combos ?? []).map((c) => c.name).join(", ");
-      return out(`Unknown combo "${args[0]}". Combos: ${names}`);
+      return out(`Unknown combo "${args[0]}". ${names ? `Combos: ${names}` : "No combos defined."}`);
     }
     case "find": {
       if (args.length === 0) return out(USAGE.find);

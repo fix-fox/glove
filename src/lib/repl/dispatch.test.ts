@@ -10,6 +10,12 @@ function outputOf(line: string): string {
   return r.text;
 }
 
+function outputOf2(cfg: typeof config, line: string): string {
+  const r = dispatch(cfg, line);
+  if (r.kind !== "output") throw new Error(`expected output, got ${r.kind}`);
+  return r.text;
+}
+
 describe("dispatch", () => {
   it("quits on quit/exit", () => {
     expect(dispatch(config, "quit")).toEqual({ kind: "quit" });
@@ -66,5 +72,12 @@ describe("dispatch", () => {
   it("prints help and per-command help", () => {
     expect(outputOf("help")).toContain("find <query>");
     expect(outputOf("help find")).toContain("reverse lookup");
+  });
+
+  it("handles unknown macro/combo when none are defined", () => {
+    const { macros, combos, ...rest } = config;
+    const empty = rest as typeof config;
+    expect(outputOf2(empty, "macro nope")).toContain("No macros defined.");
+    expect(outputOf2(empty, "combo nope")).toContain("No combos defined.");
   });
 });
