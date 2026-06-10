@@ -15,15 +15,15 @@ export function resolveLayer(
         error: `Layer index ${index} out of range (0-${config.layers.length - 1})`,
       };
     }
-    return { ok: true, value: { index, layer: config.layers[index] } };
+    return { ok: true, value: { index, layer: config.layers[index]! } };
   }
   const lower = ref.toLowerCase();
   const exact = config.layers.findIndex((l) => l.name.toLowerCase() === lower);
-  if (exact !== -1) return { ok: true, value: { index: exact, layer: config.layers[exact] } };
+  if (exact !== -1) return { ok: true, value: { index: exact, layer: config.layers[exact]! } };
   const matches = config.layers
     .map((layer, index) => ({ layer, index }))
     .filter(({ layer }) => layer.name.toLowerCase().startsWith(lower));
-  if (matches.length === 1) return { ok: true, value: matches[0] };
+  if (matches.length === 1) return { ok: true, value: matches[0]! };
   if (matches.length > 1) {
     return {
       ok: false,
