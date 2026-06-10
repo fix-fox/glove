@@ -1,5 +1,8 @@
-import type { KeyboardConfig } from "../../types/schema";
-import { GLOVE80_KEY_NAMES } from "../layout-map";
+import type {
+  Behavior, ComboDefinition, Key, KeyboardConfig, MacroDefinition,
+} from "../../types/schema";
+import { GLOVE80_GRID, GLOVE80_KEY_NAMES } from "../layout-map";
+import { behaviorLabel, holdTapSecondaryLabel, keyCodeDisplayLabel } from "../labels";
 
 export function listLayers(config: KeyboardConfig): string[] {
   return config.layers.map((layer, i) => {
@@ -41,4 +44,135 @@ export function listCondLayers(config: KeyboardConfig): string[] {
   return (config.conditionalLayers ?? []).map(
     (c) => `${c.name}: ${c.ifLayers.map(name).join(" + ")} → ${name(c.thenLayer)}`,
   );
+}
+
+const CELL_WIDTH = 7; // 6 label chars + 1 space
+
+function cellLabel(key: Key, config: KeyboardConfig): string {
+  const names = config.layers.map((l) => l.name);
+  const morphs = config.modMorphs ?? [];
+  const holdTaps = config.holdTaps ?? [];
+  if (key.tap.type === "trans") return "·";
+  let label = behaviorLabel(key.tap, names, morphs, holdTaps);
+  if (key.tap.type === "hold_tap") {
+    label = `${label}·${holdTapSecondaryLabel(key.tap.name, key.tap.param1)}`;
+  } else if (key.hold) {
+    label = `${label}·${behaviorLabel(key.hold, names, morphs, holdTaps)}`;
+  }
+  return label;
+}
+
+export function renderLayer(config: KeyboardConfig, layerIndex: number): string {
+  const layer = config.layers[layerIndex];
+  if (!layer) return `Layer ${layerIndex} not found`;
+
+  const lines = [`Layer ${layerIndex}: ${layer.name}`, ""];
+  for (const row of GLOVE80_GRID) {
+    const cells = row.map((idx) => {
+      if (idx === null) return " ".repeat(CELL_WIDTH);
+      const key = layer.keys[idx];
+      if (!key) return " ".repeat(CELL_WIDTH);
+      const label = cellLabel(key, config);
+      return label.slice(0, CELL_WIDTH - 1).padEnd(CELL_WIDTH);
+    });
+    lines.push(cells.join("").trimEnd());
+  }
+  return lines.join("\n");
+}
+
+export function macroDetail(def: MacroDefinition, indent = ""): string {
+  const lines = [`${indent}macro ${def.name}${def.label ? ` (${def.label})` : ""}`];
+  if (def.waitMs !== undefined || def.tapMs !== undefined) {
+    lines.push(`${indent}  wait: ${def.waitMs ?? "default"}ms, tap: ${def.tapMs ?? "default"}ms`);
+  }
+  def.steps.forEach((step, i) => {
+    const detail = "bindings" in step ? `${step.directive} ${step.bindings.join(" ")}` : step.directive;
+    lines.push(`${indent}  ${i + 1}. ${detail}`);
+  });
+  return lines.join("\n");
+}
+
+export function comboDetail(config: KeyboardConfig, def: ComboDefinition): string {
+  const positions = def.keyPositions.map((p) => `${GLOVE80_KEY_NAMES[p] ?? p} (${p})`).join(" + ");
+  const layers = def.layers?.length
+    ? def.layers.map((i) => config.layers[i]?.name ?? String(i)).join(", ")
+    : "all";
+  const lines = [
+    `combo ${def.name}`,
+    `  keys: ${positions}`,
+    `  binding: ${def.binding}`,
+    `  layers: ${layers}`,
+  ];
+  if (def.timeoutMs !== undefined) lines.push(`  timeout: ${def.timeoutMs}ms`);
+  return lines.join("\n");
+}
+
+export function describeBehavior(
+  behavior: Behavior,
+  config: KeyboardConfig,
+  indent = "",
+): string {
+  const names = config.layers.map((l) => l.name);
+  switch (behavior.type) {
+    case "kp":
+      return `kp ${behavior.keyCode} — ${keyCodeDisplayLabel(behavior.keyCode)}`;
+    case "mo":
+      return `mo ${behavior.layerIndex} — momentary layer "${names[behavior.layerIndex] ?? behavior.layerIndex}"`;
+    case "to":
+      return `to ${behavior.layerIndex} — switch to layer "${names[behavior.layerIndex] ?? behavior.layerIndex}"`;
+    case "sl":
+      return `sl ${behavior.layerIndex} — sticky layer "${names[behavior.layerIndex] ?? behavior.layerIndex}"`;
+    case "tog":
+      return `tog ${behavior.layerIndex} — toggle layer "${names[behavior.layerIndex] ?? behavior.layerIndex}"`;
+    case "trans":
+      return "trans — falls through to lower layer";
+    case "none":
+      return "none";
+    case "macro": {
+      const def = (config.macros ?? []).find((m) => m.name === behavior.macroName);
+      const params = [behavior.param, behavior.param2].filter(Boolean).join(", ");
+      const head = `macro ${behavior.macroName}${params ? `(${params})` : ""}`;
+      return def ? `${head}\n${macroDetail(def, `${indent}  `)}` : `${head} — definition not found`;
+    }
+    case "mod_morph": {
+      const def = (config.modMorphs ?? []).find((m) => m.name === behavior.name);
+      if (!def) return `mod-morph ${behavior.name} — definition not found`;
+      return [
+        `mod-morph ${behavior.name}`,
+        `${indent}  default: ${def.defaultBinding}`,
+        `${indent}  with ${def.mods.join("+")} → ${def.morphBinding}`,
+      ].join("\n");
+    }
+    case "hold_tap": {
+      const def = (config.holdTaps ?? []).find((h) => h.name === behavior.name);
+      const head = `hold-tap ${behavior.name}(${behavior.param1}, ${behavior.param2})`;
+      if (!def) return `${head} — definition not found`;
+      const hold = ["&kp", "&mo", "&to", "&tog", "&sl"].includes(def.holdBinding)
+        ? `${def.holdBinding} ${behavior.param1}`
+        : def.holdBinding;
+      const tap = def.tapBinding === "&kp" ? `&kp ${behavior.param2}` : def.tapBinding;
+      return [
+        head,
+        `${indent}  hold: ${hold}`,
+        `${indent}  tap:  ${tap}`,
+        `${indent}  flavor: ${def.flavor}, tapping-term: ${def.tappingTermMs}ms`,
+      ].join("\n");
+    }
+    default: {
+      const label = behaviorLabel(behavior, names, config.modMorphs ?? [], config.holdTaps ?? []);
+      return `${behavior.type}${label ? ` — ${label}` : ""}`;
+    }
+  }
+}
+
+export function keyDetail(config: KeyboardConfig, layerIndex: number, pos: number): string {
+  const layer = config.layers[layerIndex];
+  if (!layer) return `Layer ${layerIndex} not found`;
+  const key = layer.keys[pos];
+  if (!key) return `Position ${pos} not found`;
+  return [
+    `${GLOVE80_KEY_NAMES[pos]} (pos ${pos}) on layer ${layerIndex} "${layer.name}"`,
+    `  tap:  ${describeBehavior(key.tap, config, "  ")}`,
+    `  hold: ${key.hold ? describeBehavior(key.hold, config, "  ") : "(none)"}`,
+  ].join("\n");
 }

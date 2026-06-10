@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   listLayers, listMacros, listCombos, listHoldTaps, listModMorphs, listCondLayers,
+  renderLayer, keyDetail, macroDetail, comboDetail,
 } from "./render";
 import { makeConfig } from "./test-fixtures";
 
@@ -36,5 +37,63 @@ describe("list summaries", () => {
 
   it("lists conditional layers with layer names", () => {
     expect(listCondLayers(config)[0]).toBe("tri_layer: symbols + system → system");
+  });
+});
+
+describe("renderLayer", () => {
+  it("renders a header and 7 grid rows", () => {
+    const text = renderLayer(config, 0);
+    const lines = text.split("\n");
+    expect(lines[0]).toBe("Layer 0: default");
+    expect(lines).toHaveLength(9); // header + blank + 7 rows
+  });
+
+  it("shows kp labels, trans dots, and hold-tap tap·hold cells", () => {
+    const text = renderLayer(config, 0);
+    expect(text).toContain("⌘C"); // pos 43, kp LG(C)
+    expect(text).toContain("A·⌘"); // pos 34, hml_lgui(LGUI, A)
+    expect(text.split("\n")[2]!.trimStart().startsWith("·")).toBe(true); // pos 0 trans
+  });
+});
+
+describe("keyDetail", () => {
+  it("describes a plain kp key with its hold behavior", () => {
+    const text = keyDetail(config, 0, 10);
+    expect(text).toContain("LN1 (pos 10)");
+    expect(text).toContain("default");
+    expect(text).toContain("kp F5");
+    expect(text).toContain("momentary");
+    expect(text).toContain("symbols");
+  });
+
+  it("expands hold-tap definitions inline", () => {
+    const text = keyDetail(config, 0, 34);
+    expect(text).toContain("hold-tap hml_lgui(LGUI, A)");
+    expect(text).toContain("flavor: balanced");
+    expect(text).toContain("&kp LGUI");
+    expect(text).toContain("&kp A");
+  });
+
+  it("marks empty hold slots", () => {
+    const text = keyDetail(config, 0, 20);
+    expect(text).toContain("hold: (none)");
+  });
+});
+
+describe("macroDetail / comboDetail", () => {
+  it("renders numbered macro steps", () => {
+    const macro = config.macros![0]!;
+    const text = macroDetail(macro);
+    expect(text).toContain("macro copy_url (CopyURL)");
+    expect(text).toContain("1. tap &kp LG(L)");
+    expect(text).toContain("2. tap &kp LG(C)");
+  });
+
+  it("renders combo keys with names and binding", () => {
+    const text = comboDetail(config, config.combos![0]!);
+    expect(text).toContain("combo esc_combo");
+    expect(text).toContain("LT1 (22) + LT2 (23)");
+    expect(text).toContain("&kp ESC");
+    expect(text).toContain("layers: all");
   });
 });
