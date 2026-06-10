@@ -140,7 +140,7 @@ export function describeBehavior(
       return [
         `mod-morph ${behavior.name}`,
         `${indent}  default: ${def.defaultBinding}`,
-        `${indent}  with ${def.mods.join("+")} → ${def.morphBinding}`,
+        `${indent}  with ${def.mods.join("+")}: ${def.morphBinding}`,
       ].join("\n");
     }
     case "hold_tap": {
