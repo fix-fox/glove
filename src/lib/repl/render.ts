@@ -1,8 +1,10 @@
 import type {
-  Behavior, ComboDefinition, Key, KeyboardConfig, MacroDefinition,
+  Behavior, ComboDefinition, Key, KeyboardConfig, Layer, MacroDefinition,
 } from "../../types/schema";
 import { GLOVE80_GRID, GLOVE80_KEY_NAMES } from "../layout-map";
 import { behaviorLabel, holdTapSecondaryLabel, keyCodeDisplayLabel } from "../labels";
+import { displayWidth, padCenter, truncateDisplay } from "./text-width";
+import { bold, cyan, dim, magenta, yellow } from "./color";
 
 export function listLayers(config: KeyboardConfig): string[] {
   return config.layers.map((layer, i) => {
@@ -46,38 +48,121 @@ export function listCondLayers(config: KeyboardConfig): string[] {
   );
 }
 
-const CELL_WIDTH = 7; // 6 label chars + 1 space
+const MIN_CELL = 4;
+const MAX_CELL = 6;
+const GUTTER_COL = 9; // the only GLOVE80_GRID column that never holds a key
+const GUTTER = "  ";
 
-function cellLabel(key: Key, config: KeyboardConfig): string {
+type CellKind = "normal" | "layer" | "macro" | "trans" | "empty";
+
+interface CellContent {
+  tap: string;
+  hold: string | null;
+  kind: CellKind;
+}
+
+function cellContent(key: Key, config: KeyboardConfig): CellContent {
   const names = config.layers.map((l) => l.name);
   const morphs = config.modMorphs ?? [];
   const holdTaps = config.holdTaps ?? [];
-  if (key.tap.type === "trans") return "·";
-  let label = behaviorLabel(key.tap, names, morphs, holdTaps);
+  if (key.tap.type === "trans") return { tap: "·", hold: null, kind: "trans" };
+  const tapLabel = behaviorLabel(key.tap, names, morphs, holdTaps);
+  if (key.tap.type === "none" && !key.hold) return { tap: "", hold: null, kind: "empty" };
+  let hold: string | null = null;
   if (key.tap.type === "hold_tap") {
-    label = `${label}·${holdTapSecondaryLabel(key.tap.name, key.tap.param1)}`;
+    hold = holdTapSecondaryLabel(key.tap.name, key.tap.param1);
   } else if (key.hold) {
-    label = `${label}·${behaviorLabel(key.hold, names, morphs, holdTaps)}`;
+    hold = behaviorLabel(key.hold, names, morphs, holdTaps);
   }
-  return label;
+  const kind: CellKind =
+    key.tap.type === "mo" || key.tap.type === "to" || key.tap.type === "tog" || key.tap.type === "sl"
+      ? "layer"
+      : key.tap.type === "macro"
+        ? "macro"
+        : "normal";
+  return { tap: tapLabel, hold, kind };
+}
+
+function cellPlainText(c: CellContent): string {
+  return c.hold ? `${c.tap}·${c.hold}` : c.tap;
+}
+
+/** Center + colorize one cell's content to exactly `width` display columns. */
+function renderCellContent(c: CellContent, width: number): string {
+  const plain = truncateDisplay(cellPlainText(c), width);
+  const centered = padCenter(plain, width);
+  const start = centered.indexOf(plain);
+  const left = centered.slice(0, start);
+  const right = centered.slice(start + plain.length);
+  let colored: string;
+  if (c.kind === "trans" || c.kind === "empty") {
+    colored = dim(plain);
+  } else if (c.kind === "layer") {
+    colored = yellow(plain);
+  } else if (c.kind === "macro") {
+    colored = magenta(plain);
+  } else if (c.hold && plain === cellPlainText(c)) {
+    colored = `${c.tap}${dim("·")}${cyan(c.hold)}`;
+  } else {
+    colored = plain; // truncated hold-tap: single color
+  }
+  return left + colored + right;
+}
+
+const LEGEND_SYMBOLS: ReadonlyArray<readonly [string, string]> = [
+  ["◇", "◇ momentary"],
+  ["⇄", "⇄ toggle"],
+  ["⇨", "⇨ switch-to"],
+  ["◆", "◆ sticky"],
+];
+
+function legend(layer: Layer, config: KeyboardConfig): string {
+  const contents = layer.keys.map((k) => cellContent(k, config));
+  const all = contents.map(cellPlainText).join(" ");
+  const parts: string[] = [];
+  for (const [symbol, text] of LEGEND_SYMBOLS) {
+    if (all.includes(symbol)) parts.push(text);
+  }
+  if (contents.some((c) => c.hold !== null)) parts.push("A·⌘ tap·hold");
+  if (contents.some((c) => c.kind === "trans")) parts.push("· transparent");
+  return parts.length ? dim(parts.join("   ")) : "";
 }
 
 export function renderLayer(config: KeyboardConfig, layerIndex: number): string {
   const layer = config.layers[layerIndex];
   if (!layer) return `Layer ${layerIndex} not found`;
-
-  const lines = [`Layer ${layerIndex}: ${layer.name}`, ""];
+  const contents = layer.keys.map((k) => cellContent(k, config));
+  const widest = Math.max(...contents.map((c) => displayWidth(cellPlainText(c))));
+  const w = Math.max(MIN_CELL, Math.min(MAX_CELL, widest));
+  const blank = " ".repeat(w + 2);
+  const lines: string[] = [bold(`Layer ${layerIndex}: ${layer.name}`), ""];
   for (const row of GLOVE80_GRID) {
-    const cells = row.map((idx) => {
-      if (idx === null) return " ".repeat(CELL_WIDTH);
-      const key = layer.keys[idx];
-      if (!key) return " ".repeat(CELL_WIDTH);
-      const label = cellLabel(key, config);
-      return label.slice(0, CELL_WIDTH - 1).padEnd(CELL_WIDTH);
+    const top: string[] = [];
+    const mid: string[] = [];
+    const bottom: string[] = [];
+    row.forEach((idx, col) => {
+      if (col === GUTTER_COL) {
+        top.push(GUTTER);
+        mid.push(GUTTER);
+        bottom.push(GUTTER);
+        return;
+      }
+      if (idx === null) {
+        top.push(blank);
+        mid.push(blank);
+        bottom.push(blank);
+        return;
+      }
+      const c = contents[idx] ?? { tap: "", hold: null, kind: "empty" as const };
+      top.push(dim(`┌${"─".repeat(w)}┐`));
+      mid.push(`${dim("│")}${renderCellContent(c, w)}${dim("│")}`);
+      bottom.push(dim(`└${"─".repeat(w)}┘`));
     });
-    lines.push(cells.join("").trimEnd());
+    lines.push(top.join(" ").trimEnd(), mid.join(" ").trimEnd(), bottom.join(" ").trimEnd(), "");
   }
-  return lines.join("\n");
+  const leg = legend(layer, config);
+  if (leg) lines.push(leg);
+  return lines.join("\n").trimEnd();
 }
 
 export function macroDetail(def: MacroDefinition, indent = ""): string {

@@ -1,9 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import {
   listLayers, listMacros, listCombos, listHoldTaps, listModMorphs, listCondLayers,
   renderLayer, keyDetail, macroDetail, comboDetail,
 } from "./render";
 import { makeConfig } from "./test-fixtures";
+import { setColorEnabled } from "./color";
+import { displayWidth, stripAnsi } from "./text-width";
 
 const config = makeConfig();
 
@@ -40,19 +42,70 @@ describe("list summaries", () => {
   });
 });
 
-describe("renderLayer", () => {
-  it("renders a header and 7 grid rows", () => {
+beforeAll(() => setColorEnabled(false));
+
+describe("renderLayer (boxed)", () => {
+  it("renders a header and one box per key", () => {
     const text = renderLayer(config, 0);
     const lines = text.split("\n");
     expect(lines[0]).toBe("Layer 0: default");
-    expect(lines).toHaveLength(9); // header + blank + 7 rows
+    expect((text.match(/┌/g) ?? []).length).toBe(80); // one box per key
   });
 
-  it("shows kp labels, trans dots, and hold-tap tap·hold cells", () => {
+  it("shows labels, trans dot, and tap·hold cells inside boxes", () => {
     const text = renderLayer(config, 0);
-    expect(text).toContain("⌘C"); // pos 43, kp LG(C)
-    expect(text).toContain("A·⌘"); // pos 34, hml_lgui(LGUI, A)
-    expect(text.split("\n")[2]!.trimStart().startsWith("·")).toBe(true); // pos 0 trans
+    expect(text).toContain("⌘C");
+    expect(text).toContain("A·⌘");
+    expect(text).toContain("│"); // boxes drawn
+    // pos 0 is trans → first middle row starts with a box containing ·
+    const firstMid = text.split("\n")[3]!;
+    expect(firstMid.trimStart().startsWith("│")).toBe(true);
+    expect(firstMid).toContain("·");
+  });
+
+  it("keeps every line in a box row at equal display width", () => {
+    const text = renderLayer(config, 0);
+    const lines = text.split("\n");
+    // box rows come in consecutive (top, mid, bottom) triples
+    for (let i = 0; i < lines.length - 2; i++) {
+      if (lines[i]!.trimStart().startsWith("┌")) {
+        const w = displayWidth(lines[i]!);
+        expect(displayWidth(lines[i + 1]!), `mid of row at line ${i}`).toBe(w);
+        expect(displayWidth(lines[i + 2]!), `bottom of row at line ${i}`).toBe(w);
+      }
+    }
+  });
+
+  it("truncates long labels with an ellipsis instead of overflowing", () => {
+    const cfg = makeConfig();
+    cfg.layers[0]!.keys[10] = { tap: { type: "rgb_ug", action: "RGB_STATUS" }, hold: null };
+    const text = renderLayer(cfg, 0);
+    expect(text).toContain("…");
+    expect(text).not.toContain("RGB_STATUS");
+  });
+
+  it("appends a legend for symbols used in the layer", () => {
+    const text = renderLayer(config, 0);
+    expect(text).toContain("tap·hold"); // pos 34 is a hold-tap
+    expect(text).toContain("transparent"); // pos 0 is trans
+  });
+
+  it("colors survive alignment (ANSI stripped widths still equal)", () => {
+    setColorEnabled(true);
+    try {
+      const text = renderLayer(config, 0);
+      const lines = text.split("\n").map(stripAnsi);
+      for (let i = 0; i < lines.length - 2; i++) {
+        if (lines[i]!.trimStart().startsWith("┌")) {
+          const w = displayWidth(lines[i]!);
+          expect(displayWidth(lines[i + 1]!)).toBe(w);
+          expect(displayWidth(lines[i + 2]!)).toBe(w);
+        }
+      }
+      expect(text).toContain("\x1b[");
+    } finally {
+      setColorEnabled(false);
+    }
   });
 });
 
