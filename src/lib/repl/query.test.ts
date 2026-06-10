@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { resolveLayer, resolvePosition, parseFindQuery, findBindings } from "./query";
+import { resolveLayer, resolvePosition, parseFindQuery, findBindings, textSearch } from "./query";
 import { makeConfig } from "./test-fixtures";
 
 describe("resolveLayer", () => {
@@ -136,5 +136,36 @@ describe("findBindings", () => {
   it("finds plain keycode bindings with the tap slot in the location", () => {
     const results = findBindings(config, { mods: [], key: "F5" });
     expect(results.some((r) => r.location === "layer default · LN1 (pos 10) · tap")).toBe(true);
+  });
+});
+
+describe("textSearch", () => {
+  const config = makeConfig();
+
+  it("matches macro names and labels case-insensitively", () => {
+    const byName = textSearch(config, "copy_u");
+    expect(byName.some((r) => r.entity.includes('macro "copy_url"'))).toBe(true);
+    const byLabel = textSearch(config, "copyurl");
+    expect(byLabel.some((r) => r.entity.includes("copy_url"))).toBe(true);
+  });
+
+  it("matches combo, mod-morph, hold-tap, and layer names", () => {
+    expect(textSearch(config, "esc_co")[0]!.entity).toContain('combo "esc_combo"');
+    expect(textSearch(config, "bspc_shift")[0]!.entity).toContain("mm_bspc_shift_del");
+    expect(textSearch(config, "hml_")[0]!.entity).toContain("hml_lgui");
+    expect(textSearch(config, "symb")[0]!.entity).toContain('layer 1 "symbols"');
+  });
+
+  it("matches keycode labels and reverse-finds their bindings", () => {
+    // BSPC has label "Backspace" and appears in the fixture mod-morph default binding
+    const results = textSearch(config, "backsp");
+    const kc = results.find((r) => r.entity.includes("keycode BSPC"));
+    expect(kc).toBeDefined();
+    expect(kc!.matches.some((m) => m.location.includes("mm_bspc_shift_del"))).toBe(true);
+  });
+
+  it("requires at least 2 characters and returns [] for blank", () => {
+    expect(textSearch(config, "")).toEqual([]);
+    expect(textSearch(config, "a")).toEqual([]);
   });
 });

@@ -1,6 +1,6 @@
 import type { KeyboardConfig, Layer, Behavior } from "../../types/schema";
 import { GLOVE80_KEY_NAMES } from "../layout-map";
-import { isModifiedKeyCode, parseModifiedKeyCode } from "../keycodes";
+import { isModifiedKeyCode, parseModifiedKeyCode, ZMK_KEYCODES } from "../keycodes";
 
 export type Result<T> = { ok: true; value: T } | { ok: false; error: string };
 
@@ -247,5 +247,54 @@ export function findBindings(config: KeyboardConfig, q: FindQuery): FindMatch[] 
     }
   }
 
+  return results;
+}
+
+// =============================================================================
+// Text Search: Fallback for Find Query
+// =============================================================================
+
+export interface TextSearchResult {
+  entity: string; // e.g. `macro "copy_url" (CopyURL)` or `keycode BSPC "Backspace"`
+  matches: FindMatch[]; // bindings (populated for keycode hits; [] for entity hits)
+}
+
+/**
+ * Fallback for `find`: case-insensitive substring search over entity names,
+ * labels, layer names, and ZMK keycode labels (which are then reverse-found).
+ * Queries shorter than 2 chars return nothing (too noisy).
+ */
+export function textSearch(config: KeyboardConfig, query: string): TextSearchResult[] {
+  const q = query.trim().toLowerCase();
+  if (q.length < 2) return [];
+  const hit = (s: string | undefined): boolean =>
+    s !== undefined && s.toLowerCase().includes(q);
+  const results: TextSearchResult[] = [];
+
+  for (const m of config.macros ?? []) {
+    if (hit(m.name) || hit(m.label)) {
+      results.push({ entity: `macro "${m.name}"${m.label ? ` (${m.label})` : ""}`, matches: [] });
+    }
+  }
+  for (const c of config.combos ?? []) {
+    if (hit(c.name)) results.push({ entity: `combo "${c.name}"`, matches: [] });
+  }
+  for (const mm of config.modMorphs ?? []) {
+    if (hit(mm.name) || hit(mm.label)) results.push({ entity: `mod-morph "${mm.name}"`, matches: [] });
+  }
+  for (const ht of config.holdTaps ?? []) {
+    if (hit(ht.name) || hit(ht.label)) results.push({ entity: `hold-tap "${ht.name}"`, matches: [] });
+  }
+  config.layers.forEach((layer, i) => {
+    if (hit(layer.name)) results.push({ entity: `layer ${i} "${layer.name}"`, matches: [] });
+  });
+  for (const kc of ZMK_KEYCODES) {
+    if (kc.label.toLowerCase().includes(q) && kc.label.toLowerCase() !== kc.code.toLowerCase()) {
+      const matches = findBindings(config, { mods: [], key: kc.code });
+      if (matches.length > 0) {
+        results.push({ entity: `keycode ${kc.code} "${kc.label}"`, matches });
+      }
+    }
+  }
   return results;
 }
