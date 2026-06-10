@@ -16,7 +16,11 @@ function run(line: string): boolean {
   if (result.kind === "quit") return false;
   if (result.kind === "flash") {
     const r = spawnSync("bash", ["scripts/glove-flash.sh", ...result.args], { stdio: "inherit" });
-    if (r.status !== 0) console.log(`flash exited with code ${r.status}`);
+    if (r.error) {
+      console.error(`flash spawn failed: ${r.error.message}`);
+    } else if (r.status !== 0) {
+      console.error(`flash exited with code ${r.status}`);
+    }
     return true;
   }
   if (result.text) console.log(result.text);
