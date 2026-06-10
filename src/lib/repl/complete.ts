@@ -1,5 +1,6 @@
 import type { KeyboardConfig } from "../../types/schema";
 import { GLOVE80_KEY_NAMES } from "../layout-map";
+import { FIND_ALIASES } from "./find-aliases";
 
 export const COMMANDS = [
   "layers", "layer", "key", "macros", "macro", "combos", "combo",
@@ -26,5 +27,6 @@ export function complete(config: KeyboardConfig, line: string): [string[], strin
   if (cmd === "combo" && parts.length === 2) return pick((config.combos ?? []).map((c) => c.name));
   if (cmd === "flash") return pick(FLASH_FLAGS);
   if (cmd === "help" && parts.length === 2) return pick(COMMANDS);
+  if (cmd === "find" && parts.length === 2) return pick(Object.keys(FIND_ALIASES));
   return [[], last];
 }

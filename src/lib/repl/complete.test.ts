@@ -38,4 +38,8 @@ describe("complete", () => {
   it("returns no candidates where completion makes no sense", () => {
     expect(complete(config, "find Cmd")[0]).toEqual([]);
   });
+
+  it("completes alias concepts after `find`", () => {
+    expect(complete(config, "find scre")[0]).toEqual(["screenshot"]);
+  });
 });

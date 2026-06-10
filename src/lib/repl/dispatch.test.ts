@@ -1,6 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { dispatch } from "./dispatch";
 import { makeConfig } from "./test-fixtures";
+import { setColorEnabled } from "./color";
+
+beforeAll(() => setColorEnabled(false));
 
 const config = makeConfig();
 
@@ -56,8 +59,8 @@ describe("dispatch", () => {
     expect(text).toContain("layer default · RM4 (pos 43) · tap → LG(C)");
   });
 
-  it("reports unparseable and no-match find queries", () => {
-    expect(outputOf("find foo+c")).toContain("Could not parse");
+  it("reports no-match find queries (unparseable input falls through to text search)", () => {
+    expect(outputOf("find foo+c")).toContain("No bindings found");
     expect(outputOf("find F24")).toContain("No bindings found");
   });
 
@@ -79,5 +82,30 @@ describe("dispatch", () => {
     const empty = rest as typeof config;
     expect(outputOf2(empty, "macro nope")).toContain("No macros defined.");
     expect(outputOf2(empty, "combo nope")).toContain("No combos defined.");
+  });
+});
+
+describe("find tiers", () => {
+  it("keycode tier still works and stays aligned", () => {
+    const text = outputOf("find Cmd+C");
+    expect(text).toContain("layer default · RM4 (pos 43) · tap → LG(C)");
+  });
+
+  it("alias tier expands concepts with a hint", () => {
+    // fixture has LG(C) bound → alias "copy" must hit it
+    const text = outputOf("find copy");
+    expect(text).toContain("copy ≈ ⌘C");
+    expect(text).toContain("LG(C)");
+  });
+
+  it("text tier finds entities and keycode labels when other tiers miss", () => {
+    const text = outputOf("find copy_u");
+    expect(text).toContain('macro "copy_url"');
+    const text2 = outputOf("find backspace");
+    expect(text2).toContain("keycode BSPC");
+  });
+
+  it("still reports nothing found", () => {
+    expect(outputOf("find frobnicate")).toContain("No bindings found");
   });
 });

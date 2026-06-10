@@ -1,5 +1,6 @@
 import type { KeyboardConfig } from "../../types/schema";
-import { findBindings, parseFindQuery, resolveLayer, resolvePosition } from "./query";
+import { findBindings, parseFindQuery, resolveLayer, resolvePosition, textSearch } from "./query";
+import type { FindMatch } from "./query";
 import {
   comboDetail,
   keyDetail,
@@ -13,6 +14,9 @@ import {
   renderLayer,
 } from "./render";
 import { FLASH_FLAGS } from "./complete";
+import { lookupAlias } from "./find-aliases";
+import { cyan, dim, green } from "./color";
+import { displayWidth, padDisplay } from "./text-width";
 
 export type DispatchResult =
   | { kind: "output"; text: string }
@@ -30,7 +34,7 @@ const USAGE = {
   holdtaps: "holdtaps — list hold-tap definitions",
   morphs: "morphs — list mod-morph definitions",
   condlayers: "condlayers — list conditional layers",
-  find: "find <query> — reverse lookup, e.g. `find Cmd+C`, `find F5`, `find LG(C)`",
+  find: "find <query> — reverse lookup: keycodes (`find Cmd+C`), concepts (`find screenshot`), names/labels (`find print`)",
   flash: "flash [--local|--remote] [--full] — generate, build, and flash via scripts/glove-flash.sh",
   help: "help [command] — show help",
   quit: "quit — exit the REPL",
@@ -69,6 +73,16 @@ function unknownCommand(cmd: string): string {
 }
 
 const out = (text: string): DispatchResult => ({ kind: "output", text });
+
+function formatFindMatches(results: FindMatch[]): string {
+  const width = Math.max(...results.map((r) => displayWidth(r.location)));
+  return results
+    .map(
+      (r) =>
+        `${dim(padDisplay(r.location, width))} → ${green(r.binding)}${r.note ? ` ${dim(`(${r.note})`)}` : ""}`,
+    )
+    .join("\n");
+}
 
 export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
   const tokens = line.trim().split(/\s+/).filter(Boolean);
@@ -129,15 +143,32 @@ export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
     case "find": {
       if (args.length === 0) return out(USAGE.find);
       const raw = args.join(" ");
+      const sections: string[] = [];
       const q = parseFindQuery(raw);
-      if (!q) return out(`Could not parse query "${raw}". ${USAGE.find}`);
-      const results = findBindings(config, q);
-      if (results.length === 0) return out(`No bindings found for ${raw}.`);
-      return out(
-        results
-          .map((r) => `${r.location} → ${r.binding}${r.note ? ` (${r.note})` : ""}`)
-          .join("\n"),
-      );
+      if (q) {
+        const results = findBindings(config, q);
+        if (results.length > 0) sections.push(formatFindMatches(results));
+      }
+      const alias = lookupAlias(raw);
+      if (alias) {
+        for (const aliasQuery of alias.queries) {
+          const parsed = parseFindQuery(aliasQuery);
+          if (!parsed) continue;
+          const results = findBindings(config, parsed);
+          if (results.length > 0) {
+            sections.push(
+              `${cyan(raw.trim().toLowerCase())} ≈ ${alias.hint} — ${aliasQuery}:\n${formatFindMatches(results)}`,
+            );
+          }
+        }
+      }
+      if (sections.length === 0) {
+        for (const t of textSearch(config, raw)) {
+          sections.push(t.matches.length > 0 ? `${t.entity}:\n${formatFindMatches(t.matches)}` : t.entity);
+        }
+      }
+      if (sections.length === 0) return out(`No bindings found for ${raw}.`);
+      return out(sections.join("\n"));
     }
     case "flash": {
       const bad = args.filter((a) => !FLASH_FLAGS.includes(a));
