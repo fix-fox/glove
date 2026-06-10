@@ -168,7 +168,7 @@ export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
         }
       }
       if (sections.length === 0) return out(`No bindings found for ${raw}.`);
-      return out(sections.join("\n"));
+      return out(sections.join("\n\n"));
     }
     case "flash": {
       const bad = args.filter((a) => !FLASH_FLAGS.includes(a));
