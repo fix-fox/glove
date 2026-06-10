@@ -3,7 +3,7 @@ import type {
 } from "../../types/schema";
 import { GLOVE80_GRID, GLOVE80_KEY_NAMES } from "../layout-map";
 import { behaviorLabel, holdTapSecondaryLabel, keyCodeDisplayLabel } from "../labels";
-import { displayWidth, padCenter, truncateDisplay } from "./text-width";
+import { displayWidth, truncateDisplay } from "./text-width";
 import { bold, cyan, dim, magenta, yellow } from "./color";
 
 export function listLayers(config: KeyboardConfig): string[] {
@@ -90,10 +90,10 @@ function cellPlainText(c: CellContent): string {
 /** Center + colorize one cell's content to exactly `width` display columns. */
 function renderCellContent(c: CellContent, width: number): string {
   const plain = truncateDisplay(cellPlainText(c), width);
-  const centered = padCenter(plain, width);
-  const start = centered.indexOf(plain);
-  const left = centered.slice(0, start);
-  const right = centered.slice(start + plain.length);
+  const pad = Math.max(0, width - displayWidth(plain));
+  const leftPad = Math.floor(pad / 2);
+  const left = " ".repeat(leftPad);
+  const right = " ".repeat(pad - leftPad);
   let colored: string;
   if (c.kind === "trans" || c.kind === "empty") {
     colored = dim(plain);
