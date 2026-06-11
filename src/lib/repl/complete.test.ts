@@ -43,3 +43,20 @@ describe("complete", () => {
     expect(complete(config, "find scre")[0]).toEqual(["screenshot"]);
   });
 });
+
+describe("complete in layer context", () => {
+  const ctx = { layerIndex: 0 };
+
+  it("offers nav words and key names as first tokens", () => {
+    expect(complete(config, "u", ctx)[0]).toContain("up");
+    expect(complete(config, "LM", ctx)[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
+  });
+
+  it("key completes positions instead of layers in context", () => {
+    expect(complete(config, "key LM", ctx)[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
+  });
+
+  it("still completes commands in context", () => {
+    expect(complete(config, "fi", ctx)[0]).toContain("find");
+  });
+});
