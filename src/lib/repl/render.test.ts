@@ -84,6 +84,15 @@ describe("renderLayer (boxed)", () => {
     expect(text).not.toContain("RGB_STATUS");
   });
 
+  it("shows the key index under each box", () => {
+    const text = renderLayer(config, 0);
+    const lines = text.split("\n");
+    // header, blank, then top/mid/bottom/index per row — line 5 is row 1's index line
+    expect(lines[5]!.trim().split(/\s+/)).toEqual([
+      "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    ]);
+  });
+
   it("appends a legend for symbols used in the layer", () => {
     const text = renderLayer(config, 0);
     expect(text).toContain("tap·hold"); // pos 34 is a hold-tap

@@ -3,7 +3,7 @@ import type {
 } from "../../types/schema";
 import { GLOVE80_GRID, GLOVE80_KEY_NAMES } from "../layout-map";
 import { behaviorLabel, holdTapSecondaryLabel, keyCodeDisplayLabel } from "../labels";
-import { displayWidth, truncateDisplay } from "./text-width";
+import { displayWidth, padCenter, truncateDisplay } from "./text-width";
 import { bold, cyan, dim, magenta, yellow } from "./color";
 
 export function listLayers(config: KeyboardConfig): string[] {
@@ -140,25 +140,35 @@ export function renderLayer(config: KeyboardConfig, layerIndex: number): string 
     const top: string[] = [];
     const mid: string[] = [];
     const bottom: string[] = [];
+    const indices: string[] = [];
     row.forEach((idx, col) => {
       if (col === GUTTER_COL) {
         top.push(GUTTER);
         mid.push(GUTTER);
         bottom.push(GUTTER);
+        indices.push(GUTTER);
         return;
       }
       if (idx === null) {
         top.push(blank);
         mid.push(blank);
         bottom.push(blank);
+        indices.push(blank);
         return;
       }
       const c = contents[idx] ?? { tap: "", hold: null, kind: "empty" as const };
       top.push(dim(`┌${"─".repeat(w)}┐`));
       mid.push(`${dim("│")}${renderCellContent(c, w)}${dim("│")}`);
       bottom.push(dim(`└${"─".repeat(w)}┘`));
+      indices.push(dim(padCenter(String(idx), w + 2)));
     });
-    lines.push(top.join(" ").trimEnd(), mid.join(" ").trimEnd(), bottom.join(" ").trimEnd(), "");
+    lines.push(
+      top.join(" ").trimEnd(),
+      mid.join(" ").trimEnd(),
+      bottom.join(" ").trimEnd(),
+      indices.join(" ").trimEnd(),
+      "",
+    );
   }
   const leg = legend(layer, config);
   if (leg) lines.push(leg);
