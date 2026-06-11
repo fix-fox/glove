@@ -18,10 +18,18 @@ import { lookupAlias } from "./find-aliases";
 import { cyan, dim, green } from "./color";
 import { displayWidth, padDisplay } from "./text-width";
 
+export interface ReplState {
+  layerIndex: number | null;
+}
+
+const TOP_LEVEL: ReplState = { layerIndex: null };
+
 export type DispatchResult =
   | { kind: "output"; text: string }
   | { kind: "flash"; args: string[] }
-  | { kind: "quit" };
+  | { kind: "quit" }
+  | { kind: "enter-layer"; index: number; text: string }
+  | { kind: "exit-layer" };
 
 const USAGE = {
   layers: "layers — list all layers",
@@ -84,11 +92,28 @@ function formatFindMatches(results: FindMatch[]): string {
     .join("\n");
 }
 
-export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
+export function dispatch(config: KeyboardConfig, line: string, state: ReplState = TOP_LEVEL): DispatchResult {
   const tokens = line.trim().split(/\s+/).filter(Boolean);
   if (tokens.length === 0) return out("");
   const cmd = tokens[0]!;
   const args = tokens.slice(1);
+
+  const ctxLayer = state.layerIndex !== null ? config.layers[state.layerIndex] : undefined;
+  if (ctxLayer !== undefined && state.layerIndex !== null) {
+    const lower = cmd.toLowerCase();
+    if (args.length === 0 && (lower === "up" || lower === ".." || lower === "esc")) {
+      return { kind: "exit-layer" };
+    }
+    if (args.length === 0) {
+      const pr = resolvePosition(cmd);
+      if (pr.ok) return out(keyDetail(config, state.layerIndex, pr.value));
+    }
+    if (lower === "key" && args.length === 1) {
+      const pr = resolvePosition(args[0]!);
+      if (!pr.ok) return out(pr.error);
+      return out(keyDetail(config, state.layerIndex, pr.value));
+    }
+  }
 
   switch (cmd.toLowerCase()) {
     case "quit":
@@ -99,7 +124,10 @@ export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
       if (topic && USAGE[topic as keyof typeof USAGE]) {
         return out(USAGE[topic as keyof typeof USAGE]);
       }
-      return out(HELP);
+      const ctxHelp = ctxLayer
+        ? `${dim(`in layer "${ctxLayer.name}" — bare position (34, LM3) or key <pos> for key detail; up/../Esc to go back`)}\n\n`
+        : "";
+      return out(ctxHelp + HELP);
     }
     case "layers":
       return out(listLayers(config).join("\n"));
@@ -116,7 +144,8 @@ export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
     case "layer": {
       if (args.length !== 1) return out(USAGE.layer);
       const r = resolveLayer(config, args[0]!);
-      return out(r.ok ? renderLayer(config, r.value.index) : r.error);
+      if (!r.ok) return out(r.error);
+      return { kind: "enter-layer", index: r.value.index, text: renderLayer(config, r.value.index) };
     }
     case "key": {
       if (args.length !== 2) return out(USAGE.key);
@@ -176,6 +205,9 @@ export function dispatch(config: KeyboardConfig, line: string): DispatchResult {
       return { kind: "flash", args };
     }
     default:
-      return out(unknownCommand(cmd));
+      return out(
+        unknownCommand(cmd) +
+          (ctxLayer ? ` ${dim(`(in layer "${ctxLayer.name}" — \`up\` to go back)`)}` : ""),
+      );
   }
 }

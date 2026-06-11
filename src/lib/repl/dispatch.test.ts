@@ -44,7 +44,12 @@ describe("dispatch", () => {
 
   it("runs list, render, and detail commands", () => {
     expect(outputOf("layers")).toContain("default");
-    expect(outputOf("layer default")).toContain("Layer 0: default");
+    const r = dispatch(config, "layer default");
+    expect(r.kind).toBe("enter-layer");
+    if (r.kind === "enter-layer") {
+      expect(r.index).toBe(0);
+      expect(r.text).toContain("Layer 0: default");
+    }
     expect(outputOf("key default RM4")).toContain("kp LG(C)");
     expect(outputOf("macro copy_url")).toContain("1. tap");
     expect(outputOf("combo esc_combo")).toContain("LT1 (22)");
@@ -107,5 +112,57 @@ describe("find tiers", () => {
 
   it("still reports nothing found", () => {
     expect(outputOf("find frobnicate")).toContain("No bindings found");
+  });
+});
+
+describe("layer context", () => {
+  const ctx = { layerIndex: 0 };
+
+  it("exit words leave the context", () => {
+    for (const word of ["up", "..", "esc", "UP"]) {
+      expect(dispatch(config, word, ctx)).toEqual({ kind: "exit-layer" });
+    }
+  });
+
+  it("exit words are unknown commands at top level", () => {
+    const r = dispatch(config, "up");
+    expect(r.kind === "output" && r.text.includes("Unknown command")).toBe(true);
+  });
+
+  it("bare positions show key detail in context", () => {
+    for (const pos of ["RM4", "43", "rm4"]) {
+      const r = dispatch(config, pos, ctx);
+      expect(r.kind === "output" && r.text.includes("kp LG(C)"), pos).toBe(true);
+    }
+  });
+
+  it("key auto-fills the context layer with one arg", () => {
+    const r = dispatch(config, "key RM4", ctx);
+    expect(r.kind === "output" && r.text.includes("kp LG(C)")).toBe(true);
+    // explicit two-arg form still works inside a context
+    const r2 = dispatch(config, "key symbols 0", ctx);
+    expect(r2.kind).toBe("output");
+  });
+
+  it("one-arg key at top level still prints usage", () => {
+    expect(outputOf("key RM4")).toContain("key <layer> <pos>");
+  });
+
+  it("layer switches context", () => {
+    const r = dispatch(config, "layer symbols", ctx);
+    expect(r.kind).toBe("enter-layer");
+    if (r.kind === "enter-layer") expect(r.index).toBe(1);
+  });
+
+  it("global commands still work in context", () => {
+    const r = dispatch(config, "macros", ctx);
+    expect(r.kind === "output" && r.text.includes("copy_url")).toBe(true);
+  });
+
+  it("help and unknown-command hints mention the context", () => {
+    const h = dispatch(config, "help", ctx);
+    expect(h.kind === "output" && h.text.includes('in layer "default"')).toBe(true);
+    const u = dispatch(config, "frobnicate", ctx);
+    expect(u.kind === "output" && u.text.includes("up")).toBe(true);
   });
 });

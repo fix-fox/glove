@@ -24,7 +24,7 @@ function run(line: string): boolean {
     }
     return true;
   }
-  if (result.text) console.log(`\n${result.text}\n`);
+  if ("text" in result && result.text) console.log(`\n${result.text}\n`);
   return true;
 }
 
