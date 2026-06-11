@@ -116,9 +116,7 @@ describe("renderLayer (boxed)", () => {
       setColorEnabled(false);
     }
   });
-});
 
-describe("renderLayer (boxed)", () => {
   it("renders hebrew labels on layers whose name contains 'hebrew'", () => {
     const cfg = makeConfig();
     cfg.layers[1]!.name = "hebrew";
