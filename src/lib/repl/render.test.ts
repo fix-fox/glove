@@ -118,6 +118,16 @@ describe("renderLayer (boxed)", () => {
   });
 });
 
+describe("renderLayer (boxed)", () => {
+  it("renders hebrew labels on layers whose name contains 'hebrew'", () => {
+    const cfg = makeConfig();
+    cfg.layers[1]!.name = "hebrew";
+    cfg.layers[1]!.keys[20] = { tap: { type: "kp", keyCode: "A" }, hold: null };
+    expect(renderLayer(cfg, 1)).toContain("ש");
+    expect(renderLayer(cfg, 0)).not.toContain("ש"); // non-hebrew layer unaffected
+  });
+});
+
 describe("keyDetail", () => {
   it("describes a plain kp key with its hold behavior", () => {
     const text = keyDetail(config, 0, 10);
@@ -139,6 +149,13 @@ describe("keyDetail", () => {
   it("marks empty hold slots", () => {
     const text = keyDetail(config, 0, 20);
     expect(text).toContain("hold: (none)");
+  });
+
+  it("shows hebrew labels in key detail on hebrew layers", () => {
+    const cfg = makeConfig();
+    cfg.layers[1]!.name = "hebrew-alt";
+    cfg.layers[1]!.keys[20] = { tap: { type: "kp", keyCode: "A" }, hold: null };
+    expect(keyDetail(cfg, 1, 20)).toContain("ש");
   });
 });
 

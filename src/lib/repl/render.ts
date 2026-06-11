@@ -61,18 +61,23 @@ interface CellContent {
   kind: CellKind;
 }
 
-function cellContent(key: Key, config: KeyboardConfig): CellContent {
+/** Same rule as the web UI (KeyCap.tsx): hebrew layers get Hebrew glyph labels. */
+function isHebrewLayer(layer: Layer): boolean {
+  return layer.name.toLowerCase().includes("hebrew");
+}
+
+function cellContent(key: Key, config: KeyboardConfig, hebrewMode: boolean = false): CellContent {
   const names = config.layers.map((l) => l.name);
   const morphs = config.modMorphs ?? [];
   const holdTaps = config.holdTaps ?? [];
   if (key.tap.type === "trans") return { tap: "·", hold: null, kind: "trans" };
-  const tapLabel = behaviorLabel(key.tap, names, morphs, holdTaps);
+  const tapLabel = behaviorLabel(key.tap, names, morphs, holdTaps, hebrewMode);
   if (key.tap.type === "none" && !key.hold) return { tap: "", hold: null, kind: "empty" };
   let hold: string | null = null;
   if (key.tap.type === "hold_tap") {
     hold = holdTapSecondaryLabel(key.tap.name, key.tap.param1);
   } else if (key.hold) {
-    hold = behaviorLabel(key.hold, names, morphs, holdTaps);
+    hold = behaviorLabel(key.hold, names, morphs, holdTaps, hebrewMode);
   }
   const kind: CellKind =
     key.tap.type === "mo" || key.tap.type === "to" || key.tap.type === "tog" || key.tap.type === "sl"
@@ -117,7 +122,8 @@ const LEGEND_SYMBOLS: ReadonlyArray<readonly [string, string]> = [
 ];
 
 function legend(layer: Layer, config: KeyboardConfig): string {
-  const contents = layer.keys.map((k) => cellContent(k, config));
+  const hebrewMode = isHebrewLayer(layer);
+  const contents = layer.keys.map((k) => cellContent(k, config, hebrewMode));
   const all = contents.map(cellPlainText).join(" ");
   const parts: string[] = [];
   for (const [symbol, text] of LEGEND_SYMBOLS) {
@@ -131,7 +137,8 @@ function legend(layer: Layer, config: KeyboardConfig): string {
 export function renderLayer(config: KeyboardConfig, layerIndex: number): string {
   const layer = config.layers[layerIndex];
   if (!layer) return `Layer ${layerIndex} not found`;
-  const contents = layer.keys.map((k) => cellContent(k, config));
+  const hebrewMode = isHebrewLayer(layer);
+  const contents = layer.keys.map((k) => cellContent(k, config, hebrewMode));
   const widest = Math.max(...contents.map((c) => displayWidth(cellPlainText(c))));
   const w = Math.max(MIN_CELL, Math.min(MAX_CELL, widest));
   const blank = " ".repeat(w + 2);
@@ -206,11 +213,12 @@ export function describeBehavior(
   behavior: Behavior,
   config: KeyboardConfig,
   indent = "",
+  hebrewMode = false,
 ): string {
   const names = config.layers.map((l) => l.name);
   switch (behavior.type) {
     case "kp":
-      return `kp ${behavior.keyCode} — ${keyCodeDisplayLabel(behavior.keyCode)}`;
+      return `kp ${behavior.keyCode} — ${keyCodeDisplayLabel(behavior.keyCode, hebrewMode)}`;
     case "mo":
       return `mo ${behavior.layerIndex} — momentary layer "${names[behavior.layerIndex] ?? behavior.layerIndex}"`;
     case "to":
@@ -265,9 +273,10 @@ export function keyDetail(config: KeyboardConfig, layerIndex: number, pos: numbe
   if (!layer) return `Layer ${layerIndex} not found`;
   const key = layer.keys[pos];
   if (!key) return `Position ${pos} not found`;
+  const hebrewMode = isHebrewLayer(layer);
   return [
     `${GLOVE80_KEY_NAMES[pos]} (pos ${pos}) on layer ${layerIndex} "${layer.name}"`,
-    `  tap:  ${describeBehavior(key.tap, config, "  ")}`,
-    `  hold: ${key.hold ? describeBehavior(key.hold, config, "  ") : "(none)"}`,
+    `  tap:  ${describeBehavior(key.tap, config, "  ", hebrewMode)}`,
+    `  hold: ${key.hold ? describeBehavior(key.hold, config, "  ", hebrewMode) : "(none)"}`,
   ].join("\n");
 }
