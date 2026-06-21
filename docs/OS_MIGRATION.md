@@ -40,7 +40,8 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 | `LA(LS(V))` (Maccy paste) | `LA(LC(V))` (Win paste-special) | cursor layer |
 | `LC(LG(Q))` (lock) | `LG(L)` (Win+L) | default layer |
 | `LC(LG(SPACE))` (emoji) | `LG(SEMI)` (Win+; emoji) | default layer |
-| `LG(LS(N5))` (Cmd+Shift+5) | `PSCRN` | default layer |
+| `LG(LS(N5))` (Cmd+Shift+5) | `PSCRN` | default layer (key 72 tap, via `shot_ht`) |
+| `LG(LS(N4))` (Cmd+Shift+4) | (no Win equivalent; drop the hold) | default layer (key 72 **hold**, via `shot_ht`) |
 | `LG(LS(N5))` (Cmd+Shift+5) | `PRINTSCREEN` | system layer |
 | `LA(SPACE)` (launcher) | `LC(SPACE)` (Ctrl+Space launcher) | default layer `&lt 15` thumb |
 
@@ -56,7 +57,8 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 | `gemini_tab` | `Cmd+T` + `@gemini⇥` | `Ctrl+T` + `@gemini⇥` |
 | `flow_bookmark` | `Option+Space` + `b ` | `Ctrl+Space` + `b ` |
 | `v_space_ctrl_t` | `v ` + `Cmd+T` | `v ` + `Ctrl+T` |
-| `dictation` | double-tap `LCTRL` (macOS "Press Control twice") | no direct equivalent — bind to the target OS's dictation/speech shortcut, or remove the key |
+| `dictation` | double-tap `LCTRL` (macOS "Press Control twice"); on key 75 **hold** (`dict_enter`) and Apps-layer key 69 | no direct equivalent — bind to the target OS's dictation/speech shortcut, or remove the key |
+| `caps_mac` | taps `CAPS` held ~150 ms (macOS ignores too-brief Caps taps); on shift keys 54/55 tap via `shift_caps` | revert keys 54/55 to plain `&mt LSHIFT CAPS` — no hold-delay needed off macOS |
 
 ## macOS software to disable when leaving the Mac
 

@@ -131,6 +131,13 @@
             bindings = <&macro_tap &kp LCTRL>, <&macro_tap &kp LCTRL>;
         };
 
+        caps_mac: caps_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <150>;
+            bindings = <&macro_tap &kp CAPS>;
+        };
+
         copy_url: copy_url {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -192,6 +199,32 @@
             tapping-term-ms = <200>;
             quick-tap-ms = <175>;
             bindings = <&mo>, <&mm_bspc_shift_del>;
+        };
+
+        shift_caps: shift_caps {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            bindings = <&kp>, <&caps_mac>;
+        };
+
+        dict_enter: dict_enter {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <220>;
+            quick-tap-ms = <175>;
+            bindings = <&dictation>, <&kp>;
+        };
+
+        shot_ht: shot_ht {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&kp>, <&kp>;
         };
     };
 
@@ -256,8 +289,8 @@
                 &tog 3  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &none
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LC(LG(SPACE))  &none
                 &none  &hml LCTRL A  &hml LALT R  &hml LGUI S  &hml LSHIFT T  &kp G  &kp M  &hmr RSHIFT N  &hmr RGUI E  &hmr RALT I  &hmr RCTRL O  &none
-                &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &mt LSHIFT CAPS  &mt LSHIFT CAPS  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 17  &kp LG(LS(N5))  &lt 15 LA(SPACE)  &lt 5 SPACE  &kp ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
+                &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &shift_caps LSHIFT 0  &shift_caps LSHIFT 0  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
+                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 17  &shot_ht LG(LS(N4)) LG(LS(N5))  &lt 15 LA(SPACE)  &lt 5 SPACE  &dict_enter 0 ENTER  &tog 8  &kp ESC  &kp TILDE  &magic 1 0
             >;
         };
 

@@ -39,6 +39,41 @@ wait_for_device() {
     echo ""
 }
 
+# Copy firmware to a bootloader volume, fail loudly, and verify it landed.
+#
+# Two macOS quirks are handled here:
+#   1. The nRF52 UF2 bootloader reboots (unmounting the volume) the instant it
+#      receives a complete, valid UF2 — so a copy that "fails" because the
+#      volume vanished mid-write is actually a SUCCESS.
+#   2. macOS 26 (Tahoe) mounts FAT with the new FSKit `msdos` driver. For a
+#      second or two after the volume appears, macOS is still doing its initial
+#      FAT housekeeping (.Spotlight-V100, .fseventsd, ._ AppleDouble sidecars),
+#      and writes attempted in that window intermittently fail with EACCES
+#      ("Permission denied"). So we let the volume settle, then retry.
+flash_copy() {
+    local src=$1 vol=$2
+    local attempt
+
+    sleep 2  # let FSKit finish initial FAT housekeeping before the first write
+
+    for attempt in 1 2 3 4 5; do
+        if cp -X "$src" "$vol/"; then
+            return 0
+        fi
+        # Volume gone => bootloader accepted the image and rebooted. Success.
+        if [ ! -d "$vol" ]; then
+            return 0
+        fi
+        echo "  copy attempt $attempt failed (volume still mounted) — retrying in 2s..." >&2
+        sleep 2
+    done
+
+    echo "" >&2
+    echo "ERROR: failed to copy firmware to $vol after 5 attempts." >&2
+    echo "       The keyboard was NOT flashed. Run scripts/glove-boot-diag.sh to diagnose." >&2
+    return 1
+}
+
 wait_for_disconnect() {
     local vol=$1
     local timeout=$2
@@ -198,7 +233,7 @@ if $FULL; then
     wait_for_device "$RH_VOL" 120
 
     echo "Device detected! Copying right-hand firmware..."
-    cp "$RH_FIRMWARE_FILE" "$RH_VOL/" || true
+    flash_copy "$RH_FIRMWARE_FILE" "$RH_VOL" || exit 1
 
     echo "Right half done! Waiting for it to reboot..."
     echo "(macOS may warn 'Disk not ejected properly' — that's normal.)"
@@ -221,7 +256,7 @@ if $FULL; then
     wait_for_device "$LH_VOL" 120
 
     echo "Device detected! Copying left-hand firmware..."
-    cp "$FIRMWARE_FILE" "$LH_VOL/" || true
+    flash_copy "$FIRMWARE_FILE" "$LH_VOL" || exit 1
     echo "(macOS may warn 'Disk not ejected properly' — that's normal.)"
 
     echo ""
@@ -267,7 +302,7 @@ else
     wait_for_device "$LH_VOL" 60
 
     echo "Device detected! Copying firmware..."
-    cp "$FIRMWARE_FILE" "$LH_VOL/" || true
+    flash_copy "$FIRMWARE_FILE" "$LH_VOL" || exit 1
 
     echo ""
     echo "Firmware copied (macOS may warn 'Disk not ejected properly' — normal)."

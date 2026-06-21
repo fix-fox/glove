@@ -398,23 +398,21 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "CAPS"
+            "type": "hold_tap",
+            "name": "shift_caps",
+            "param1": "LSHIFT",
+            "param2": "0"
           },
-          "hold": {
-            "type": "kp",
-            "keyCode": "LSHIFT"
-          }
+          "hold": null
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "CAPS"
+            "type": "hold_tap",
+            "name": "shift_caps",
+            "param1": "LSHIFT",
+            "param2": "0"
           },
-          "hold": {
-            "type": "kp",
-            "keyCode": "LSHIFT"
-          }
+          "hold": null
         },
         {
           "tap": {
@@ -544,8 +542,10 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "LG(LS(N5))"
+            "type": "hold_tap",
+            "name": "shot_ht",
+            "param1": "LG(LS(N4))",
+            "param2": "LG(LS(N5))"
           },
           "hold": null
         },
@@ -571,8 +571,10 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "ENTER"
+            "type": "hold_tap",
+            "name": "dict_enter",
+            "param1": "0",
+            "param2": "ENTER"
           },
           "hold": null
         },
@@ -10198,6 +10200,20 @@
       ]
     },
     {
+      "id": "abc161b5-f017-4421-94f5-18ddf98cac4f",
+      "name": "caps_mac",
+      "label": "CAPS_MAC",
+      "tapMs": 150,
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp CAPS"
+          ]
+        }
+      ]
+    },
+    {
       "id": "a1b2c3d4-e5f6-4708-9a0b-1c2d3e4f5a6b",
       "name": "copy_url",
       "label": "COPY_URL",
@@ -10390,6 +10406,35 @@
       "requirePriorIdleMs": 0,
       "holdBinding": "&mo",
       "tapBinding": "&mm_bspc_shift_del"
+    },
+    {
+      "id": "8752f239-ce44-4c84-a769-d280f3022405",
+      "name": "shift_caps",
+      "label": "SHIFT_CAPS",
+      "flavor": "balanced",
+      "tappingTermMs": 200,
+      "quickTapMs": 0,
+      "holdBinding": "&kp",
+      "tapBinding": "&caps_mac"
+    },
+    {
+      "id": "fcac7f30-c133-43b2-8b84-b0f3e6e70eca",
+      "name": "dict_enter",
+      "label": "DICT_ENTER",
+      "flavor": "tap-preferred",
+      "tappingTermMs": 220,
+      "quickTapMs": 175,
+      "holdBinding": "&dictation",
+      "tapBinding": "&kp"
+    },
+    {
+      "id": "8f0971e3-3091-45f0-9594-f39b66252d12",
+      "name": "shot_ht",
+      "label": "SHOT_HT",
+      "flavor": "tap-preferred",
+      "tappingTermMs": 200,
+      "holdBinding": "&kp",
+      "tapBinding": "&kp"
     }
   ],
   "combos": [

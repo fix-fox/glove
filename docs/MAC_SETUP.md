@@ -106,8 +106,11 @@ swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C
 - [ ] **Emoji picker:** confirm Ctrl+Cmd+Space opens it (macOS default; matches the remapped `Win+;` key).
 - [ ] **Dictation:** Settings → Keyboard → **Dictation → On**, then set **Shortcut → "Press Control
       Key Twice."** This is **not** the macOS default (the default is *Press Globe/Fn twice*, which the
-      keyboard can't emit), so it must be set explicitly. The dictation key (Apps layer, key 69) emits a
-      double-tap of Control to match it.
+      keyboard can't emit), so it must be set explicitly. Two keys emit the double-tap of Control to
+      match it: **holding the right Enter thumb (key 75)** and the Apps-layer dictation key (key 69).
+- [ ] **Caps Lock:** the two shift thumb keys (54/55) emit Caps Lock on tap, Shift on hold. macOS
+      deliberately ignores a too-brief Caps Lock press, so the tap fires through a macro (`caps_mac`)
+      that holds Caps Lock ~150 ms. The 39+40 combo (`&kp CAPS`) is the held-duration fallback.
 - [ ] Optional: Settings → Keyboard → "Use F1, F2 as standard function keys" if you want plain F-keys.
 
 ## 7. Verify (smoke test)
@@ -122,8 +125,10 @@ swap takes that combo away from its native iTerm meaning (e.g. `Cmd+C → Ctrl+C
 6. Maccy via `Option+Shift+V`; launcher via `Option+Space` (both inside and outside iTerm2).
 7. Macros: `delete_to_bol`/`delete_to_eol`/`select_line`, `gemini_tab` (Chrome new tab),
    `flow_bookmark`, `v_space_ctrl_t` (→ `Ctrl+T` inside the terminal).
-8. Special keys: lock (`Ctrl+Cmd+Q`), emoji (`Ctrl+Cmd+Space`), Print Screen (`Cmd+Shift+5`).
-9. Dictation: hold the launcher thumb (`Option+Space` key) to reach the Apps layer, tap key 69 →
-   the macOS dictation overlay (microphone) appears. Requires the Dictation shortcut set to "Press
-   Control Key Twice" (see §6) — this is **not** the macOS default, so if nothing happens that
-   setting is the first thing to check.
+8. Special keys: lock (`Ctrl+Cmd+Q`), emoji (`Ctrl+Cmd+Space`), screenshot menu (`Cmd+Shift+5`,
+   tap key 72) and region/window capture (`Cmd+Shift+4`, **hold** key 72).
+9. Dictation: **hold the right Enter thumb (key 75)** → the macOS dictation overlay (microphone)
+   appears (also available via the Apps layer: hold the launcher thumb, tap key 69). Requires the
+   Dictation shortcut set to "Press Control Key Twice" (see §6) — this is **not** the macOS default,
+   so if nothing happens that setting is the first thing to check.
+10. Caps Lock: tap a shift thumb (key 54 or 55) → Caps Lock toggles (LED/indicator on).
