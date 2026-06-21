@@ -1,8 +1,10 @@
 import type { KeyboardConfig } from "../../types/schema";
+import { GLOVE80_KEY_NAMES } from "../layout-map";
 import { findBindings, parseFindQuery, resolveLayer, resolvePosition, textSearch } from "./query";
 import type { FindMatch } from "./query";
 import {
   comboDetail,
+  describeBehavior,
   keyDetail,
   listCombos,
   listCondLayers,
@@ -27,6 +29,7 @@ const TOP_LEVEL: ReplState = { layerIndex: null };
 export type DispatchResult =
   | { kind: "output"; text: string }
   | { kind: "flash"; args: string[] }
+  | { kind: "mutate"; text: string }
   | { kind: "quit" }
   | { kind: "enter-layer"; index: number; text: string }
   | { kind: "exit-layer" };
@@ -43,6 +46,7 @@ const USAGE = {
   morphs: "morphs — list mod-morph definitions",
   condlayers: "condlayers — list conditional layers",
   find: "find <query> — reverse lookup: keycodes (`find Cmd+C`), concepts (`find screenshot`), names/labels (`find print`)",
+  rm: "rm <pos> — (in a layer) clear a key: none on the base layer, trans elsewhere, e.g. `rm RM4`",
   flash: "flash [--local|--remote] [--full] — generate, build, and flash via scripts/glove-flash.sh",
   help: "help [command] — show help",
   quit: "quit — exit the REPL",
@@ -112,6 +116,23 @@ export function dispatch(config: KeyboardConfig, line: string, state: ReplState 
       const pr = resolvePosition(args[0]!);
       if (!pr.ok) return out(pr.error);
       return out(keyDetail(config, state.layerIndex, pr.value));
+    }
+    if (lower === "rm") {
+      if (args.length !== 1) return out(USAGE.rm);
+      const pr = resolvePosition(args[0]!);
+      if (!pr.ok) return out(pr.error);
+      const layer = ctxLayer;
+      const key = layer.keys[pr.value]!;
+      const prev = describeBehavior(key.tap, config).split("\n")[0]!;
+      const label = `${GLOVE80_KEY_NAMES[pr.value]} (pos ${pr.value})`;
+      // Mirror the editor's clear semantics: hard "none" on the base layer,
+      // transparent (falls through) on every other layer.
+      const clearedType = state.layerIndex === 0 ? "none" : "trans";
+      if (key.tap.type === clearedType && key.hold === null) {
+        return out(`${label} was already clear (${prev}).`);
+      }
+      layer.keys[pr.value] = { tap: { type: clearedType }, hold: null };
+      return { kind: "mutate", text: `${green("removed")} ${label} — was ${prev}` };
     }
   }
 
@@ -199,6 +220,8 @@ export function dispatch(config: KeyboardConfig, line: string, state: ReplState 
       if (sections.length === 0) return out(`No bindings found for ${raw}.`);
       return out(sections.join("\n\n"));
     }
+    case "rm":
+      return out(`rm works inside a layer — enter one first (e.g. \`layer base\`). ${USAGE.rm}`);
     case "flash": {
       const bad = args.filter((a) => !FLASH_FLAGS.includes(a));
       if (bad.length > 0) return out(`Unknown flash flag ${bad.join(" ")}. ${USAGE.flash}`);

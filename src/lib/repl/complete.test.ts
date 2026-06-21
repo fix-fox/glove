@@ -56,6 +56,13 @@ describe("complete in layer context", () => {
     expect(complete(config, "key LM", ctx)[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
   });
 
+  it("offers rm as a first token and completes positions for it", () => {
+    expect(complete(config, "r", ctx)[0]).toContain("rm");
+    expect(complete(config, "rm LM", ctx)[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
+    // rm is layer-context only — no position completion at top level
+    expect(complete(config, "rm LM")[0]).toEqual([]);
+  });
+
   it("still completes commands in context", () => {
     expect(complete(config, "fi", ctx)[0]).toContain("find");
   });

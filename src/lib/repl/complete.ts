@@ -20,11 +20,12 @@ export function complete(config: KeyboardConfig, line: string, state?: ReplState
   ];
   const inContext = state !== undefined && state.layerIndex !== null;
   if (parts.length <= 1) {
-    return pick(inContext ? ["up", "..", "esc", ...COMMANDS, ...GLOVE80_KEY_NAMES] : COMMANDS);
+    return pick(inContext ? ["up", "..", "esc", "rm", ...COMMANDS, ...GLOVE80_KEY_NAMES] : COMMANDS);
   }
   const cmd = (parts[0] ?? "").toLowerCase();
   const layerNames = config.layers.map((l) => l.name);
   if (cmd === "layer" && parts.length === 2) return pick(layerNames);
+  if (cmd === "rm" && inContext && parts.length === 2) return pick(GLOVE80_KEY_NAMES);
   if (cmd === "key" && parts.length === 2) return pick(inContext ? GLOVE80_KEY_NAMES : layerNames);
   if (cmd === "key" && parts.length === 3) return pick(GLOVE80_KEY_NAMES);
   if (cmd === "macro" && parts.length === 2) return pick((config.macros ?? []).map((m) => m.name));

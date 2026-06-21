@@ -166,3 +166,51 @@ describe("layer context", () => {
     expect(u.kind === "output" && u.text.includes("up")).toBe(true);
   });
 });
+
+describe("rm (clear key in layer context)", () => {
+  it("clears a base-layer key to none and reports the old binding", () => {
+    const cfg = makeConfig();
+    const r = dispatch(cfg, "rm RM4", { layerIndex: 0 });
+    expect(r.kind).toBe("mutate");
+    if (r.kind === "mutate") {
+      expect(r.text).toContain("RM4");
+      expect(r.text).toContain("LG(C)");
+    }
+    expect(cfg.layers[0]!.keys[43]).toEqual({ tap: { type: "none" }, hold: null });
+  });
+
+  it("clears a non-base-layer key to trans", () => {
+    const cfg = makeConfig();
+    const r = dispatch(cfg, "rm 0", { layerIndex: 1 });
+    expect(r.kind).toBe("mutate");
+    expect(cfg.layers[1]!.keys[0]).toEqual({ tap: { type: "trans" }, hold: null });
+  });
+
+  it("reports a no-op without mutating when the key is already clear", () => {
+    const cfg = makeConfig();
+    dispatch(cfg, "rm RM4", { layerIndex: 0 }); // now none
+    const r = dispatch(cfg, "rm RM4", { layerIndex: 0 });
+    expect(r.kind).toBe("output");
+    expect(r.kind === "output" && r.text.includes("already clear")).toBe(true);
+  });
+
+  it("surfaces position errors and usage", () => {
+    const cfg = makeConfig();
+    expect(dispatch(cfg, "rm nope", { layerIndex: 0 })).toEqual({
+      kind: "output",
+      text: expect.stringContaining("Unknown key name"),
+    });
+    expect(dispatch(cfg, "rm", { layerIndex: 0 })).toEqual({
+      kind: "output",
+      text: expect.stringContaining("rm <pos>"),
+    });
+  });
+
+  it("at top level explains a layer is required and does not mutate", () => {
+    const cfg = makeConfig();
+    const before = JSON.stringify(cfg.layers[0]!.keys[43]);
+    const r = dispatch(cfg, "rm RM4");
+    expect(r.kind === "output" && r.text.includes("inside a layer")).toBe(true);
+    expect(JSON.stringify(cfg.layers[0]!.keys[43])).toBe(before);
+  });
+});

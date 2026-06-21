@@ -1,5 +1,5 @@
 // scripts/repl.ts
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { spawnSync } from "child_process";
 import * as readline from "readline";
 import { KeyboardConfigSchema } from "@/types/schema";
@@ -34,6 +34,11 @@ function run(line: string): boolean {
     console.log(`\n${result.text}\n`);
     return true;
   }
+  if (result.kind === "mutate") {
+    writeFileSync("config.json", JSON.stringify(config, null, 2) + "\n");
+    console.log(`\n${result.text} ${dim("(saved config.json — run `npm run generate-firmware` to rebuild)")}\n`);
+    return true;
+  }
   if (result.kind === "flash") {
     const r = spawnSync("bash", ["scripts/glove-flash.sh", ...result.args], { stdio: "inherit" });
     if (r.error) {
@@ -52,7 +57,7 @@ if (args.length > 0) {
   // One-shot mode: npm run repl -- find Cmd+C
   run(args.join(" "));
 } else {
-  console.log(dim("Glove80 keymap REPL (read-only). Tab completes; `help` for commands, `quit` to exit."));
+  console.log(dim("Glove80 keymap REPL (mostly read-only; `rm` edits config.json). Tab completes; `help` for commands, `quit` to exit."));
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
