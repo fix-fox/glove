@@ -226,6 +226,14 @@
             tapping-term-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
+
+        app_alt: app_alt {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <250>;
+            bindings = <&kp>, <&kp>;
+        };
     };
 
     combos {
@@ -268,16 +276,6 @@
             if-layers = <3 12>;
             then-layer = <13>;
         };
-
-        hebrew_alt_symbols {
-            if-layers = <16 5>;
-            then-layer = <6>;
-        };
-
-        english_alpha_when_mod_alt {
-            if-layers = <16 12>;
-            then-layer = <13>;
-        };
     };
 
     keymap {
@@ -290,7 +288,7 @@
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LC(LG(SPACE))  &none
                 &none  &hml LCTRL A  &hml LALT R  &hml LGUI S  &hml LSHIFT T  &kp G  &kp M  &hmr RSHIFT N  &hmr RGUI E  &hmr RALT I  &hmr RCTRL O  &none
                 &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &shift_caps LSHIFT 0  &shift_caps LSHIFT 0  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 17  &shot_ht LG(LS(N4)) LG(LS(N5))  &lt 15 LA(SPACE)  &lt 5 SPACE  &dict_enter 0 ENTER  &none  &kp ESC  &kp TILDE  &magic 1 0
+                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 16  &shot_ht LG(LS(N4)) LG(LS(N5))  &lt 15 LA(SPACE)  &lt 5 SPACE  &dict_enter 0 ENTER  &none  &kp ESC  &kp TILDE  &magic 1 0
             >;
         };
 
@@ -320,9 +318,9 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &kp PERIOD  &kp COMMA  &kp E  &kp R  &kp T  &kp Y  &kp D  &kp I  &kp O  &kp P  &trans
-                &trans  &hml LCTRL A  &hml LALT S  &hml LGUI K  &hml LSHIFT H  &lt 15 G  &lt 15 F  &hmr RSHIFT V  &hmr RGUI U  &hmr RALT L  &hmr RCTRL SEMI  &kp APOS
-                &trans  &kp Z  &kp X  &kp C  &lt 10 J  &kp B  &trans  &trans  &trans  &trans  &trans  &trans  &kp N  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
+                &trans  &kp PERIOD  &kp COMMA  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &trans
+                &trans  &hml LCTRL A  &hml LALT S  &hml LGUI D  &hml LSHIFT F  &lt 15 G  &lt 15 H  &hmr RSHIFT J  &hmr RGUI K  &hmr RALT L  &hmr RCTRL SEMI  &kp APOS
+                &trans  &kp Z  &kp X  &kp C  &lt 10 V  &kp B  &trans  &trans  &trans  &trans  &trans  &trans  &kp N  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
@@ -452,21 +450,10 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &kp LG(N1)  &kp LG(N2)  &kp LG(N3)  &kp LG(N4)  &kp LG(N5)  &kp LG(N6)  &kp LG(N7)  &kp LG(N8)  &kp LG(N9)  &kp LG(N0)  &trans
-                &trans  &kp LC(LS(LG(Q)))  &kp LC(LS(LG(W)))  &kp LC(LS(LG(F)))  &kp LC(LS(LG(P)))  &flow_bookmark  &kp LC(LS(LG(J)))  &kp LC(LS(LG(L)))  &kp LC(LS(LG(U)))  &kp LC(LS(LG(Y)))  &trans  &trans
-                &trans  &kp LC(LS(LG(A)))  &kp LC(LS(LG(R)))  &kp LC(LS(LG(S)))  &kp LC(LS(LG(T)))  &kp LC(LS(LG(G)))  &kp LC(LS(LG(M)))  &kp LC(LS(LG(N)))  &kp LC(LS(LG(E)))  &kp LC(LS(LG(I)))  &kp LC(LS(LG(O)))  &trans
-                &trans  &kp LC(LS(LG(Z)))  &kp LC(LS(LG(X)))  &kp LC(LS(LG(C)))  &kp LC(LS(LG(D)))  &kp LC(LS(LG(V)))  &trans  &trans  &trans  &trans  &trans  &trans  &kp LC(LS(LG(K)))  &kp LC(LS(LG(H)))  &trans  &trans  &trans  &trans
+                &trans  &app_alt LC(LS(LG(LA(Q)))) LC(LS(LG(Q)))  &app_alt LC(LS(LG(LA(W)))) LC(LS(LG(W)))  &app_alt LC(LS(LG(LA(F)))) LC(LS(LG(F)))  &app_alt LC(LS(LG(LA(P)))) LC(LS(LG(P)))  &flow_bookmark  &app_alt LC(LS(LG(LA(J)))) LC(LS(LG(J)))  &app_alt LC(LS(LG(LA(L)))) LC(LS(LG(L)))  &app_alt LC(LS(LG(LA(U)))) LC(LS(LG(U)))  &app_alt LC(LS(LG(LA(Y)))) LC(LS(LG(Y)))  &trans  &trans
+                &trans  &app_alt LC(LS(LG(LA(A)))) LC(LS(LG(A)))  &app_alt LC(LS(LG(LA(R)))) LC(LS(LG(R)))  &app_alt LC(LS(LG(LA(S)))) LC(LS(LG(S)))  &app_alt LC(LS(LG(LA(T)))) LC(LS(LG(T)))  &app_alt LC(LS(LG(LA(G)))) LC(LS(LG(G)))  &app_alt LC(LS(LG(LA(M)))) LC(LS(LG(M)))  &app_alt LC(LS(LG(LA(N)))) LC(LS(LG(N)))  &app_alt LC(LS(LG(LA(E)))) LC(LS(LG(E)))  &app_alt LC(LS(LG(LA(I)))) LC(LS(LG(I)))  &app_alt LC(LS(LG(LA(O)))) LC(LS(LG(O)))  &trans
+                &trans  &app_alt LC(LS(LG(LA(Z)))) LC(LS(LG(Z)))  &app_alt LC(LS(LG(LA(X)))) LC(LS(LG(X)))  &app_alt LC(LS(LG(LA(C)))) LC(LS(LG(C)))  &app_alt LC(LS(LG(LA(D)))) LC(LS(LG(D)))  &app_alt LC(LS(LG(LA(V)))) LC(LS(LG(V)))  &trans  &trans  &trans  &trans  &trans  &trans  &app_alt LC(LS(LG(LA(K)))) LC(LS(LG(K)))  &app_alt LC(LS(LG(LA(H)))) LC(LS(LG(H)))  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &dictation  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-            >;
-        };
-
-        hebrew_alt {
-            bindings = <
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &kp P  &kp B  &kp O  &kp E  &kp J  &kp N  &kp S  &kp Z  &kp F  &kp X  &trans
-                &trans  &hml LCTRL COMMA  &hml LALT R  &hml LGUI K  &hml LSHIFT H  &lt 15 G  &lt 15 C  &hmr RSHIFT V  &hmr RGUI U  &hmr RALT T  &hmr RCTRL A  &trans
-                &trans  &kp SEMI  &kp I  &kp Y  &lt 10 D  &kp PERIOD  &trans  &trans  &trans  &trans  &trans  &trans  &kp L  &lt 10 M  &kp APOS  &kp SLASH  &mm_q_shift_qmark  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
