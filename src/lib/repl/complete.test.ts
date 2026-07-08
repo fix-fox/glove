@@ -5,9 +5,10 @@ import { makeConfig } from "./test-fixtures";
 const config = makeConfig();
 
 describe("complete", () => {
-  it("completes command names on the first token", () => {
+  it("completes only command names on the first token", () => {
     expect(complete(config, "")).toEqual([COMMANDS, ""]);
     expect(complete(config, "la")[0]).toEqual(["layers", "layer"]);
+    expect(complete(config, "LM")[0]).toEqual([]);
   });
 
   it("completes layer names after `layer`", () => {
@@ -15,11 +16,13 @@ describe("complete", () => {
     expect(complete(config, "layer ")[0]).toEqual(["default", "symbols", "system"]);
   });
 
-  it("completes layer names then key names for `key`", () => {
-    expect(complete(config, "key def")[0]).toEqual(["default"]);
-    expect(complete(config, "key default LM")[0]).toEqual([
-      "LM1", "LM2", "LM3", "LM4", "LM5", "LM6",
-    ]);
+  it("completes key names for `key` and `rm`", () => {
+    expect(complete(config, "key LM")[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
+    expect(complete(config, "rm LM")[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
+  });
+
+  it("does not complete a second arg for `key` (no layer arg anymore)", () => {
+    expect(complete(config, "key LM4 ")[0]).toEqual([]);
   });
 
   it("completes macro and combo names", () => {
@@ -41,29 +44,5 @@ describe("complete", () => {
 
   it("completes alias concepts after `find`", () => {
     expect(complete(config, "find scre")[0]).toEqual(["screenshot"]);
-  });
-});
-
-describe("complete in layer context", () => {
-  const ctx = { layerIndex: 0 };
-
-  it("offers nav words and key names as first tokens", () => {
-    expect(complete(config, "u", ctx)[0]).toContain("up");
-    expect(complete(config, "LM", ctx)[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
-  });
-
-  it("key completes positions instead of layers in context", () => {
-    expect(complete(config, "key LM", ctx)[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
-  });
-
-  it("offers rm as a first token and completes positions for it", () => {
-    expect(complete(config, "r", ctx)[0]).toContain("rm");
-    expect(complete(config, "rm LM", ctx)[0]).toEqual(["LM1", "LM2", "LM3", "LM4", "LM5", "LM6"]);
-    // rm is layer-context only — no position completion at top level
-    expect(complete(config, "rm LM")[0]).toEqual([]);
-  });
-
-  it("still completes commands in context", () => {
-    expect(complete(config, "fi", ctx)[0]).toContain("find");
   });
 });

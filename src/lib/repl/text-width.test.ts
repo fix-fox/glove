@@ -57,6 +57,14 @@ describe("truncateDisplay", () => {
   it("accounts for wide chars when truncating", () => {
     expect(truncateDisplay("中中中中", 5)).toBe("中中…"); // 2+2+1 = 5
   });
+
+  it("passes ANSI codes through without counting them, appending a reset", () => {
+    expect(truncateDisplay(`\x1b[36mRGB_STATUS\x1b[0m`, 6)).toBe(`\x1b[36mRGB_S…\x1b[0m`);
+  });
+
+  it("keeps ANSI-styled strings within budget unchanged", () => {
+    expect(truncateDisplay(`\x1b[36mabc\x1b[0m`, 6)).toBe(`\x1b[36mabc\x1b[0m`);
+  });
 });
 
 describe("stripAnsi", () => {

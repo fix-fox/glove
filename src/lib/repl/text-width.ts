@@ -31,18 +31,30 @@ export function displayWidth(s: string): number {
   return w;
 }
 
-/** Truncate plain (ANSI-free) text to a display-width budget, ending with `…`. */
+/** Truncate to a display-width budget, ending with `…`; ANSI codes pass through (reset appended). */
 export function truncateDisplay(s: string, max: number): string {
   if (displayWidth(s) <= max) return s;
   let out = "";
   let w = 0;
-  for (const ch of s) {
-    const cw = charWidth(ch.codePointAt(0)!);
+  let i = 0;
+  let sawAnsi = false;
+  while (i < s.length) {
+    const ansi = /^\x1b\[[0-9;]*m/.exec(s.slice(i));
+    if (ansi) {
+      out += ansi[0];
+      sawAnsi = true;
+      i += ansi[0].length;
+      continue;
+    }
+    const cp = s.codePointAt(i)!;
+    const ch = String.fromCodePoint(cp);
+    const cw = charWidth(cp);
     if (w + cw > max - 1) break;
     out += ch;
     w += cw;
+    i += ch.length;
   }
-  return `${out}…`;
+  return `${out}…${sawAnsi ? "\x1b[0m" : ""}`;
 }
 
 export function padDisplay(s: string, width: number): string {

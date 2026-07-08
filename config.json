@@ -2963,8 +2963,10 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "MINUS"
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LGUI",
+            "param2": "MINUS"
           },
           "hold": null
         },
@@ -5495,15 +5497,13 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "select_line"
+            "type": "trans"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "delete_to_bol"
+            "type": "trans"
           },
           "hold": null
         },
@@ -5558,26 +5558,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "gemini_tab"
-          },
-          "hold": null
-        },
-        {
-          "tap": {
-            "type": "trans"
-          },
-          "hold": null
-        },
-        {
-          "tap": {
-            "type": "trans"
-          },
-          "hold": null
-        },
-        {
-          "tap": {
-            "type": "kp",
-            "keyCode": "COLON"
+            "macroName": "claude_copy_vim"
           },
           "hold": null
         },
@@ -5608,6 +5589,25 @@
         {
           "tap": {
             "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "trans"
+          },
+          "hold": null
+        },
+        {
+          "tap": {
+            "type": "macro",
+            "macroName": "vim_cq"
           },
           "hold": null
         },
@@ -5676,8 +5676,7 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "delete_to_eol"
+            "type": "trans"
           },
           "hold": null
         },
@@ -5690,8 +5689,7 @@
         },
         {
           "tap": {
-            "type": "tog",
-            "layerIndex": 8
+            "type": "trans"
           },
           "hold": null
         },
@@ -9347,78 +9345,6 @@
       ]
     },
     {
-      "id": "f65473e9-a9f2-4a7e-a745-901f2213a8a0",
-      "name": "gemini_tab",
-      "steps": [
-        {
-          "directive": "press",
-          "bindings": [
-            "&kp LGUI"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp T"
-          ]
-        },
-        {
-          "directive": "release",
-          "bindings": [
-            "&kp LGUI"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp AT"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp G"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp E"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp M"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp I"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp N"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp I"
-          ]
-        },
-        {
-          "directive": "tap",
-          "bindings": [
-            "&kp TAB"
-          ]
-        }
-      ]
-    },
-    {
       "id": "37948adb-7ce0-44f6-9062-a3e66258a6d3",
       "name": "flow_bookmark",
       "label": "FLOW_BOOKMARK",
@@ -9745,6 +9671,79 @@
           "directive": "release",
           "bindings": [
             "&kp LGUI"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "98544597-873e-4e7a-9e47-e1f37fa654f4",
+      "name": "claude_copy_vim",
+      "label": "/copy vim",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp FSLH",
+            "&kp C",
+            "&kp O",
+            "&kp P",
+            "&kp Y"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&macro_wait_time 300",
+            "&kp RET",
+            "&kp LC(G)"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&macro_wait_time 30",
+            "&kp I",
+            "&kp LG(V)",
+            "&kp ESC",
+            "&kp G",
+            "&kp G"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "95accc5b-2a9d-4ae9-bb51-64f9766fa107",
+      "name": "vim_cq",
+      "label": ":cq",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp ESC"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp COLON"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp C"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp Q"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp RET"
           ]
         }
       ]

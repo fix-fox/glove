@@ -1,33 +1,28 @@
 import type { KeyboardConfig } from "../../types/schema";
 import { GLOVE80_KEY_NAMES } from "../layout-map";
 import { FIND_ALIASES } from "./find-aliases";
-import type { ReplState } from "./dispatch";
 
 export const COMMANDS = [
-  "layers", "layer", "key", "macros", "macro", "combos", "combo",
+  "layers", "layer", "key", "rm", "macros", "macro", "combos", "combo",
   "holdtaps", "morphs", "condlayers", "find", "flash", "help", "quit", "exit",
 ];
 
 export const FLASH_FLAGS = ["--local", "--remote", "--full"];
 
 /** Readline completer: candidates for the token being typed + that token. */
-export function complete(config: KeyboardConfig, line: string, state?: ReplState): [string[], string] {
+export function complete(config: KeyboardConfig, line: string): [string[], string] {
   const parts = line.split(/\s+/);
   const last = parts[parts.length - 1] ?? "";
   const pick = (candidates: readonly string[]): [string[], string] => [
     candidates.filter((c) => c.toLowerCase().startsWith(last.toLowerCase())),
     last,
   ];
-  const inContext = state !== undefined && state.layerIndex !== null;
   if (parts.length <= 1) {
-    return pick(inContext ? ["up", "..", "esc", "rm", ...COMMANDS, ...GLOVE80_KEY_NAMES] : COMMANDS);
+    return pick(COMMANDS);
   }
   const cmd = (parts[0] ?? "").toLowerCase();
-  const layerNames = config.layers.map((l) => l.name);
-  if (cmd === "layer" && parts.length === 2) return pick(layerNames);
-  if (cmd === "rm" && inContext && parts.length === 2) return pick(GLOVE80_KEY_NAMES);
-  if (cmd === "key" && parts.length === 2) return pick(inContext ? GLOVE80_KEY_NAMES : layerNames);
-  if (cmd === "key" && parts.length === 3) return pick(GLOVE80_KEY_NAMES);
+  if (cmd === "layer" && parts.length === 2) return pick(config.layers.map((l) => l.name));
+  if ((cmd === "key" || cmd === "rm") && parts.length === 2) return pick(GLOVE80_KEY_NAMES);
   if (cmd === "macro" && parts.length === 2) return pick((config.macros ?? []).map((m) => m.name));
   if (cmd === "combo" && parts.length === 2) return pick((config.combos ?? []).map((c) => c.name));
   if (cmd === "flash") return pick(FLASH_FLAGS);

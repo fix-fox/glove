@@ -20,24 +20,24 @@ import { lookupAlias } from "./find-aliases";
 import { cyan, dim, green } from "./color";
 import { displayWidth, padDisplay } from "./text-width";
 
+/** The layer currently shown in the display area — the context for key/rm/bare positions. */
 export interface ReplState {
-  layerIndex: number | null;
+  layerIndex: number;
 }
 
-const TOP_LEVEL: ReplState = { layerIndex: null };
+const DEFAULT_STATE: ReplState = { layerIndex: 0 };
 
 export type DispatchResult =
   | { kind: "output"; text: string }
   | { kind: "flash"; args: string[] }
   | { kind: "mutate"; text: string }
   | { kind: "quit" }
-  | { kind: "enter-layer"; index: number; text: string }
-  | { kind: "exit-layer" };
+  | { kind: "show-layer"; index: number; text: string };
 
 const USAGE = {
   layers: "layers — list all layers",
-  layer: "layer <name|index> — render a layer, e.g. `layer symbols`",
-  key: "key <layer> <pos> — key detail, e.g. `key symbols RM4` or `key 5 43`",
+  layer: "layer <name|index> — display a layer, e.g. `layer symbols`",
+  key: "key <pos> — key detail on the displayed layer, e.g. `key RM4` or `key 43` (a bare position works too)",
   macros: "macros — list all macros",
   macro: "macro <name> — full macro definition",
   combos: "combos — list all combos",
@@ -46,7 +46,7 @@ const USAGE = {
   morphs: "morphs — list mod-morph definitions",
   condlayers: "condlayers — list conditional layers",
   find: "find <query> — reverse lookup: keycodes (`find Cmd+C`), concepts (`find screenshot`), names/labels (`find print`)",
-  rm: "rm <pos> — (in a layer) clear a key: none on the base layer, trans elsewhere, e.g. `rm RM4`",
+  rm: "rm <pos> — clear a key on the displayed layer: none on the base layer, trans elsewhere, e.g. `rm RM4`",
   flash: "flash [--local|--remote] [--full] — generate, build, and flash via scripts/glove-flash.sh",
   help: "help [command] — show help",
   quit: "quit — exit the REPL",
@@ -96,44 +96,17 @@ function formatFindMatches(results: FindMatch[]): string {
     .join("\n");
 }
 
-export function dispatch(config: KeyboardConfig, line: string, state: ReplState = TOP_LEVEL): DispatchResult {
+export function dispatch(config: KeyboardConfig, line: string, state: ReplState = DEFAULT_STATE): DispatchResult {
   const tokens = line.trim().split(/\s+/).filter(Boolean);
   if (tokens.length === 0) return out("");
   const cmd = tokens[0]!;
   const args = tokens.slice(1);
+  const layerIndex = state.layerIndex;
 
-  const ctxLayer = state.layerIndex !== null ? config.layers[state.layerIndex] : undefined;
-  if (ctxLayer !== undefined && state.layerIndex !== null) {
-    const lower = cmd.toLowerCase();
-    if (args.length === 0 && (lower === "up" || lower === ".." || lower === "esc")) {
-      return { kind: "exit-layer" };
-    }
-    if (args.length === 0) {
-      const pr = resolvePosition(cmd);
-      if (pr.ok) return out(keyDetail(config, state.layerIndex, pr.value));
-    }
-    if (lower === "key" && args.length === 1) {
-      const pr = resolvePosition(args[0]!);
-      if (!pr.ok) return out(pr.error);
-      return out(keyDetail(config, state.layerIndex, pr.value));
-    }
-    if (lower === "rm") {
-      if (args.length !== 1) return out(USAGE.rm);
-      const pr = resolvePosition(args[0]!);
-      if (!pr.ok) return out(pr.error);
-      const layer = ctxLayer;
-      const key = layer.keys[pr.value]!;
-      const prev = describeBehavior(key.tap, config).split("\n")[0]!;
-      const label = `${GLOVE80_KEY_NAMES[pr.value]} (pos ${pr.value})`;
-      // Mirror the editor's clear semantics: hard "none" on the base layer,
-      // transparent (falls through) on every other layer.
-      const clearedType = state.layerIndex === 0 ? "none" : "trans";
-      if (key.tap.type === clearedType && key.hold === null) {
-        return out(`${label} was already clear (${prev}).`);
-      }
-      layer.keys[pr.value] = { tap: { type: clearedType }, hold: null };
-      return { kind: "mutate", text: `${green("removed")} ${label} — was ${prev}` };
-    }
+  // Bare position (34, LM3) → key detail on the displayed layer.
+  if (args.length === 0) {
+    const pr = resolvePosition(cmd);
+    if (pr.ok) return out(keyDetail(config, layerIndex, pr.value));
   }
 
   switch (cmd.toLowerCase()) {
@@ -145,10 +118,7 @@ export function dispatch(config: KeyboardConfig, line: string, state: ReplState 
       if (topic && USAGE[topic as keyof typeof USAGE]) {
         return out(USAGE[topic as keyof typeof USAGE]);
       }
-      const ctxHelp = ctxLayer
-        ? `${dim(`in layer "${ctxLayer.name}" — bare position (34, LM3) or key <pos> for key detail; up/../Esc to go back`)}\n\n`
-        : "";
-      return out(ctxHelp + HELP);
+      return out(HELP);
     }
     case "layers":
       return out(listLayers(config).join("\n"));
@@ -166,15 +136,30 @@ export function dispatch(config: KeyboardConfig, line: string, state: ReplState 
       if (args.length !== 1) return out(USAGE.layer);
       const r = resolveLayer(config, args[0]!);
       if (!r.ok) return out(r.error);
-      return { kind: "enter-layer", index: r.value.index, text: renderLayer(config, r.value.index) };
+      return { kind: "show-layer", index: r.value.index, text: renderLayer(config, r.value.index) };
     }
     case "key": {
-      if (args.length !== 2) return out(USAGE.key);
-      const lr = resolveLayer(config, args[0]!);
-      if (!lr.ok) return out(lr.error);
-      const pr = resolvePosition(args[1]!);
+      if (args.length !== 1) return out(USAGE.key);
+      const pr = resolvePosition(args[0]!);
       if (!pr.ok) return out(pr.error);
-      return out(keyDetail(config, lr.value.index, pr.value));
+      return out(keyDetail(config, layerIndex, pr.value));
+    }
+    case "rm": {
+      if (args.length !== 1) return out(USAGE.rm);
+      const pr = resolvePosition(args[0]!);
+      if (!pr.ok) return out(pr.error);
+      const layer = config.layers[layerIndex]!;
+      const key = layer.keys[pr.value]!;
+      const prev = describeBehavior(key.tap, config).split("\n")[0]!;
+      const label = `${GLOVE80_KEY_NAMES[pr.value]} (pos ${pr.value})`;
+      // Mirror the editor's clear semantics: hard "none" on the base layer,
+      // transparent (falls through) on every other layer.
+      const clearedType = layerIndex === 0 ? "none" : "trans";
+      if (key.tap.type === clearedType && key.hold === null) {
+        return out(`${label} was already clear (${prev}).`);
+      }
+      layer.keys[pr.value] = { tap: { type: clearedType }, hold: null };
+      return { kind: "mutate", text: `${green("removed")} ${label} — was ${prev}` };
     }
     case "macro": {
       if (args.length !== 1) return out(USAGE.macro);
@@ -220,17 +205,12 @@ export function dispatch(config: KeyboardConfig, line: string, state: ReplState 
       if (sections.length === 0) return out(`No bindings found for ${raw}.`);
       return out(sections.join("\n\n"));
     }
-    case "rm":
-      return out(`rm works inside a layer — enter one first (e.g. \`layer base\`). ${USAGE.rm}`);
     case "flash": {
       const bad = args.filter((a) => !FLASH_FLAGS.includes(a));
       if (bad.length > 0) return out(`Unknown flash flag ${bad.join(" ")}. ${USAGE.flash}`);
       return { kind: "flash", args };
     }
     default:
-      return out(
-        unknownCommand(cmd) +
-          (ctxLayer ? ` ${dim(`(in layer "${ctxLayer.name}" — \`up\` to go back)`)}` : ""),
-      );
+      return out(unknownCommand(cmd));
   }
 }

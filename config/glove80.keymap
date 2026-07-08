@@ -69,12 +69,6 @@
             bindings = <&macro_press &kp LGUI>, <&macro_tap &kp LEFT>, <&macro_release &kp LGUI>, <&macro_press &kp LSHFT>, <&macro_press &kp LGUI>, <&macro_tap &kp RIGHT>, <&macro_release &kp LGUI>, <&macro_release &kp LSHFT>;
         };
 
-        gemini_tab: gemini_tab {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp T>, <&macro_release &kp LGUI>, <&macro_tap &kp AT>, <&macro_tap &kp G>, <&macro_tap &kp E>, <&macro_tap &kp M>, <&macro_tap &kp I>, <&macro_tap &kp N>, <&macro_tap &kp I>, <&macro_tap &kp TAB>;
-        };
-
         flow_bookmark: flow_bookmark {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -142,6 +136,18 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings = <&macro_press &kp LGUI>, <&macro_tap &kp L>, <&macro_tap &kp C>, <&macro_release &kp LGUI>;
+        };
+
+        claude_copy_vim: claude_copy_vim {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp FSLH &kp C &kp O &kp P &kp Y>, <&macro_tap &macro_wait_time 300 &kp RET &kp LC(G)>, <&macro_tap &macro_wait_time 30 &kp I &kp LG(V) &kp ESC &kp G &kp G>;
+        };
+
+        vim_cq: vim_cq {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp C>, <&macro_tap &kp Q>, <&macro_tap &kp RET>;
         };
     };
 
@@ -341,7 +347,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &kp COLON  &kp ESC  &trans  &kp CARET  &kp AMPS  &kp STAR  &kp PIPE  &trans  &trans
-                &trans  &kp BSLH  &kp EQUAL  &kp MINUS  &kp UNDER  &kp GRAVE  &kp SQT  &kp DOUBLE_QUOTES  &hmr RGUI PLUS  &kp TILDE  &kp FSLH  &trans
+                &trans  &kp BSLH  &kp EQUAL  &hml LGUI MINUS  &kp UNDER  &kp GRAVE  &kp SQT  &kp DOUBLE_QUOTES  &hmr RGUI PLUS  &kp TILDE  &kp FSLH  &trans
                 &trans  &kp LESS_THAN  &kp LEFT_BRACE  &kp LBKT  &kp LEFT_PARENTHESIS  &kp SEMI  &trans  &trans  &trans  &trans  &trans  &trans  &kp COLON  &kp RIGHT_PARENTHESIS  &kp RBKT  &kp RIGHT_BRACE  &kp GREATER_THAN  &trans
                 &trans  &trans  &trans  &trans  &trans  &kp BSPC  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
@@ -395,9 +401,9 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &vim_q  &vim_w  &trans  &v_space_ctrl_t  &flow_bookmark  &trans  &select_line  &delete_to_bol  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &gemini_tab  &trans  &trans  &kp COLON  &trans  &trans  &trans
-                &trans  &trans  &vim_x  &copy_url  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &delete_to_eol  &lang_toggle  &tog 8  &trans  &trans  &trans
+                &trans  &vim_q  &vim_w  &trans  &v_space_ctrl_t  &flow_bookmark  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &claude_copy_vim  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &vim_cq  &vim_x  &copy_url  &lang_toggle  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &lang_toggle  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &delete_to_bol  &delete_to_eol  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
         };

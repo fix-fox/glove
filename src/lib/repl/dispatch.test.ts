@@ -35,22 +35,27 @@ describe("dispatch", () => {
 
   it("prints usage when args are missing", () => {
     expect(outputOf("layer")).toContain("layer <name|index>");
-    expect(outputOf("key default")).toContain("key <layer> <pos>");
+    expect(outputOf("key")).toContain("key <pos>");
+  });
+
+  it("rejects the old two-arg key form", () => {
+    expect(outputOf("key symbols RM4")).toContain("key <pos>");
   });
 
   it("surfaces resolution errors", () => {
     expect(outputOf("layer nope")).toContain("Unknown layer");
+    expect(outputOf("key nope")).toContain("Unknown key name");
   });
 
   it("runs list, render, and detail commands", () => {
     expect(outputOf("layers")).toContain("default");
     const r = dispatch(config, "layer default");
-    expect(r.kind).toBe("enter-layer");
-    if (r.kind === "enter-layer") {
+    expect(r.kind).toBe("show-layer");
+    if (r.kind === "show-layer") {
       expect(r.index).toBe(0);
       expect(r.text).toContain("Layer 0: default");
     }
-    expect(outputOf("key default RM4")).toContain("kp LG(C)");
+    expect(outputOf("key RM4")).toContain("kp LG(C)");
     expect(outputOf("macro copy_url")).toContain("1. tap");
     expect(outputOf("combo esc_combo")).toContain("LT1 (22)");
   });
@@ -80,6 +85,7 @@ describe("dispatch", () => {
   it("prints help and per-command help", () => {
     expect(outputOf("help")).toContain("find <query>");
     expect(outputOf("help find")).toContain("reverse lookup");
+    expect(outputOf("help key")).toContain("displayed layer");
   });
 
   it("handles unknown macro/combo when none are defined", () => {
@@ -115,62 +121,39 @@ describe("find tiers", () => {
   });
 });
 
-describe("layer context", () => {
-  const ctx = { layerIndex: 0 };
-
-  it("exit words leave the context", () => {
-    for (const word of ["up", "..", "esc", "UP"]) {
-      expect(dispatch(config, word, ctx)).toEqual({ kind: "exit-layer" });
-    }
-  });
-
-  it("exit words are unknown commands at top level", () => {
-    const r = dispatch(config, "up");
-    expect(r.kind === "output" && r.text.includes("Unknown command")).toBe(true);
-  });
-
-  it("bare positions show key detail in context", () => {
+describe("displayed-layer context", () => {
+  it("bare positions show key detail on the displayed layer", () => {
     for (const pos of ["RM4", "43", "rm4"]) {
-      const r = dispatch(config, pos, ctx);
+      const r = dispatch(config, pos);
       expect(r.kind === "output" && r.text.includes("kp LG(C)"), pos).toBe(true);
     }
   });
 
-  it("key auto-fills the context layer with one arg", () => {
-    const r = dispatch(config, "key RM4", ctx);
-    expect(r.kind === "output" && r.text.includes("kp LG(C)")).toBe(true);
-    // explicit two-arg form still works inside a context
-    const r2 = dispatch(config, "key symbols 0", ctx);
-    expect(r2.kind).toBe("output");
+  it("key and bare positions follow the displayed layer", () => {
+    const r = dispatch(config, "key RM4", { layerIndex: 1 });
+    expect(r.kind === "output" && r.text.includes('layer 1 "symbols"')).toBe(true);
+    const bare = dispatch(config, "RM4", { layerIndex: 1 });
+    expect(bare.kind === "output" && bare.text.includes('layer 1 "symbols"')).toBe(true);
   });
 
-  it("one-arg key at top level still prints usage", () => {
-    expect(outputOf("key RM4")).toContain("key <layer> <pos>");
+  it("layer switches the displayed layer", () => {
+    const r = dispatch(config, "layer symbols");
+    expect(r.kind).toBe("show-layer");
+    if (r.kind === "show-layer") expect(r.index).toBe(1);
   });
 
-  it("layer switches context", () => {
-    const r = dispatch(config, "layer symbols", ctx);
-    expect(r.kind).toBe("enter-layer");
-    if (r.kind === "enter-layer") expect(r.index).toBe(1);
-  });
-
-  it("global commands still work in context", () => {
-    const r = dispatch(config, "macros", ctx);
-    expect(r.kind === "output" && r.text.includes("copy_url")).toBe(true);
-  });
-
-  it("help and unknown-command hints mention the context", () => {
-    const h = dispatch(config, "help", ctx);
-    expect(h.kind === "output" && h.text.includes('in layer "default"')).toBe(true);
-    const u = dispatch(config, "frobnicate", ctx);
-    expect(u.kind === "output" && u.text.includes("up")).toBe(true);
+  it("old drill-down exit words are plain unknown commands", () => {
+    for (const word of ["up", "..", "esc"]) {
+      const r = dispatch(config, word);
+      expect(r.kind === "output" && r.text.includes("Unknown command"), word).toBe(true);
+    }
   });
 });
 
-describe("rm (clear key in layer context)", () => {
+describe("rm (clear key on the displayed layer)", () => {
   it("clears a base-layer key to none and reports the old binding", () => {
     const cfg = makeConfig();
-    const r = dispatch(cfg, "rm RM4", { layerIndex: 0 });
+    const r = dispatch(cfg, "rm RM4");
     expect(r.kind).toBe("mutate");
     if (r.kind === "mutate") {
       expect(r.text).toContain("RM4");
@@ -188,29 +171,21 @@ describe("rm (clear key in layer context)", () => {
 
   it("reports a no-op without mutating when the key is already clear", () => {
     const cfg = makeConfig();
-    dispatch(cfg, "rm RM4", { layerIndex: 0 }); // now none
-    const r = dispatch(cfg, "rm RM4", { layerIndex: 0 });
+    dispatch(cfg, "rm RM4"); // now none
+    const r = dispatch(cfg, "rm RM4");
     expect(r.kind).toBe("output");
     expect(r.kind === "output" && r.text.includes("already clear")).toBe(true);
   });
 
   it("surfaces position errors and usage", () => {
     const cfg = makeConfig();
-    expect(dispatch(cfg, "rm nope", { layerIndex: 0 })).toEqual({
+    expect(dispatch(cfg, "rm nope")).toEqual({
       kind: "output",
       text: expect.stringContaining("Unknown key name"),
     });
-    expect(dispatch(cfg, "rm", { layerIndex: 0 })).toEqual({
+    expect(dispatch(cfg, "rm")).toEqual({
       kind: "output",
       text: expect.stringContaining("rm <pos>"),
     });
-  });
-
-  it("at top level explains a layer is required and does not mutate", () => {
-    const cfg = makeConfig();
-    const before = JSON.stringify(cfg.layers[0]!.keys[43]);
-    const r = dispatch(cfg, "rm RM4");
-    expect(r.kind === "output" && r.text.includes("inside a layer")).toBe(true);
-    expect(JSON.stringify(cfg.layers[0]!.keys[43])).toBe(before);
   });
 });
