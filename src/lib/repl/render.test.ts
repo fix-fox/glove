@@ -126,6 +126,53 @@ describe("renderLayer (boxed)", () => {
   });
 });
 
+describe("renderLayer sides and stretch", () => {
+  const maxWidth = (text: string) => Math.max(...text.split("\n").map(displayWidth));
+
+  it("stretches cells to fill the given width without overflowing it", () => {
+    const plain = renderLayer(config, 0);
+    const wide = renderLayer(config, 0, { width: 300 });
+    expect(maxWidth(wide)).toBeGreaterThan(maxWidth(plain));
+    expect(maxWidth(wide)).toBeLessThanOrEqual(300);
+    expect((wide.match(/┌/g) ?? []).length).toBe(80); // still one box per key
+  });
+
+  it("never shrinks below the content-based width on narrow terminals", () => {
+    expect(renderLayer(config, 0, { width: 40 })).toBe(renderLayer(config, 0));
+  });
+
+  it("left shows only the 40 left-hand keys with a half marker", () => {
+    const text = renderLayer(config, 0, { side: "left" });
+    expect(text.split("\n")[0]).toContain("(left half)");
+    expect((text.match(/┌/g) ?? []).length).toBe(40);
+    // row 1 indices: left-hand positions only
+    expect(text.split("\n")[5]!.trim().split(/\s+/)).toEqual(["0", "1", "2", "3", "4"]);
+  });
+
+  it("right shows only the 40 right-hand keys", () => {
+    const text = renderLayer(config, 0, { side: "right" });
+    expect(text.split("\n")[0]).toContain("(right half)");
+    expect((text.match(/┌/g) ?? []).length).toBe(40);
+    expect(text.split("\n")[5]!.trim().split(/\s+/)).toEqual(["5", "6", "7", "8", "9"]);
+  });
+
+  it("a half view stretches wider per cell than the full board at the same width", () => {
+    const half = renderLayer(config, 0, { side: "left", width: 200 });
+    expect(maxWidth(half)).toBeLessThanOrEqual(200);
+    // 9 columns instead of 19 → each cell gets roughly twice the width
+    const halfCell = half.split("\n")[2]!.indexOf("┐");
+    const full = renderLayer(config, 0, { width: 200 });
+    const fullCell = full.split("\n")[2]!.indexOf("┐");
+    expect(halfCell).toBeGreaterThan(fullCell);
+  });
+
+  it("legend reflects only the visible half", () => {
+    // pos 0, the fixture's only trans key, is on the left
+    expect(renderLayer(config, 0, { side: "left" })).toContain("transparent");
+    expect(renderLayer(config, 0, { side: "right" })).not.toContain("transparent");
+  });
+});
+
 describe("keyDetail", () => {
   it("describes a plain kp key with its hold behavior", () => {
     const text = keyDetail(config, 0, 10);

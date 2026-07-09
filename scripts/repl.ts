@@ -14,7 +14,7 @@ const config = KeyboardConfigSchema.parse(JSON.parse(readFileSync("config.json",
 migrateConfig(config);
 
 // The displayed layer is the context for key/rm/bare-position commands.
-const state: ReplState = { layerIndex: 0 };
+const state: ReplState = { layerIndex: 0, side: "both" };
 const PROMPT = cyan("glove> ");
 
 /** Returns a one-line status for the display area / stderr. */
@@ -32,12 +32,13 @@ function execute(line: string): {
   flash?: string[];
   layerShown?: true;
 } {
-  const result = dispatch(config, line, state);
+  const result = dispatch(config, line, state, process.stdout.columns || undefined);
   switch (result.kind) {
     case "quit":
       return { quit: true };
     case "show-layer":
       state.layerIndex = result.index;
+      state.side = result.side;
       return { text: result.text, layerShown: true };
     case "mutate":
       writeFileSync("config.json", JSON.stringify(config, null, 2) + "\n");
@@ -200,7 +201,7 @@ function interactiveLoop(): void {
     const cols = process.stdout.columns || 80;
     const bodyRows = Math.max(1, rows - 2);
     // Re-render every paint so mutations (rm) show up immediately.
-    let layerLines = renderLayer(config, state.layerIndex).split("\n");
+    let layerLines = renderLayer(config, state.layerIndex, { side: state.side, width: cols }).split("\n");
     // Gray out the board while a popup covers it.
     if (overlay !== null) layerLines = layerLines.map((l) => (l ? dim(stripAnsi(l)) : l));
     const pad = Math.max(0, Math.floor((cols - Math.max(...layerLines.map(displayWidth))) / 2));

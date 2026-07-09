@@ -15,6 +15,7 @@ import {
   macroDetail,
   renderLayer,
 } from "./render";
+import type { ViewSide } from "./render";
 import { FLASH_FLAGS } from "./complete";
 import { lookupAlias } from "./find-aliases";
 import { cyan, dim, green } from "./color";
@@ -23,6 +24,8 @@ import { displayWidth, padDisplay } from "./text-width";
 /** The layer currently shown in the display area — the context for key/rm/bare positions. */
 export interface ReplState {
   layerIndex: number;
+  /** Which half of the board the display shows ("both" when unset). */
+  side?: ViewSide;
 }
 
 const DEFAULT_STATE: ReplState = { layerIndex: 0 };
@@ -32,11 +35,14 @@ export type DispatchResult =
   | { kind: "flash"; args: string[] }
   | { kind: "mutate"; text: string }
   | { kind: "quit" }
-  | { kind: "show-layer"; index: number; text: string };
+  | { kind: "show-layer"; index: number; side: ViewSide; text: string };
 
 const USAGE = {
   layers: "layers — list all layers",
   layer: "layer <name|index> — display a layer, e.g. `layer symbols`",
+  left: "left — show only the left half of the board, stretched",
+  right: "right — show only the right half of the board, stretched",
+  both: "both — show the full board (the default)",
   key: "key <pos> — key detail on the displayed layer, e.g. `key RM4` or `key 43` (a bare position works too)",
   macros: "macros — list all macros",
   macro: "macro <name> — full macro definition",
@@ -96,12 +102,18 @@ function formatFindMatches(results: FindMatch[]): string {
     .join("\n");
 }
 
-export function dispatch(config: KeyboardConfig, line: string, state: ReplState = DEFAULT_STATE): DispatchResult {
+export function dispatch(
+  config: KeyboardConfig,
+  line: string,
+  state: ReplState = DEFAULT_STATE,
+  width?: number,
+): DispatchResult {
   const tokens = line.trim().split(/\s+/).filter(Boolean);
   if (tokens.length === 0) return out("");
   const cmd = tokens[0]!;
   const args = tokens.slice(1);
   const layerIndex = state.layerIndex;
+  const side = state.side ?? "both";
 
   // Bare position (34, LM3) → key detail on the displayed layer.
   if (args.length === 0) {
@@ -136,7 +148,24 @@ export function dispatch(config: KeyboardConfig, line: string, state: ReplState 
       if (args.length !== 1) return out(USAGE.layer);
       const r = resolveLayer(config, args[0]!);
       if (!r.ok) return out(r.error);
-      return { kind: "show-layer", index: r.value.index, text: renderLayer(config, r.value.index) };
+      return {
+        kind: "show-layer",
+        index: r.value.index,
+        side,
+        text: renderLayer(config, r.value.index, { side, width }),
+      };
+    }
+    case "left":
+    case "right":
+    case "both": {
+      const newSide = cmd.toLowerCase() as ViewSide;
+      if (args.length !== 0) return out(USAGE[newSide]);
+      return {
+        kind: "show-layer",
+        index: layerIndex,
+        side: newSide,
+        text: renderLayer(config, layerIndex, { side: newSide, width }),
+      };
     }
     case "key": {
       if (args.length !== 1) return out(USAGE.key);

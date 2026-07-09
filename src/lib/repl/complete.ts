@@ -3,8 +3,9 @@ import { GLOVE80_KEY_NAMES } from "../layout-map";
 import { FIND_ALIASES } from "./find-aliases";
 
 export const COMMANDS = [
-  "layers", "layer", "key", "rm", "macros", "macro", "combos", "combo",
-  "holdtaps", "morphs", "condlayers", "find", "flash", "help", "quit", "exit",
+  "layers", "layer", "left", "right", "both", "key", "rm", "macros", "macro",
+  "combos", "combo", "holdtaps", "morphs", "condlayers", "find", "flash",
+  "help", "quit", "exit",
 ];
 
 export const FLASH_FLAGS = ["--local", "--remote", "--full"];

@@ -11,10 +11,17 @@ const config = KeyboardConfigSchema.parse(
 
 beforeAll(() => setColorEnabled(true)); // exercise the colored path; widths measured after stripAnsi
 
+const VARIANTS = [
+  ["full", undefined],
+  ["stretched", { width: 220 }],
+  ["left half", { side: "left", width: 180 }],
+  ["right half", { side: "right" }],
+] as const;
+
 describe("layer rendering alignment (real config)", () => {
   config.layers.forEach((layer, i) => {
-    it(`layer ${i} (${layer.name}) renders aligned boxes`, () => {
-      const text = renderLayer(config, i);
+    it.each(VARIANTS)(`layer ${i} (${layer.name}) renders aligned boxes (%s)`, (_name, opts) => {
+      const text = renderLayer(config, i, opts);
       const lines = text.split("\n").map(stripAnsi);
       for (let l = 0; l < lines.length; l++) {
         const line = lines[l]!;

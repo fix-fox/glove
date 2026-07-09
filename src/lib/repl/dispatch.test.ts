@@ -150,6 +150,31 @@ describe("displayed-layer context", () => {
   });
 });
 
+describe("left/right/both (view side)", () => {
+  it("switches the shown half, keeping the displayed layer", () => {
+    const r = dispatch(config, "left", { layerIndex: 1 });
+    expect(r.kind).toBe("show-layer");
+    if (r.kind === "show-layer") {
+      expect(r.index).toBe(1);
+      expect(r.side).toBe("left");
+      expect(r.text).toContain("(left half)");
+    }
+    const b = dispatch(config, "both", { layerIndex: 1, side: "left" });
+    expect(b.kind === "show-layer" && b.side === "both").toBe(true);
+    expect(b.kind === "show-layer" && !b.text.includes("half")).toBe(true);
+  });
+
+  it("layer keeps the current side", () => {
+    const r = dispatch(config, "layer symbols", { layerIndex: 0, side: "right" });
+    expect(r.kind === "show-layer" && r.side === "right").toBe(true);
+    expect(r.kind === "show-layer" && r.text.includes("(right half)")).toBe(true);
+  });
+
+  it("rejects arguments with usage", () => {
+    expect(outputOf("left foo")).toContain("left half");
+  });
+});
+
 describe("rm (clear key on the displayed layer)", () => {
   it("clears a base-layer key to none and reports the old binding", () => {
     const cfg = makeConfig();

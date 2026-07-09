@@ -53,6 +53,15 @@ const MAX_CELL = 6;
 const GUTTER_COL = 9; // the only GLOVE80_GRID column that never holds a key
 const GUTTER = "  ";
 
+export type ViewSide = "left" | "right" | "both";
+
+export interface RenderLayerOptions {
+  /** Which half of the board to show (default "both"). */
+  side?: ViewSide | undefined;
+  /** Available display width — cells widen to fill it (never shrink below the content-based width). */
+  width?: number | undefined;
+}
+
 type CellKind = "normal" | "layer" | "macro" | "trans" | "empty";
 
 interface CellContent {
@@ -121,9 +130,7 @@ const LEGEND_SYMBOLS: ReadonlyArray<readonly [string, string]> = [
   ["◆", "◆ sticky"],
 ];
 
-function legend(layer: Layer, config: KeyboardConfig): string {
-  const hebrewMode = isHebrewLayer(layer);
-  const contents = layer.keys.map((k) => cellContent(k, config, hebrewMode));
+function legend(contents: CellContent[]): string {
   const all = contents.map(cellPlainText).join(" ");
   const parts: string[] = [];
   for (const [symbol, text] of LEGEND_SYMBOLS) {
@@ -134,22 +141,40 @@ function legend(layer: Layer, config: KeyboardConfig): string {
   return parts.length ? dim(parts.join("   ")) : "";
 }
 
-export function renderLayer(config: KeyboardConfig, layerIndex: number): string {
+export function renderLayer(
+  config: KeyboardConfig,
+  layerIndex: number,
+  opts: RenderLayerOptions = {},
+): string {
   const layer = config.layers[layerIndex];
   if (!layer) return `Layer ${layerIndex} not found`;
+  const side = opts.side ?? "both";
   const hebrewMode = isHebrewLayer(layer);
   const contents = layer.keys.map((k) => cellContent(k, config, hebrewMode));
-  const widest = Math.max(...contents.map((c) => displayWidth(cellPlainText(c))));
-  const w = Math.max(MIN_CELL, Math.min(MAX_CELL, widest));
+  const grid = GLOVE80_GRID.map((row) =>
+    side === "left" ? row.slice(0, GUTTER_COL) : side === "right" ? row.slice(GUTTER_COL + 1) : row,
+  );
+  const gutterCol = side === "both" ? GUTTER_COL : -1;
+  const visible = grid.flat().filter((i): i is number => i !== null);
+  const widest = Math.max(...visible.map((i) => displayWidth(cellPlainText(contents[i]!))));
+  let w = Math.max(MIN_CELL, Math.min(MAX_CELL, widest));
+  if (opts.width !== undefined) {
+    // Every column but the gutter renders as a cell of width w+2; columns are joined by single spaces.
+    const nCols = grid[0]!.length;
+    const cellCols = nCols - (side === "both" ? 1 : 0);
+    const fixed = nCols - 1 + (side === "both" ? GUTTER.length : 0);
+    w = Math.max(w, Math.floor((opts.width - fixed) / cellCols) - 2);
+  }
   const blank = " ".repeat(w + 2);
-  const lines: string[] = [bold(`Layer ${layerIndex}: ${layer.name}`), ""];
-  for (const row of GLOVE80_GRID) {
+  const title = bold(`Layer ${layerIndex}: ${layer.name}`) + (side === "both" ? "" : dim(` (${side} half)`));
+  const lines: string[] = [title, ""];
+  for (const row of grid) {
     const top: string[] = [];
     const mid: string[] = [];
     const bottom: string[] = [];
     const indices: string[] = [];
     row.forEach((idx, col) => {
-      if (col === GUTTER_COL) {
+      if (col === gutterCol) {
         top.push(GUTTER);
         mid.push(GUTTER);
         bottom.push(GUTTER);
@@ -177,7 +202,7 @@ export function renderLayer(config: KeyboardConfig, layerIndex: number): string 
       "",
     );
   }
-  const leg = legend(layer, config);
+  const leg = legend(visible.map((i) => contents[i]!));
   if (leg) lines.push(leg);
   return lines.join("\n").trimEnd();
 }
