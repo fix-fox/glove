@@ -395,7 +395,7 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_UP  &mmv MOVE_UP  &msc SCRL_DOWN  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_DOWN  &mmv MOVE_UP  &msc SCRL_UP  &trans  &trans
                 &trans  &trans  &trans  &kp LCTRL  &kp LEFT_SHIFT  &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans  &trans
                 &trans  &trans  &kp LG(X)  &kp LG(C)  &trans  &kp LG(V)  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &msc SCRL_LEFT  &tog 8  &msc SCRL_RIGHT  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &mo 11  &trans  &trans  &trans  &trans  &mkp LCLK  &mkp LCLK  &mkp MCLK  &mkp RCLK  &trans  &trans

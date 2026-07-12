@@ -4425,7 +4425,7 @@
         {
           "tap": {
             "type": "msc",
-            "direction": "SCRL_UP"
+            "direction": "SCRL_DOWN"
           },
           "hold": null
         },
@@ -4439,7 +4439,7 @@
         {
           "tap": {
             "type": "msc",
-            "direction": "SCRL_DOWN"
+            "direction": "SCRL_UP"
           },
           "hold": null
         },
