@@ -3,7 +3,7 @@ import type { Behavior } from "../types/schema";
 export const ALL_BEHAVIOR_TYPES = [
   "kp", "mo", "to", "sl", "tog", "trans", "none", "bootloader", "sys_reset",
   "bt", "caps_word", "rgb_ug", "out", "mmv", "msc", "mkp",
-  "macro", "mod_morph", "hold_tap",
+  "macro", "mod_morph", "hold_tap", "tap_dance",
 ] as const;
 
 export const HOLD_BEHAVIOR_TYPES = ["kp", "mo", "to", "sl", "tog", "hold_tap"] as const;
@@ -28,6 +28,7 @@ export const BEHAVIOR_TYPE_LABELS: Record<Behavior["type"], string> = {
   macro: "Macro",
   mod_morph: "Mod-Morph",
   hold_tap: "Custom Hold-Tap",
+  tap_dance: "Tap-Dance",
 };
 
 export function defaultBehaviorForType(type: Behavior["type"]): Behavior {
@@ -70,5 +71,7 @@ export function defaultBehaviorForType(type: Behavior["type"]): Behavior {
       return { type: "mod_morph", name: "my_morph" };
     case "hold_tap":
       return { type: "hold_tap", name: "my_ht", param1: "0", param2: "SPACE" };
+    case "tap_dance":
+      return { type: "tap_dance", name: "my_td" };
   }
 }

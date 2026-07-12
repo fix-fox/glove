@@ -1,4 +1,4 @@
-import type { Behavior, Key, KeyboardConfig, MacroDefinition, ModMorphDefinition, HoldTapDefinition, ComboDefinition, ConditionalLayerDefinition, MouseSettings } from "../types/schema";
+import type { Behavior, Key, KeyboardConfig, MacroDefinition, ModMorphDefinition, HoldTapDefinition, TapDanceDefinition, ComboDefinition, ConditionalLayerDefinition, MouseSettings } from "../types/schema";
 import { DEFAULT_MOUSE_SETTINGS } from "../types/schema";
 import { parseModifiedKeyCode } from "./keycodes";
 
@@ -63,6 +63,8 @@ function tapBehaviorToString(behavior: Behavior, mouseSettings?: MouseSettings):
       return parts.join(" ");
     }
     case "mod_morph":
+      return `&${behavior.name}`;
+    case "tap_dance":
       return `&${behavior.name}`;
     case "hold_tap":
       return `&${behavior.name} ${behavior.param1} ${behavior.param2}`;
@@ -295,6 +297,23 @@ function generateModMorphBlock(mm: ModMorphDefinition): string {
 }
 
 // =============================================================================
+// Tap-dance generation
+// =============================================================================
+
+function generateTapDanceBlock(td: TapDanceDefinition): string {
+  const lines: string[] = [];
+  lines.push(`        ${td.name}: ${td.name} {`);
+  lines.push(`            compatible = "zmk,behavior-tap-dance";`);
+  lines.push(`            #binding-cells = <0>;`);
+  if (td.tappingTermMs !== undefined) {
+    lines.push(`            tapping-term-ms = <${td.tappingTermMs}>;`);
+  }
+  lines.push(`            bindings = ${td.bindings.map((b) => `<${b}>`).join(", ")};`);
+  lines.push(`        };`);
+  return lines.join("\n");
+}
+
+// =============================================================================
 // Hold-tap generation
 // =============================================================================
 
@@ -336,9 +355,10 @@ function generateHoldTapBlock(ht: HoldTapDefinition): string {
   return lines.join("\n");
 }
 
-function generateBehaviorsSection(modMorphs: ModMorphDefinition[], holdTaps: HoldTapDefinition[]): string {
+function generateBehaviorsSection(modMorphs: ModMorphDefinition[], holdTaps: HoldTapDefinition[], tapDances: TapDanceDefinition[]): string {
   const blocks: string[] = [];
   for (const mm of modMorphs) blocks.push(generateModMorphBlock(mm));
+  for (const td of tapDances) blocks.push(generateTapDanceBlock(td));
   for (const ht of holdTaps) {
     if (!ZMK_BUILTIN_HOLD_TAPS.has(ht.name)) {
       blocks.push(generateHoldTapBlock(ht));
@@ -465,7 +485,7 @@ ${bindingsStr}
   if (features.pointing) includes.push("#include <dt-bindings/zmk/pointing.h>");
 
   const macrosSection = generateMacrosSection(config.macros ?? []);
-  const behaviorsSection = generateBehaviorsSection(config.modMorphs ?? [], config.holdTaps ?? []);
+  const behaviorsSection = generateBehaviorsSection(config.modMorphs ?? [], config.holdTaps ?? [], config.tapDances ?? []);
   const overridesSection = generateOverridesSection(config.holdTaps ?? []);
   const combosSection = generateCombosSection(config.combos ?? []);
   const condLayersSection = generateConditionalLayersSection(config.conditionalLayers ?? []);

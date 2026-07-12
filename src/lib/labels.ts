@@ -252,5 +252,7 @@ export function behaviorLabel(
     }
     case "hold_tap":
       return holdTapTapLabel(behavior.name, behavior.param2, holdTaps ?? [], modMorphs ?? [], hebrewMode);
+    case "tap_dance":
+      return behavior.name.replace(/^td_/, "");
   }
 }

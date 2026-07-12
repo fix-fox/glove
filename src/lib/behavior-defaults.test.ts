@@ -8,8 +8,8 @@ import {
 } from "./behavior-defaults";
 
 describe("ALL_BEHAVIOR_TYPES", () => {
-  it("has 19 types", () => {
-    expect(ALL_BEHAVIOR_TYPES).toHaveLength(19);
+  it("has 20 types", () => {
+    expect(ALL_BEHAVIOR_TYPES).toHaveLength(20);
   });
 });
 

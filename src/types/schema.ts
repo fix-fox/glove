@@ -119,6 +119,12 @@ const HoldTapBehaviorSchema = z.object({
   param2: z.string().min(1),
 });
 
+// &tap_dance_name — references a user-defined tap-dance
+const TapDanceBehaviorSchema = z.object({
+  type: z.literal("tap_dance"),
+  name: z.string().min(1),
+});
+
 export const BehaviorSchema = z.discriminatedUnion("type", [
   KpSchema,
   MoSchema,
@@ -139,6 +145,7 @@ export const BehaviorSchema = z.discriminatedUnion("type", [
   MacroBehaviorSchema,
   ModMorphBehaviorSchema,
   HoldTapBehaviorSchema,
+  TapDanceBehaviorSchema,
 ]);
 
 // =============================================================================
@@ -217,6 +224,19 @@ export const HoldTapDefinitionSchema = z.object({
 });
 
 // =============================================================================
+// Tap-Dance definitions
+// =============================================================================
+
+export const TapDanceDefinitionSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  label: z.string().optional(),
+  tappingTermMs: z.number().int().min(0).optional(),
+  // Raw ZMK bindings, index = tap count (e.g. ["&kp A", "&kp LG(TAB)"])
+  bindings: z.array(z.string().min(1)).min(2),
+});
+
+// =============================================================================
 // Combos
 // =============================================================================
 
@@ -264,6 +284,7 @@ export const KeyboardConfigSchema = z.object({
   macros: z.array(MacroDefinitionSchema).optional(),
   modMorphs: z.array(ModMorphDefinitionSchema).optional(),
   holdTaps: z.array(HoldTapDefinitionSchema).optional(),
+  tapDances: z.array(TapDanceDefinitionSchema).optional(),
   combos: z.array(ComboDefinitionSchema).optional(),
   conditionalLayers: z.array(ConditionalLayerDefinitionSchema).optional(),
   hrmSettings: HrmSettingsSchema.optional(),
@@ -282,6 +303,7 @@ export type MacroStep = z.infer<typeof MacroStepSchema>;
 export type MacroDefinition = z.infer<typeof MacroDefinitionSchema>;
 export type ModMorphDefinition = z.infer<typeof ModMorphDefinitionSchema>;
 export type HoldTapDefinition = z.infer<typeof HoldTapDefinitionSchema>;
+export type TapDanceDefinition = z.infer<typeof TapDanceDefinitionSchema>;
 export type ComboDefinition = z.infer<typeof ComboDefinitionSchema>;
 export type ConditionalLayerDefinition = z.infer<typeof ConditionalLayerDefinitionSchema>;
 export type MouseSettings = z.infer<typeof MouseSettingsSchema>;

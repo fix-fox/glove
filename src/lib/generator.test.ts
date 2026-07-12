@@ -606,6 +606,40 @@ describe("generateKeymap", () => {
     }
   });
 
+  it("emits behaviors section with tap-dance", () => {
+    const config: KeyboardConfig = {
+      ...makeConfig([makeLayer("Base")]),
+      tapDances: [{
+        id: randomUUID(),
+        name: "td_launcher_prevapp",
+        tappingTermMs: 200,
+        bindings: ["&kp LA(SPACE)", "&kp LG(TAB)"],
+      }],
+    };
+    const result = generateKeymap(config);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.keymap).toContain("td_launcher_prevapp: td_launcher_prevapp {");
+      expect(result.keymap).toContain('compatible = "zmk,behavior-tap-dance"');
+      expect(result.keymap).toContain("#binding-cells = <0>");
+      expect(result.keymap).toContain("tapping-term-ms = <200>");
+      expect(result.keymap).toContain("bindings = <&kp LA(SPACE)>, <&kp LG(TAB)>;");
+    }
+  });
+
+  it("generates &name for tap-dance behavior", () => {
+    const key: Key = { tap: { type: "tap_dance", name: "td_launcher_prevapp" }, hold: null };
+    expect(behaviorToString(key)).toBe("&td_launcher_prevapp");
+  });
+
+  it("generates &lt_td_name for tap-dance tap with mo hold", () => {
+    const key: Key = {
+      tap: { type: "tap_dance", name: "td_launcher_prevapp" },
+      hold: { type: "mo", layerIndex: 15 },
+    };
+    expect(behaviorToString(key)).toBe("&lt_td_launcher_prevapp 15 0");
+  });
+
   it("emits combos section", () => {
     const config: KeyboardConfig = {
       ...makeConfig([makeLayer("Base")]),
