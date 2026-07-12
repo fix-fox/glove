@@ -347,7 +347,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &kp COLON  &kp ESC  &trans  &kp CARET  &kp AMPS  &kp STAR  &kp PIPE  &trans  &trans
-                &trans  &kp BSLH  &kp EQUAL  &hml LGUI MINUS  &kp UNDER  &kp GRAVE  &kp SQT  &kp DOUBLE_QUOTES  &hmr RGUI PLUS  &kp TILDE  &kp FSLH  &trans
+                &trans  &hml LCTRL BSLH  &kp EQUAL  &hml LGUI MINUS  &kp UNDER  &kp GRAVE  &kp SQT  &kp DOUBLE_QUOTES  &hmr RGUI PLUS  &kp TILDE  &hmr RCTRL FSLH  &trans
                 &trans  &kp LESS_THAN  &kp LEFT_BRACE  &kp LBKT  &kp LEFT_PARENTHESIS  &kp SEMI  &trans  &trans  &trans  &trans  &trans  &trans  &kp COLON  &kp RIGHT_PARENTHESIS  &kp RBKT  &kp RIGHT_BRACE  &kp GREATER_THAN  &trans
                 &trans  &trans  &trans  &trans  &trans  &kp BSPC  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;

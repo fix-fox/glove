@@ -2949,8 +2949,10 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "BSLH"
+            "type": "hold_tap",
+            "name": "hml",
+            "param1": "LCTRL",
+            "param2": "BSLH"
           },
           "hold": null
         },
@@ -3016,8 +3018,10 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "FSLH"
+            "type": "hold_tap",
+            "name": "hmr",
+            "param1": "RCTRL",
+            "param2": "FSLH"
           },
           "hold": null
         },
