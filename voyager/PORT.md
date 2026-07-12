@@ -2,14 +2,15 @@
 
 A port of the Glove80 layout (`config.json`) to a ZSA Voyager Oryx layout, built
 to evaluate whether the Voyager can cover the current key functionality.
-Generated and pushed by `scripts/voyager-oryx/push_layout.py`.
+Generated and pushed by `voyager/push_layout.py`. The buy/don't-buy
+analysis is in `EVALUATION.md`.
 
 **Layout:** https://configure.zsa.io/voyager/layouts/OwJw3/latest/0
 
 - Anyone with the link can view it. It is compiled (firmware v25) and read-only.
 - To tweak it: click **Modify layout** on that page (or sign in to a ZSA account
   first so the fork lands in your account and persists there).
-- To regenerate from scratch: `python3 scripts/voyager-oryx/push_layout.py --fork`
+- To regenerate from scratch: `python3 voyager/push_layout.py --fork`
   (prints a fresh layout URL; edit the `LAYERS` table in the script first).
   Compile **last** — compiling freezes the revision; API edits then return
   `Unauthorized` and you must fork again.

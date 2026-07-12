@@ -5,11 +5,11 @@ Uses Oryx's GraphQL API (the same one its web UI calls). Anonymous layouts
 need no auth; anyone with the layout hashId can edit them.
 
 Usage:
-  python3 scripts/voyager-oryx/push_layout.py <layout-hashId>
-  python3 scripts/voyager-oryx/push_layout.py --fork   # fork default Voyager layout first
+  python3 voyager/push_layout.py <layout-hashId>
+  python3 voyager/push_layout.py --fork   # fork default Voyager layout first
 
 The layer/key mapping and all Glove80->Voyager judgment calls live in
-docs/VOYAGER_ORYX.md.
+voyager/PORT.md.
 
 Voyager key indices:
   LEFT:  0  1  2  3  4  5      RIGHT: 26 27 28 29 30 31
