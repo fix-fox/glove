@@ -43,7 +43,8 @@ On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)
 | `LG(LS(N5))` (Cmd+Shift+5) | `PSCRN` | default layer (key 72 tap, via `shot_ht`) |
 | `LG(LS(N4))` (Cmd+Shift+4) | (no Win equivalent; drop the hold) | default layer (key 72 **hold**, via `shot_ht`) |
 | `LG(LS(N5))` (Cmd+Shift+5) | `PRINTSCREEN` | system layer |
-| `LA(SPACE)` (launcher) | `LC(SPACE)` (Ctrl+Space launcher) | default layer `&lt 15` thumb |
+| `LA(SPACE)` (launcher) | `LC(SPACE)` (Ctrl+Space launcher) | default layer thumb (key 73, tap 1 of `td_launcher_prevapp`) |
+| `LG(TAB)` (Cmd+Tab prev app) | `LA(TAB)` (Alt+Tab) | default layer thumb (key 73, tap 2 of `td_launcher_prevapp`) |
 
 ### Macros (reverse)
 

@@ -551,8 +551,8 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "LA(SPACE)"
+            "type": "tap_dance",
+            "name": "td_launcher_prevapp"
           },
           "hold": {
             "type": "mo",
@@ -9952,6 +9952,16 @@
       "tappingTermMs": 250,
       "holdBinding": "&kp",
       "tapBinding": "&kp"
+    },
+    {
+      "id": "0c06d88c-6366-4bd1-98b6-6985a965ed6f",
+      "name": "lt_td_launcher_prevapp",
+      "flavor": "balanced",
+      "tappingTermMs": 200,
+      "quickTapMs": 175,
+      "requirePriorIdleMs": 0,
+      "holdBinding": "&mo",
+      "tapBinding": "&td_launcher_prevapp"
     }
   ],
   "combos": [
@@ -10031,5 +10041,17 @@
   "mouseSettings": {
     "normalSpeed": 900,
     "precisionSpeed": 300
-  }
+  },
+  "tapDances": [
+    {
+      "id": "0f391a0c-c130-4ed2-b535-e3a089602251",
+      "name": "td_launcher_prevapp",
+      "label": "TD_LAUNCHER_PREVAPP",
+      "tappingTermMs": 200,
+      "bindings": [
+        "&kp LA(SPACE)",
+        "&kp LG(TAB)"
+      ]
+    }
+  ]
 }

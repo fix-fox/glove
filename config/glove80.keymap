@@ -166,6 +166,13 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        td_launcher_prevapp: td_launcher_prevapp {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LA(SPACE)>, <&kp LG(TAB)>;
+        };
+
         magic: magic {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -240,6 +247,15 @@
             tapping-term-ms = <250>;
             bindings = <&kp>, <&kp>;
         };
+
+        lt_td_launcher_prevapp: lt_td_launcher_prevapp {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            bindings = <&mo>, <&td_launcher_prevapp>;
+        };
     };
 
     combos {
@@ -294,7 +310,7 @@
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LC(LG(SPACE))  &none
                 &none  &hml LCTRL A  &hml LALT R  &hml LGUI S  &hml LSHIFT T  &kp G  &kp M  &hmr RSHIFT N  &hmr RGUI E  &hmr RALT I  &hmr RCTRL O  &none
                 &none  &kp Z  &kp X  &kp C  &lt 10 D  &kp V  &lt 4 TAB  &lt 7 ESCAPE  &shift_caps LSHIFT 0  &shift_caps LSHIFT 0  &none  &lt 8 TAB  &kp K  &lt 10 H  &kp COMMA  &kp DOT  &kp FSLH  &none
-                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 16  &shot_ht LG(LS(N4)) LG(LS(N5))  &lt 15 LA(SPACE)  &lt 5 SPACE  &dict_enter 0 ENTER  &none  &kp ESC  &kp TILDE  &magic 1 0
+                &magic 1 0  &kp GRAVE  &kp ESC  &kp SPACE  &kp ENTER  &lt_mm_bspc_shift_del 14 0  &lt 8 DEL  &mo 16  &shot_ht LG(LS(N4)) LG(LS(N5))  &lt_td_launcher_prevapp 15 0  &lt 5 SPACE  &dict_enter 0 ENTER  &none  &kp ESC  &kp TILDE  &magic 1 0
             >;
         };
 
