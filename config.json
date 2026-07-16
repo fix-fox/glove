@@ -5488,8 +5488,8 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "flow_bookmark"
+            "type": "kp",
+            "keyCode": "LC(LS(LG(B)))"
           },
           "hold": null
         },
@@ -8042,8 +8042,8 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "flow_bookmark"
+            "type": "kp",
+            "keyCode": "LC(LS(LG(B)))"
           },
           "hold": null
         },
