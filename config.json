@@ -2444,7 +2444,8 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "kp",
+            "keyCode": "LCTRL"
           },
           "hold": null
         },
@@ -2458,7 +2459,7 @@
         {
           "tap": {
             "type": "kp",
-            "keyCode": "LCTRL"
+            "keyCode": "LEFT_GUI"
           },
           "hold": null
         },
