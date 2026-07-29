@@ -5476,7 +5476,8 @@
         },
         {
           "tap": {
-            "type": "trans"
+            "type": "macro",
+            "macroName": "vg_enter"
           },
           "hold": null
         },
@@ -5562,8 +5563,7 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "claude_copy_vim"
+            "type": "trans"
           },
           "hold": null
         },
@@ -9511,6 +9511,21 @@
         {
           "directive": "tap",
           "bindings": [
+            "&kp RET"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9f0234d5-cb73-435d-8cf3-224fdac3af19",
+      "name": "vg_enter",
+      "label": "vg",
+      "steps": [
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp V",
+            "&kp G",
             "&kp RET"
           ]
         }
