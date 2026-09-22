@@ -15,10 +15,10 @@
 
 / {
     macros {
-        ctrl_b: ctrl_b {
+        ctrl_a: ctrl_a {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
-            bindings = <&macro_tap &kp LC(B)>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
+            bindings = <&macro_tap &kp LC(A)>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
         };
 
         rgb_ug_status_macro: rgb_ug_status_macro {
@@ -502,14 +502,14 @@
             >;
         };
 
-        ctrl_b {
+        ctrl_a {
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &ctrl_b N1  &ctrl_b N2  &ctrl_b N3  &ctrl_b N4  &ctrl_b N5  &ctrl_b N6  &ctrl_b N7  &ctrl_b N8  &ctrl_b N9  &ctrl_b N0  &trans
-                &trans  &ctrl_b Q  &ctrl_b W  &ctrl_b F  &ctrl_b P  &ctrl_b B  &ctrl_b J  &ctrl_b L  &ctrl_b U  &ctrl_b Y  &ctrl_b SEMI  &trans
-                &trans  &ctrl_b A  &ctrl_b R  &ctrl_b S  &ctrl_b T  &ctrl_b G  &ctrl_b M  &ctrl_b N  &ctrl_b E  &ctrl_b I  &ctrl_b O  &trans
-                &trans  &ctrl_b Z  &ctrl_b X  &ctrl_b C  &ctrl_b D  &ctrl_b V  &ctrl_b TAB  &ctrl_b ESCAPE  &kp LSHIFT  &kp LSHIFT  &trans  &ctrl_b TAB  &ctrl_b K  &ctrl_b H  &ctrl_b COMMA  &ctrl_b DOT  &ctrl_b FSLH  &trans
-                &trans  &ctrl_b GRAVE  &ctrl_b ESC  &ctrl_b SPACE  &ctrl_b ENTER  &ctrl_b BSPC  &ctrl_b DEL  &trans  &trans  &trans  &ctrl_b SPACE  &ctrl_b ENTER  &trans  &ctrl_b ESC  &ctrl_b TILDE  &trans
+                &trans  &ctrl_a N1  &ctrl_a N2  &ctrl_a N3  &ctrl_a N4  &ctrl_a N5  &ctrl_a N6  &ctrl_a N7  &ctrl_a N8  &ctrl_a N9  &ctrl_a N0  &trans
+                &trans  &ctrl_a Q  &ctrl_a W  &ctrl_a F  &ctrl_a P  &ctrl_a B  &ctrl_a J  &ctrl_a L  &ctrl_a U  &ctrl_a Y  &ctrl_a SEMI  &trans
+                &trans  &ctrl_a A  &ctrl_a R  &ctrl_a S  &ctrl_a T  &ctrl_a G  &ctrl_a M  &ctrl_a N  &ctrl_a E  &ctrl_a I  &ctrl_a O  &trans
+                &trans  &ctrl_a Z  &ctrl_a X  &ctrl_a C  &ctrl_a D  &ctrl_a V  &ctrl_a TAB  &ctrl_a ESCAPE  &kp LSHIFT  &kp LSHIFT  &trans  &ctrl_a TAB  &ctrl_a K  &ctrl_a H  &ctrl_a COMMA  &ctrl_a DOT  &ctrl_a FSLH  &trans
+                &trans  &ctrl_a GRAVE  &ctrl_a ESC  &ctrl_a SPACE  &ctrl_a ENTER  &ctrl_a BSPC  &ctrl_a DEL  &trans  &trans  &trans  &ctrl_a SPACE  &ctrl_a ENTER  &trans  &ctrl_a ESC  &ctrl_a TILDE  &trans
             >;
         };
     };

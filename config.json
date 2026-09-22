@@ -9146,7 +9146,7 @@
     },
     {
       "id": "922bd0c9-5134-4700-bdd1-57044eede11d",
-      "name": "ctrl+b",
+      "name": "ctrl+a",
       "keys": [
         {
           "tap": {
@@ -9217,7 +9217,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N1"
           },
           "hold": null
@@ -9225,7 +9225,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N2"
           },
           "hold": null
@@ -9233,7 +9233,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N3"
           },
           "hold": null
@@ -9241,7 +9241,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N4"
           },
           "hold": null
@@ -9249,7 +9249,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N5"
           },
           "hold": null
@@ -9257,7 +9257,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N6"
           },
           "hold": null
@@ -9265,7 +9265,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N7"
           },
           "hold": null
@@ -9273,7 +9273,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N8"
           },
           "hold": null
@@ -9281,7 +9281,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N9"
           },
           "hold": null
@@ -9289,7 +9289,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N0"
           },
           "hold": null
@@ -9309,7 +9309,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "Q"
           },
           "hold": null
@@ -9317,7 +9317,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "W"
           },
           "hold": null
@@ -9325,7 +9325,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "F"
           },
           "hold": null
@@ -9333,7 +9333,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "P"
           },
           "hold": null
@@ -9341,7 +9341,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "B"
           },
           "hold": null
@@ -9349,7 +9349,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "J"
           },
           "hold": null
@@ -9357,7 +9357,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "L"
           },
           "hold": null
@@ -9365,7 +9365,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "U"
           },
           "hold": null
@@ -9373,7 +9373,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "Y"
           },
           "hold": null
@@ -9381,7 +9381,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "SEMI"
           },
           "hold": null
@@ -9401,7 +9401,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "A"
           },
           "hold": null
@@ -9409,7 +9409,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "R"
           },
           "hold": null
@@ -9417,7 +9417,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "S"
           },
           "hold": null
@@ -9425,7 +9425,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "T"
           },
           "hold": null
@@ -9433,7 +9433,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "G"
           },
           "hold": null
@@ -9441,7 +9441,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "M"
           },
           "hold": null
@@ -9449,7 +9449,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "N"
           },
           "hold": null
@@ -9457,7 +9457,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "E"
           },
           "hold": null
@@ -9465,7 +9465,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "I"
           },
           "hold": null
@@ -9473,7 +9473,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "O"
           },
           "hold": null
@@ -9493,7 +9493,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "Z"
           },
           "hold": null
@@ -9501,7 +9501,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "X"
           },
           "hold": null
@@ -9509,7 +9509,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "C"
           },
           "hold": null
@@ -9517,7 +9517,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "D"
           },
           "hold": null
@@ -9525,7 +9525,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "V"
           },
           "hold": null
@@ -9533,7 +9533,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "TAB"
           },
           "hold": null
@@ -9541,7 +9541,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "ESCAPE"
           },
           "hold": null
@@ -9569,7 +9569,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "TAB"
           },
           "hold": null
@@ -9577,7 +9577,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "K"
           },
           "hold": null
@@ -9585,7 +9585,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "H"
           },
           "hold": null
@@ -9593,7 +9593,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "COMMA"
           },
           "hold": null
@@ -9601,7 +9601,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "DOT"
           },
           "hold": null
@@ -9609,7 +9609,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "FSLH"
           },
           "hold": null
@@ -9629,7 +9629,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "GRAVE"
           },
           "hold": null
@@ -9637,7 +9637,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "ESC"
           },
           "hold": null
@@ -9645,7 +9645,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "SPACE"
           },
           "hold": null
@@ -9653,7 +9653,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "ENTER"
           },
           "hold": null
@@ -9661,7 +9661,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "BSPC"
           },
           "hold": null
@@ -9669,7 +9669,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "DEL"
           },
           "hold": null
@@ -9695,7 +9695,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "SPACE"
           },
           "hold": null
@@ -9703,7 +9703,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "ENTER"
           },
           "hold": null
@@ -9717,7 +9717,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "ESC"
           },
           "hold": null
@@ -9725,7 +9725,7 @@
         {
           "tap": {
             "type": "macro",
-            "macroName": "ctrl_b",
+            "macroName": "ctrl_a",
             "param": "TILDE"
           },
           "hold": null
@@ -9742,14 +9742,14 @@
   "macros": [
     {
       "id": "561d5845-ff0c-40ad-8434-032d2a4bbb75",
-      "name": "ctrl_b",
-      "label": "Ctrl+B",
+      "name": "ctrl_a",
+      "label": "Ctrl+A",
       "bindingCells": 1,
       "steps": [
         {
           "directive": "tap",
           "bindings": [
-            "&kp LC(B)"
+            "&kp LC(A)"
           ]
         },
         {
