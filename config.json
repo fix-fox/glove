@@ -9146,7 +9146,7 @@
     },
     {
       "id": "922bd0c9-5134-4700-bdd1-57044eede11d",
-      "name": "ctrl+a",
+      "name": "tmux",
       "keys": [
         {
           "tap": {

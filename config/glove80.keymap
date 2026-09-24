@@ -502,7 +502,7 @@
             >;
         };
 
-        ctrl_a {
+        tmux {
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &ctrl_a N1  &ctrl_a N2  &ctrl_a N3  &ctrl_a N4  &ctrl_a N5  &ctrl_a N6  &ctrl_a N7  &ctrl_a N8  &ctrl_a N9  &ctrl_a N0  &trans
