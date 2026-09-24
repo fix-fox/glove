@@ -18,7 +18,7 @@
         ctrl_a: ctrl_a {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
-            bindings = <&macro_tap &kp LC(A)>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
+            bindings = <&macro_tap &tmux_prefix>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
         };
 
         rgb_ug_status_macro: rgb_ug_status_macro {
@@ -178,6 +178,13 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        tmux_prefix: tmux_prefix {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp LC(A)>, <&kp LC(A)>;
+            mods = <(MOD_LSFT|MOD_RSFT|MOD_LALT|MOD_RALT|MOD_LCTL|MOD_RCTL|MOD_LGUI|MOD_RGUI)>;
+        };
+
         td_launcher_prevapp: td_launcher_prevapp {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
@@ -267,6 +274,30 @@
             tapping-term-ms = <200>;
             quick-tap-ms = <175>;
             bindings = <&mo>, <&td_launcher_prevapp>;
+        };
+
+        hml_ctrl_a: hml_ctrl_a {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <0>;
+            require-prior-idle-ms = <100>;
+            bindings = <&mod_activate>, <&ctrl_a>;
+            hold-trigger-key-positions = <5 6 7 8 9 16 17 18 19 20 21 28 29 30 31 32 33 40 41 42 43 44 45 58 59 60 61 62 63 75 76 77 78 79 72 73 74 55 56 57 52 69>;
+            hold-trigger-on-release;
+        };
+
+        hmr_ctrl_a: hmr_ctrl_a {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <0>;
+            require-prior-idle-ms = <100>;
+            bindings = <&mod_activate>, <&ctrl_a>;
+            hold-trigger-key-positions = <4 3 2 1 0 15 14 13 12 11 10 27 26 25 24 23 22 39 38 37 36 35 34 51 50 49 48 47 46 68 67 66 65 64 71 70 69 54 53 52 57 74>;
+            hold-trigger-on-release;
         };
     };
 
@@ -508,7 +539,7 @@
                 &trans  &ctrl_a N1  &ctrl_a N2  &ctrl_a N3  &ctrl_a N4  &ctrl_a N5  &ctrl_a N6  &ctrl_a N7  &ctrl_a N8  &ctrl_a N9  &ctrl_a N0  &trans
                 &trans  &ctrl_a Q  &ctrl_a W  &ctrl_a F  &ctrl_a P  &ctrl_a B  &ctrl_a J  &ctrl_a L  &ctrl_a U  &ctrl_a Y  &ctrl_a SEMI  &trans
                 &trans  &ctrl_a A  &ctrl_a R  &ctrl_a S  &ctrl_a T  &ctrl_a G  &ctrl_a M  &ctrl_a N  &ctrl_a E  &ctrl_a I  &ctrl_a O  &trans
-                &trans  &ctrl_a Z  &ctrl_a X  &ctrl_a C  &ctrl_a D  &ctrl_a V  &ctrl_a TAB  &ctrl_a ESCAPE  &kp LSHIFT  &kp LSHIFT  &trans  &ctrl_a TAB  &ctrl_a K  &ctrl_a H  &ctrl_a COMMA  &ctrl_a DOT  &ctrl_a FSLH  &trans
+                &trans  &hml_ctrl_a LCTRL Z  &hml_ctrl_a LALT X  &ctrl_a C  &hml_ctrl_a LSHIFT D  &ctrl_a V  &ctrl_a TAB  &ctrl_a ESCAPE  &kp LSHIFT  &kp LSHIFT  &trans  &ctrl_a TAB  &ctrl_a K  &hmr_ctrl_a RSHIFT H  &ctrl_a COMMA  &hmr_ctrl_a RALT DOT  &hmr_ctrl_a RCTRL FSLH  &trans
                 &trans  &ctrl_a GRAVE  &ctrl_a ESC  &ctrl_a SPACE  &ctrl_a ENTER  &ctrl_a BSPC  &ctrl_a DEL  &trans  &trans  &trans  &ctrl_a SPACE  &ctrl_a ENTER  &trans  &ctrl_a ESC  &ctrl_a TILDE  &trans
             >;
         };

@@ -26,6 +26,11 @@ Swap back on every HRM `hold_tap` `param1` (all layers): `LCTRL→LGUI`, `LGUI�
 `RCTRL→RGUI`, `RGUI→RCTRL`. Net result: pinky=GUI, ring=Alt, middle=Ctrl, index=Shift.
 (`LA(LGUI)`/`RA(RGUI)` inner combos are left as-is — they were never swapped.)
 
+Keep `hml_ctrl_a` and `hmr_ctrl_a` on the `tmux` layer unchanged: their Ctrl, Alt,
+and Shift holds are terminal modifiers on every OS. The `tmux_prefix`
+[mod-morph](https://zmk.dev/docs/keymaps/behaviors/mod-morph#advanced-configuration)
+masks held modifiers only during Ctrl+A, restoring them for the command key.
+
 ### Shortcut keycodes: Mac Cmd → Windows Ctrl
 
 On the `cursor` and `mouse` layers, convert `LG(x)` shortcut taps back to `LC(x)`

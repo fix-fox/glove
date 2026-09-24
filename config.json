@@ -9492,17 +9492,19 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "ctrl_a",
-            "param": "Z"
+            "type": "hold_tap",
+            "name": "hml_ctrl_a",
+            "param1": "LCTRL",
+            "param2": "Z"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "ctrl_a",
-            "param": "X"
+            "type": "hold_tap",
+            "name": "hml_ctrl_a",
+            "param1": "LALT",
+            "param2": "X"
           },
           "hold": null
         },
@@ -9516,9 +9518,10 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "ctrl_a",
-            "param": "D"
+            "type": "hold_tap",
+            "name": "hml_ctrl_a",
+            "param1": "LSHIFT",
+            "param2": "D"
           },
           "hold": null
         },
@@ -9584,9 +9587,10 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "ctrl_a",
-            "param": "H"
+            "type": "hold_tap",
+            "name": "hmr_ctrl_a",
+            "param1": "RSHIFT",
+            "param2": "H"
           },
           "hold": null
         },
@@ -9600,17 +9604,19 @@
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "ctrl_a",
-            "param": "DOT"
+            "type": "hold_tap",
+            "name": "hmr_ctrl_a",
+            "param1": "RALT",
+            "param2": "DOT"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "macro",
-            "macroName": "ctrl_a",
-            "param": "FSLH"
+            "type": "hold_tap",
+            "name": "hmr_ctrl_a",
+            "param1": "RCTRL",
+            "param2": "FSLH"
           },
           "hold": null
         },
@@ -9749,7 +9755,7 @@
         {
           "directive": "tap",
           "bindings": [
-            "&kp LC(A)"
+            "&tmux_prefix"
           ]
         },
         {
@@ -10226,7 +10232,7 @@
     {
       "id": "30c2864b-4a20-444d-ba10-73437df5fd29",
       "name": "v_space_ctrl_t",
-      "label": "v ⌃T",
+      "label": "v \u2303T",
       "steps": [
         {
           "directive": "tap",
@@ -10418,6 +10424,22 @@
         "MOD_LSFT",
         "MOD_RSFT"
       ]
+    },
+    {
+      "id": "d58b361d-18d5-449d-a61c-3b02b18a6b3b",
+      "name": "tmux_prefix",
+      "defaultBinding": "&kp LC(A)",
+      "morphBinding": "&kp LC(A)",
+      "mods": [
+        "MOD_LSFT",
+        "MOD_RSFT",
+        "MOD_LALT",
+        "MOD_RALT",
+        "MOD_LCTL",
+        "MOD_RCTL",
+        "MOD_LGUI",
+        "MOD_RGUI"
+      ]
     }
   ],
   "holdTaps": [
@@ -10607,6 +10629,116 @@
       "requirePriorIdleMs": 0,
       "holdBinding": "&mo",
       "tapBinding": "&td_launcher_prevapp"
+    },
+    {
+      "id": "ae00ab83-e571-4d5f-83df-bd09980952f1",
+      "name": "hml_ctrl_a",
+      "flavor": "balanced",
+      "tappingTermMs": 280,
+      "quickTapMs": 0,
+      "requirePriorIdleMs": 100,
+      "holdBinding": "&mod_activate",
+      "tapBinding": "&ctrl_a",
+      "holdTriggerKeyPositions": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        75,
+        76,
+        77,
+        78,
+        79,
+        72,
+        73,
+        74,
+        55,
+        56,
+        57,
+        52,
+        69
+      ],
+      "holdTriggerOnRelease": true
+    },
+    {
+      "id": "4e3d6c10-4d35-494c-8aa3-e1246b2d003d",
+      "name": "hmr_ctrl_a",
+      "flavor": "balanced",
+      "tappingTermMs": 280,
+      "quickTapMs": 0,
+      "requirePriorIdleMs": 100,
+      "holdBinding": "&mod_activate",
+      "tapBinding": "&ctrl_a",
+      "holdTriggerKeyPositions": [
+        4,
+        3,
+        2,
+        1,
+        0,
+        15,
+        14,
+        13,
+        12,
+        11,
+        10,
+        27,
+        26,
+        25,
+        24,
+        23,
+        22,
+        39,
+        38,
+        37,
+        36,
+        35,
+        34,
+        51,
+        50,
+        49,
+        48,
+        47,
+        46,
+        68,
+        67,
+        66,
+        65,
+        64,
+        71,
+        70,
+        69,
+        54,
+        53,
+        52,
+        57,
+        74
+      ],
+      "holdTriggerOnRelease": true
     }
   ],
   "combos": [
