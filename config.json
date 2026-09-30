@@ -10092,7 +10092,7 @@
     {
       "id": "ed30db9c-0932-4eb0-87d7-74b318139746",
       "name": "vim_q",
-      "label": ":q",
+      "label": ":qa",
       "steps": [
         {
           "directive": "tap",
@@ -10110,6 +10110,12 @@
           "directive": "tap",
           "bindings": [
             "&kp Q"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp A"
           ]
         },
         {
