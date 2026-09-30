@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 FULL=false
 MODE="local"  # default to local Docker build
+NOTIFICATION_PID=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -21,6 +22,32 @@ done
 
 LH_VOL="/Volumes/GLV80LHBOOT"
 RH_VOL="/Volumes/GLV80RHBOOT"
+
+# Stop the pending bootloader alert when the device appears or flashing exits.
+clear_bootloader_notification() {
+    if [ -n "$NOTIFICATION_PID" ]; then
+        kill "$NOTIFICATION_PID" 2>/dev/null || true
+        wait "$NOTIFICATION_PID" 2>/dev/null || true
+        NOTIFICATION_PID=""
+    fi
+}
+
+# Alerter uses persistent alerts; install with brew install vjeantet/tap/alerter.
+# https://github.com/vjeantet/alerter documents --timeout 0 and signal dismissal.
+notify_bootloader() {
+    local message=$1
+    clear_bootloader_notification
+    if [ "$(uname -s)" != "Darwin" ]; then
+        return 0
+    fi
+    if ! command -v alerter >/dev/null 2>&1; then
+        echo "Warning: Sticky bootloader alerts need Alerter: brew install vjeantet/tap/alerter" >&2
+        return 0
+    fi
+    alerter --title "Glove80 ready to flash" --message "$message" \
+        --timeout 0 --sound default --group "glove-flash-$$" >/dev/null &
+    NOTIFICATION_PID=$!
+}
 
 wait_for_device() {
     local vol=$1
@@ -37,6 +64,7 @@ wait_for_device() {
         printf "\r  Waiting... %ds" $elapsed
     done
     echo ""
+    clear_bootloader_notification
 }
 
 # Copy firmware to a bootloader volume, fail loudly, and verify it landed.
@@ -99,7 +127,10 @@ npm run generate-firmware --silent
 # $HOME by default. A /tmp or /var/folders mktemp dir (the system default) is
 # not shared into the VM, so the built .uf2 would never reach the host.
 TEMP_DIR=$(mktemp -d "${HOME}/.glove-flash.XXXXXX")
-cleanup() { rm -rf "$TEMP_DIR"; }
+cleanup() {
+    clear_bootloader_notification
+    rm -rf "$TEMP_DIR"
+}
 trap cleanup EXIT
 
 if [ "$MODE" = "local" ]; then
@@ -230,6 +261,7 @@ if $FULL; then
     echo ""
     echo "Waiting for bootloader volume at $RH_VOL ..."
 
+    notify_bootloader "Put the RIGHT half in bootloader mode. Hold C3R3 + C6R6 while powering it on with USB connected."
     wait_for_device "$RH_VOL" 120
 
     echo "Device detected! Copying right-hand firmware..."
@@ -253,6 +285,7 @@ if $FULL; then
     echo ""
     echo "Waiting for bootloader volume at $LH_VOL ..."
 
+    notify_bootloader "Put the LEFT half in bootloader mode. Hold C6R6 + C3R3 while powering it on with USB connected."
     wait_for_device "$LH_VOL" 120
 
     echo "Device detected! Copying left-hand firmware..."
@@ -299,6 +332,7 @@ else
     echo ""
     echo "Waiting for bootloader volume at $LH_VOL ..."
 
+    notify_bootloader "Put the LEFT half in bootloader mode: hold the bottom-left Magic key, tap the top-left key, then release both."
     wait_for_device "$LH_VOL" 60
 
     echo "Device detected! Copying firmware..."
