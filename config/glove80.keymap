@@ -104,7 +104,7 @@
         vim_x: vim_x {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp X>, <&macro_tap &kp RET>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp X>, <&macro_tap &kp A>, <&macro_tap &kp RET>;
         };
 
         vg_enter: vg_enter {

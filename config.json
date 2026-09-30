@@ -10129,7 +10129,7 @@
     {
       "id": "9abae799-788b-4890-9f9d-39af2b715121",
       "name": "vim_x",
-      "label": ":x",
+      "label": ":xa",
       "steps": [
         {
           "directive": "tap",
@@ -10147,6 +10147,12 @@
           "directive": "tap",
           "bindings": [
             "&kp X"
+          ]
+        },
+        {
+          "directive": "tap",
+          "bindings": [
+            "&kp A"
           ]
         },
         {
