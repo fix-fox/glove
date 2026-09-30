@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 FULL=false
 MODE="local"  # default to local Docker build
-NOTIFICATION_PID=""
+NOTIFICATION_ID=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -23,30 +23,44 @@ done
 LH_VOL="/Volumes/GLV80LHBOOT"
 RH_VOL="/Volumes/GLV80RHBOOT"
 
-# Stop the pending bootloader alert when the device appears or flashing exits.
+# Withdraw only this flash run's notification when its device appears or it exits.
 clear_bootloader_notification() {
-    if [ -n "$NOTIFICATION_PID" ]; then
-        kill "$NOTIFICATION_PID" 2>/dev/null || true
-        wait "$NOTIFICATION_PID" 2>/dev/null || true
-        NOTIFICATION_PID=""
+    if [ -n "$NOTIFICATION_ID" ]; then
+        hs -A -q -t 5 "$SCRIPT_DIR/glove-notify.lua" clear "$NOTIFICATION_ID" >/dev/null 2>&1 || true
+        NOTIFICATION_ID=""
     fi
 }
 
-# Alerter uses persistent alerts; install with brew install vjeantet/tap/alerter.
-# https://github.com/vjeantet/alerter documents --timeout 0 and signal dismissal.
+# Hammerspoon is a registered macOS app; withdrawAfter=0 keeps its alert persistent.
+# https://www.hammerspoon.org/docs/hs.notify.html#withdrawAfter
 notify_bootloader() {
-    local message=$1
+    local message=$1 result attempt
     clear_bootloader_notification
     if [ "$(uname -s)" != "Darwin" ]; then
         return 0
     fi
-    if ! command -v alerter >/dev/null 2>&1; then
-        echo "Warning: Sticky bootloader alerts need Alerter: brew install vjeantet/tap/alerter" >&2
-        return 0
+    if ! command -v hs >/dev/null 2>&1; then
+        echo "Error: Bootloader notifications need Hammerspoon and its hs CLI." >&2
+        return 1
     fi
-    alerter --title "Glove80 ready to flash" --message "$message" \
-        --timeout 0 --sound default --group "glove-flash-$$" >/dev/null &
-    NOTIFICATION_PID=$!
+    NOTIFICATION_ID="glove-flash-$$"
+    if ! result=$(hs -A -q -t 5 "$SCRIPT_DIR/glove-notify.lua" show "$NOTIFICATION_ID" "$message"); then
+        echo "Error: Could not send the bootloader notification: $result" >&2
+        return 1
+    fi
+    if [ "$result" != "sent" ]; then
+        echo "Error: Could not send the bootloader notification: $result" >&2
+        return 1
+    fi
+    for attempt in 1 2 3; do
+        sleep 1
+        if result=$(hs -A -q -t 5 "$SCRIPT_DIR/glove-notify.lua" status "$NOTIFICATION_ID") && [ "$result" = "delivered" ]; then
+            return 0
+        fi
+    done
+    echo "Error: macOS did not acknowledge delivery of the bootloader notification." >&2
+    echo "Enable Hammerspoon notifications and the persistent alert style in System Settings > Notifications > Hammerspoon, then retry." >&2
+    return 1
 }
 
 wait_for_device() {
