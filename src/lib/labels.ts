@@ -1,4 +1,4 @@
-import type { Behavior, HoldTapDefinition, ModMorphDefinition } from "../types/schema";
+import type { Behavior, HoldTapDefinition, ModMorphDefinition } from "../types/keymap";
 import { ZMK_KEYCODES, isModifiedKeyCode, parseModifiedKeyCode } from "./keycodes";
 import { unpackModMorphChain } from "./mod-morph-utils";
 import { hebrewLabel } from "./hebrew";

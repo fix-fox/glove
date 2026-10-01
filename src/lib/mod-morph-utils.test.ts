@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import type { Behavior, ModMorphDefinition } from "../types/schema";
+import type { Behavior, ModMorphDefinition } from "../types/keymap";
 import { unpackModMorphChain } from "./mod-morph-utils";
 
 function makeMM(name: string, defaultBinding: string, morphBinding: string, mods: string[]): ModMorphDefinition {
-  return { id: crypto.randomUUID(), name, defaultBinding, morphBinding, mods };
+  return { name, defaultBinding, morphBinding, mods };
 }
 
 describe("unpackModMorphChain", () => {

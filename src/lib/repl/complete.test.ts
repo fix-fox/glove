@@ -11,6 +11,12 @@ describe("complete", () => {
     expect(complete(config, "LM")[0]).toEqual([]);
   });
 
+  it("completes native config commands", () => {
+    expect(complete(config, "re")[0]).toEqual(["reload"]);
+    expect(complete(config, "ed")[0]).toEqual(["edit"]);
+    expect(complete(config, "help re")[0]).toEqual(["reload"]);
+  });
+
   it("completes layer names after `layer`", () => {
     expect(complete(config, "layer sy")[0]).toEqual(["symbols", "system"]);
     expect(complete(config, "layer ")[0]).toEqual(["default", "symbols", "system"]);

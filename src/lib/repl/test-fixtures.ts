@@ -1,4 +1,4 @@
-import type { Key, KeyboardConfig } from "../../types/schema";
+import type { Key, Keymap } from "../../types/keymap";
 
 function noneKey(): Key {
   return { tap: { type: "none" }, hold: null };
@@ -17,7 +17,7 @@ function emptyKeys(): Key[] {
  * - default layer pos 43 (RM4): kp LG(C)
  * Three layers so the prefix "sy" is ambiguous (symbols, system).
  */
-export function makeConfig(): KeyboardConfig {
+export function makeConfig(): Keymap {
   const keys = emptyKeys();
   keys[0] = { tap: { type: "trans" }, hold: null };
   keys[10] = { tap: { type: "kp", keyCode: "F5" }, hold: { type: "mo", layerIndex: 1 } };
@@ -25,16 +25,13 @@ export function makeConfig(): KeyboardConfig {
   keys[34] = { tap: { type: "hold_tap", name: "hml_lgui", param1: "LGUI", param2: "A" }, hold: null };
   keys[43] = { tap: { type: "kp", keyCode: "LG(C)" }, hold: null };
   return {
-    name: "test",
-    version: 1,
     layers: [
-      { id: "00000000-0000-0000-0000-000000000001", name: "default", keys },
-      { id: "00000000-0000-0000-0000-000000000002", name: "symbols", keys: emptyKeys() },
-      { id: "00000000-0000-0000-0000-000000000003", name: "system", keys: emptyKeys() },
+      { name: "default", keys },
+      { name: "symbols", keys: emptyKeys() },
+      { name: "system", keys: emptyKeys() },
     ],
     macros: [
       {
-        id: "00000000-0000-0000-0000-000000000004",
         name: "copy_url",
         label: "CopyURL",
         steps: [
@@ -45,7 +42,6 @@ export function makeConfig(): KeyboardConfig {
     ],
     combos: [
       {
-        id: "00000000-0000-0000-0000-000000000005",
         name: "esc_combo",
         keyPositions: [22, 23],
         binding: "&kp ESC",
@@ -53,7 +49,6 @@ export function makeConfig(): KeyboardConfig {
     ],
     modMorphs: [
       {
-        id: "00000000-0000-0000-0000-000000000006",
         name: "mm_bspc_shift_del",
         defaultBinding: "&kp BSPC",
         morphBinding: "&kp DEL",
@@ -62,7 +57,6 @@ export function makeConfig(): KeyboardConfig {
     ],
     holdTaps: [
       {
-        id: "00000000-0000-0000-0000-000000000007",
         name: "hml_lgui",
         flavor: "balanced",
         tappingTermMs: 280,
@@ -72,7 +66,6 @@ export function makeConfig(): KeyboardConfig {
     ],
     conditionalLayers: [
       {
-        id: "00000000-0000-0000-0000-000000000008",
         name: "tri_layer",
         ifLayers: [1, 2],
         thenLayer: 2,

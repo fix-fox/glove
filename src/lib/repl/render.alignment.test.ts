@@ -1,13 +1,10 @@
-import { readFileSync } from "fs";
 import { describe, it, expect, beforeAll } from "vitest";
-import { KeyboardConfigSchema } from "../../types/schema";
+import { loadKeymap } from "../keymap-loader";
 import { renderLayer } from "./render";
 import { setColorEnabled } from "./color";
 import { displayWidth, stripAnsi } from "./text-width";
 
-const config = KeyboardConfigSchema.parse(
-  JSON.parse(readFileSync("config.json", "utf-8")),
-);
+const config = loadKeymap().config;
 
 beforeAll(() => setColorEnabled(true)); // exercise the colored path; widths measured after stripAnsi
 

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { behaviorLabel, holdTapSecondaryLabel, keyCodeDisplayLabel } from "./labels";
-import type { Behavior } from "../types/schema";
+import type { Behavior } from "../types/keymap";
 
 describe("behaviorLabel", () => {
   it("kp returns resolved display label", () => {
@@ -110,14 +110,12 @@ describe("behaviorLabel", () => {
 
   it("hold_tap with mod-morph tapBinding resolves base key from definition", () => {
     const modMorphs = [{
-      id: "mm1",
       name: "mm_q_shift_qmark",
       defaultBinding: "&kp Q",
       morphBinding: "&kp QMARK",
       mods: ["MOD_LSFT", "MOD_RSFT"],
     }];
     const holdTaps = [{
-      id: "ht1",
       name: "hml_lctrl_mm_q_shift_qmark",
       flavor: "balanced" as const,
       tappingTermMs: 280,

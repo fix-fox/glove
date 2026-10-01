@@ -2,7 +2,7 @@
 // Mod-morph chain decoding
 // =============================================================================
 
-import type { Behavior, ModMorphDefinition } from "../types/schema";
+import type { Behavior, ModMorphDefinition } from "../types/keymap";
 
 export interface ModMorphEntry {
   mod: "shift" | "ctrl" | "alt" | "gui";

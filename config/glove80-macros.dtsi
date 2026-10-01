@@ -1,0 +1,171 @@
+// Native macro definitions included inside the root node.
+// https://zmk.dev/docs/keymaps/behaviors/macros
+// Label annotations only affect TUI display and search.
+    macros {
+        // @label Ctrl+A
+        ctrl_a: ctrl_a {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            bindings = <&macro_tap &tmux_prefix>, <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
+        };
+
+        // @label RGB_UG_STATUS
+        rgb_ug_status_macro: rgb_ug_status_macro {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &rgb_ug RGB_STATUS>;
+        };
+
+        // @label BT_0
+        bt_0: bt_0 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &out OUT_BLE &bt BT_SEL 0>;
+        };
+
+        // @label BT_1
+        bt_1: bt_1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &out OUT_BLE &bt BT_SEL 1>;
+        };
+
+        // @label BT_2
+        bt_2: bt_2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &out OUT_BLE &bt BT_SEL 2>;
+        };
+
+        // @label BT_3
+        bt_3: bt_3 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &out OUT_BLE &bt BT_SEL 3>;
+        };
+
+        // @label LANG_TOGGLE
+        lang_toggle: lang_toggle {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LCTRL>, <&macro_tap &kp SPACE>, <&macro_release &kp LCTRL>, <&macro_tap &tog LAYER_HEBREW>;
+        };
+
+        delete_to_bol: delete_to_bol {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp BSPC>, <&macro_release &kp LGUI>;
+        };
+
+        delete_to_eol: delete_to_eol {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LCTRL>, <&macro_tap &kp K>, <&macro_release &kp LCTRL>;
+        };
+
+        select_line: select_line {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp LEFT>, <&macro_release &kp LGUI>, <&macro_press &kp LSHFT>, <&macro_press &kp LGUI>, <&macro_tap &kp RIGHT>, <&macro_release &kp LGUI>, <&macro_release &kp LSHFT>;
+        };
+
+        // @label FLOW_BOOKMARK
+        flow_bookmark: flow_bookmark {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LALT>, <&macro_tap &kp SPACE>, <&macro_release &kp LALT>, <&macro_tap &kp B &kp SPACE>;
+        };
+
+        mod_activate: mod_activate {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            wait-ms = <0>;
+            tap-ms = <0>;
+            bindings = <&macro_press &mo LAYER_MOD_ACTIVE>, <&macro_param_1to1>, <&macro_press &kp MACRO_PLACEHOLDER>, <&macro_pause_for_release>, <&macro_param_1to1>, <&macro_release &kp MACRO_PLACEHOLDER>, <&macro_release &mo LAYER_MOD_ACTIVE>;
+        };
+
+        // @label :w
+        vim_w: vim_w {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp W>, <&macro_tap &kp RET>;
+        };
+
+        // @label :qa
+        vim_q: vim_q {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp Q>, <&macro_tap &kp A>, <&macro_tap &kp RET>;
+        };
+
+        // @label :xa
+        vim_x: vim_x {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp X>, <&macro_tap &kp A>, <&macro_tap &kp RET>;
+        };
+
+        // @label vg
+        vg_enter: vg_enter {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp V &kp G &kp RET>;
+        };
+
+        // @label CLIP_HIST
+        clipboard_history: clipboard_history {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LALT>, <&macro_press &kp LSHFT>, <&macro_tap &kp V>, <&macro_release &kp LSHFT>, <&macro_release &kp LALT>;
+        };
+
+        // @label ##
+        type_2digits: type_2digits {
+            compatible = "zmk,behavior-macro-two-param";
+            #binding-cells = <2>;
+            bindings = <&macro_param_1to1>, <&macro_tap &kp MACRO_PLACEHOLDER>, <&macro_param_2to1>, <&macro_tap &kp MACRO_PLACEHOLDER>;
+        };
+
+        // @label v ⌃T
+        v_space_ctrl_t: v_space_ctrl_t {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp V>, <&macro_tap &kp SPACE>, <&macro_press &kp LCTRL>, <&macro_tap &kp T>, <&macro_release &kp LCTRL>;
+        };
+
+        // @label DICTATION
+        dictation: dictation {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LCTRL>, <&macro_tap &kp LCTRL>;
+        };
+
+        // @label CAPS_MAC
+        caps_mac: caps_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            tap-ms = <150>;
+            bindings = <&macro_tap &kp CAPS>;
+        };
+
+        // @label COPY_URL
+        copy_url: copy_url {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &kp L>, <&macro_tap &kp C>, <&macro_release &kp LGUI>;
+        };
+
+        // @label /copy vim
+        claude_copy_vim: claude_copy_vim {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp FSLH &kp C &kp O &kp P &kp Y>, <&macro_tap &macro_wait_time 300 &kp RET &kp LC(G)>, <&macro_tap &macro_wait_time 30 &kp I &kp LG(V) &kp ESC &kp G &kp G>;
+        };
+
+        // @label :cq
+        vim_cq: vim_cq {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp ESC>, <&macro_tap &kp COLON>, <&macro_tap &kp C>, <&macro_tap &kp Q>, <&macro_tap &kp RET>;
+        };
+    };

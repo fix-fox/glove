@@ -1,11 +1,11 @@
-import type { KeyboardConfig, Layer, Behavior } from "../../types/schema";
+import type { Keymap, Layer, Behavior } from "../../types/keymap";
 import { GLOVE80_KEY_NAMES } from "../layout-map";
 import { isModifiedKeyCode, parseModifiedKeyCode, ZMK_KEYCODES } from "../keycodes";
 
 export type Result<T> = { ok: true; value: T } | { ok: false; error: string };
 
 export function resolveLayer(
-  config: KeyboardConfig,
+  config: Keymap,
   ref: string,
 ): Result<{ index: number; layer: Layer }> {
   if (/^\d+$/.test(ref)) {
@@ -170,7 +170,7 @@ function matchCode(code: string, q: FindQuery): { match: boolean; note: string |
   return { match: mods.join(",") === q.mods.join(","), note: undefined };
 }
 
-function behaviorKeyCodes(behavior: Behavior, config: KeyboardConfig): string[] {
+function behaviorKeyCodes(behavior: Behavior, config: Keymap): string[] {
   switch (behavior.type) {
     case "kp":
       return [behavior.keyCode];
@@ -186,7 +186,7 @@ function behaviorKeyCodes(behavior: Behavior, config: KeyboardConfig): string[] 
   }
 }
 
-export function findBindings(config: KeyboardConfig, q: FindQuery): FindMatch[] {
+export function findBindings(config: Keymap, q: FindQuery): FindMatch[] {
   const results: FindMatch[] = [];
 
   const add = (location: string, code: string) => {
@@ -264,7 +264,7 @@ export interface TextSearchResult {
  * labels, layer names, and ZMK keycode labels (which are then reverse-found).
  * Queries shorter than 2 chars return nothing (too noisy).
  */
-export function textSearch(config: KeyboardConfig, query: string): TextSearchResult[] {
+export function textSearch(config: Keymap, query: string): TextSearchResult[] {
   const q = query.trim().toLowerCase();
   if (q.length < 2) return [];
   const hit = (s: string | undefined): boolean =>

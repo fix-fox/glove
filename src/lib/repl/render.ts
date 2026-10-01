@@ -1,12 +1,12 @@
 import type {
-  Behavior, ComboDefinition, Key, KeyboardConfig, Layer, MacroDefinition,
-} from "../../types/schema";
+  Behavior, ComboDefinition, Key, Keymap, Layer, MacroDefinition,
+} from "../../types/keymap";
 import { GLOVE80_GRID, GLOVE80_KEY_NAMES } from "../layout-map";
 import { behaviorLabel, holdTapSecondaryLabel, keyCodeDisplayLabel } from "../labels";
 import { displayWidth, padCenter, truncateDisplay } from "./text-width";
 import { bold, cyan, dim, magenta, yellow } from "./color";
 
-export function listLayers(config: KeyboardConfig): string[] {
+export function listLayers(config: Keymap): string[] {
   return config.layers.map((layer, i) => {
     const bound = layer.keys.filter(
       (k) => k.tap.type !== "none" && k.tap.type !== "trans",
@@ -15,33 +15,33 @@ export function listLayers(config: KeyboardConfig): string[] {
   });
 }
 
-export function listMacros(config: KeyboardConfig): string[] {
+export function listMacros(config: Keymap): string[] {
   return (config.macros ?? []).map((m) => {
     const steps = `${m.steps.length} step${m.steps.length === 1 ? "" : "s"}`;
     return `${m.name} — ${steps}${m.label ? ` (${m.label})` : ""}`;
   });
 }
 
-export function listCombos(config: KeyboardConfig): string[] {
+export function listCombos(config: Keymap): string[] {
   return (config.combos ?? []).map((c) => {
     const keys = c.keyPositions.map((p) => GLOVE80_KEY_NAMES[p] ?? String(p)).join("+");
     return `${c.name}: ${keys} → ${c.binding}`;
   });
 }
 
-export function listHoldTaps(config: KeyboardConfig): string[] {
+export function listHoldTaps(config: Keymap): string[] {
   return (config.holdTaps ?? []).map(
     (h) => `${h.name}: ${h.flavor}, ${h.tappingTermMs}ms, hold ${h.holdBinding}, tap ${h.tapBinding}`,
   );
 }
 
-export function listModMorphs(config: KeyboardConfig): string[] {
+export function listModMorphs(config: Keymap): string[] {
   return (config.modMorphs ?? []).map(
     (m) => `${m.name}: ${m.defaultBinding} / ${m.mods.join("+")} → ${m.morphBinding}`,
   );
 }
 
-export function listCondLayers(config: KeyboardConfig): string[] {
+export function listCondLayers(config: Keymap): string[] {
   const name = (i: number) => config.layers[i]?.name ?? String(i);
   return (config.conditionalLayers ?? []).map(
     (c) => `${c.name}: ${c.ifLayers.map(name).join(" + ")} → ${name(c.thenLayer)}`,
@@ -75,7 +75,7 @@ function isHebrewLayer(layer: Layer): boolean {
   return layer.name.toLowerCase().includes("hebrew");
 }
 
-function cellContent(key: Key, config: KeyboardConfig, hebrewMode: boolean = false): CellContent {
+function cellContent(key: Key, config: Keymap, hebrewMode: boolean = false): CellContent {
   const names = config.layers.map((l) => l.name);
   const morphs = config.modMorphs ?? [];
   const holdTaps = config.holdTaps ?? [];
@@ -142,7 +142,7 @@ function legend(contents: CellContent[]): string {
 }
 
 export function renderLayer(
-  config: KeyboardConfig,
+  config: Keymap,
   layerIndex: number,
   opts: RenderLayerOptions = {},
 ): string {
@@ -219,7 +219,7 @@ export function macroDetail(def: MacroDefinition, indent = ""): string {
   return lines.join("\n");
 }
 
-export function comboDetail(config: KeyboardConfig, def: ComboDefinition): string {
+export function comboDetail(config: Keymap, def: ComboDefinition): string {
   const positions = def.keyPositions.map((p) => `${GLOVE80_KEY_NAMES[p] ?? p} (${p})`).join(" + ");
   const layers = def.layers?.length
     ? def.layers.map((i) => config.layers[i]?.name ?? String(i)).join(", ")
@@ -236,7 +236,7 @@ export function comboDetail(config: KeyboardConfig, def: ComboDefinition): strin
 
 export function describeBehavior(
   behavior: Behavior,
-  config: KeyboardConfig,
+  config: Keymap,
   indent = "",
   hebrewMode = false,
 ): string {
@@ -293,7 +293,7 @@ export function describeBehavior(
   }
 }
 
-export function keyDetail(config: KeyboardConfig, layerIndex: number, pos: number): string {
+export function keyDetail(config: Keymap, layerIndex: number, pos: number): string {
   const layer = config.layers[layerIndex];
   if (!layer) return `Layer ${layerIndex} not found`;
   const key = layer.keys[pos];

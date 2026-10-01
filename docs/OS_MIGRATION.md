@@ -6,10 +6,11 @@ The keymap is currently set up for **macOS** (branch `mac-migration`, see
 > **Keep this file accurate.** When you change OS-specific keyboard behavior (home-row mod order,
 > Windows/Mac shortcut keycodes, macro modifier translations), update the reverse table below.
 
-This guide is for **reverting to Windows/Linux**. The forward transform
-(`scripts/macos-migrate.mjs`) is one-directional; revert by either restoring a pre-migration
-`config.json` (git history before commit `1e95d4b`) **or** applying the reverse table by hand,
-then running `npm run generate-firmware`.
+This guide is for reverting to Windows/Linux. Apply the reverse table directly
+in `config/glove80.keymap` and `config/glove80-macros.dtsi`. Shared behavior
+settings live in `config/glove80-behaviors.dtsi` and `config/constants.h`.
+Run `npm run check-config`, then build the firmware. The former JSON migration
+script and generation step have been removed.
 
 ## The macOS-vs-Windows model (why these changes exist)
 
@@ -22,7 +23,7 @@ then running `npm run generate-firmware`.
 
 ### Home-row mods: CAGS → GACS
 
-Swap back on every HRM `hold_tap` `param1` (all layers): `LCTRL→LGUI`, `LGUI→LCTRL`,
+Swap the first argument of each `&hml` and `&hmr` binding on all layers: `LCTRL→LGUI`, `LGUI→LCTRL`,
 `RCTRL→RGUI`, `RGUI→RCTRL`. Net result: pinky=GUI, ring=Alt, middle=Ctrl, index=Shift.
 (`LA(LGUI)`/`RA(RGUI)` inner combos are left as-is — they were never swapped.)
 

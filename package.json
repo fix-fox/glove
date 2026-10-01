@@ -7,17 +7,16 @@
   },
   "scripts": {
     "test": "vitest run",
-    "generate-firmware": "tsx scripts/generate-firmware.ts",
     "repl": "node --no-deprecation --import=tsx scripts/repl.ts",
     "build-firmware": "bash scripts/zmk-docker-build.sh",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check-config": "node --no-deprecation --import=tsx scripts/validate-keymap.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tsx": "^4.21.0",
-    "zod": "^3.25.76"
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@types/node": "^25.2.3",

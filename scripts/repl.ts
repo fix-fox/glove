@@ -1,67 +1,119 @@
-// scripts/repl.ts
-import { readFileSync, writeFileSync } from "fs";
-import { spawnSync } from "child_process";
-import * as readline from "readline";
-import { KeyboardConfigSchema } from "@/types/schema";
-import { migrateConfig } from "@/lib/migrations";
-import { dispatch, type ReplState } from "@/lib/repl/dispatch";
-import { complete } from "@/lib/repl/complete";
-import { renderLayer } from "@/lib/repl/render";
-import { cyan, dim } from "@/lib/repl/color";
-import { displayWidth, padDisplay, stripAnsi, truncateDisplay } from "@/lib/repl/text-width";
+import { spawnSync } from "node:child_process";
+import * as readline from "node:readline";
+import { loadKeymap, type KeymapDocument } from "../src/lib/keymap-loader";
+import { clearKey } from "../src/lib/keymap-edit";
+import { dispatch, type ReplState } from "../src/lib/repl/dispatch";
+import { complete } from "../src/lib/repl/complete";
+import { editKeymap } from "../src/lib/repl/editor";
+import { renderLayer } from "../src/lib/repl/render";
+import { cyan, dim } from "../src/lib/repl/color";
+import { displayWidth, padDisplay, stripAnsi, truncateDisplay } from "../src/lib/repl/text-width";
 
-const config = KeyboardConfigSchema.parse(JSON.parse(readFileSync("config.json", "utf-8")));
-migrateConfig(config);
+let document: KeymapDocument;
+try {
+  document = loadKeymap();
+} catch (error) {
+  console.error(`Unable to load keymap: ${error instanceof Error ? error.message : String(error)}`);
+  process.exit(1);
+}
+let config = document.config;
 
 // The displayed layer is the context for key/rm/bare-position commands.
 const state: ReplState = { layerIndex: 0, side: "both" };
 const PROMPT = cyan("glove> ");
 
-/** Returns a one-line status for the display area / stderr. */
-function runFlash(flashArgs: string[]): string {
-  const r = spawnSync("bash", ["scripts/glove-flash.sh", ...flashArgs], { stdio: "inherit" });
-  if (r.error) return `flash spawn failed: ${r.error.message}`;
-  if (r.status !== 0) return `flash exited with code ${r.status}`;
-  return "flash done";
-}
-
-/** Execute one line: applies state/file effects, returns what to show. */
-function execute(line: string): {
+interface ExecutionResult {
   quit?: true;
   text?: string;
+  error?: true;
   flash?: string[];
+  edit?: true;
   layerShown?: true;
-} {
-  const result = dispatch(config, line, state, process.stdout.columns || undefined);
-  switch (result.kind) {
-    case "quit":
-      return { quit: true };
-    case "show-layer":
-      state.layerIndex = result.index;
-      state.side = result.side;
-      return { text: result.text, layerShown: true };
-    case "mutate":
-      writeFileSync("config.json", JSON.stringify(config, null, 2) + "\n");
-      return {
-        text: `${result.text} ${dim("(saved config.json — run `npm run generate-firmware` to rebuild)")}`,
-      };
-    case "flash":
-      return { flash: result.args };
-    case "output":
-      return { text: result.text };
+}
+
+/** Adopt a successfully loaded document and keep the displayed layer when it still exists. */
+function adopt(next: KeymapDocument): void {
+  const currentLayer = config.layers[state.layerIndex]?.name;
+  const newIndex = next.config.layers.findIndex((layer) => layer.name === currentLayer);
+  document = next;
+  config = next.config;
+  state.layerIndex = newIndex >= 0 ? newIndex : Math.min(state.layerIndex, config.layers.length - 1);
+}
+
+function failure(error: unknown): ExecutionResult {
+  return { error: true, text: error instanceof Error ? error.message : String(error) };
+}
+
+/** Execute one line, adopting file edits only after they are validated and saved. */
+function execute(line: string): ExecutionResult {
+  try {
+    const result = dispatch(config, line, state, process.stdout.columns || undefined);
+    switch (result.kind) {
+      case "quit":
+        return { quit: true };
+      case "show-layer":
+        state.layerIndex = result.index;
+        state.side = result.side;
+        return { text: result.text, layerShown: true };
+      case "clear-key": {
+        const next = clearKey(document, result.layerIndex, result.position);
+        const saved = next !== document;
+        adopt(next);
+        return { text: saved ? `${result.text} ${dim("(saved native config)")}` : result.text };
+      }
+      case "reload":
+        adopt(loadKeymap(document.path));
+        return { text: `Reloaded ${document.path}.` };
+      case "edit":
+        return { edit: true };
+      case "flash":
+        // A bad on-disk config must never reach the build or flash step.
+        adopt(loadKeymap(document.path));
+        return { flash: result.args };
+      case "output":
+        return result.error ? { text: result.text, error: true } : { text: result.text };
+    }
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+/** Run a terminal-owning command. Interactive callers suspend readline around this call. */
+function runExternal(result: ExecutionResult): ExecutionResult {
+  try {
+    if (result.flash) {
+      const child = spawnSync("bash", ["scripts/glove-flash.sh", ...result.flash], { stdio: "inherit" });
+      if (child.error) throw new Error(`Could not start flash: ${child.error.message}`);
+      if (child.signal) throw new Error(`Flash stopped by ${child.signal}.`);
+      if (child.status !== 0) throw new Error(`Flash exited with code ${child.status}.`);
+      return { text: "flash done" };
+    }
+    if (result.edit) {
+      if (!process.stdin.isTTY || !process.stdout.isTTY) {
+        throw new Error("edit requires an interactive terminal. Edit the config files directly, then run reload.");
+      }
+      editKeymap(document.path);
+      adopt(loadKeymap(document.path));
+      return { text: `Reloaded ${document.path}.` };
+    }
+    return result;
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+function printResult(result: ExecutionResult): void {
+  if (result.error) {
+    console.error(result.text);
+    process.exitCode = 1;
+  } else if (result.text) {
+    console.log(`\n${result.text}\n`);
   }
 }
 
 const args = process.argv.slice(2);
 if (args.length > 0) {
-  // One-shot mode: npm run repl -- find Cmd+C
-  const o = execute(args.join(" "));
-  if (o.flash) {
-    const status = runFlash(o.flash);
-    if (status !== "flash done") console.error(status);
-  } else if (o.text) {
-    console.log(`\n${o.text}\n`);
-  }
+  printResult(runExternal(execute(args.join(" "))));
 } else if (process.stdin.isTTY && process.stdout.isTTY) {
   interactiveLoop();
 } else {
@@ -81,7 +133,7 @@ function interactiveLoop(): void {
   let cycle: { cands: string[]; index: number; current: string } | null = null;
   let lastKeyWasTab = false;
   const HINT =
-    "Tab completes, again cycles · help for commands · Esc closes popup · rm edits config.json · quit exits";
+    "Tab completes, again cycles · help for commands · Esc closes popup · rm edits native config · quit exits";
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -227,18 +279,26 @@ function interactiveLoop(): void {
     if (overlay !== null && overlayKind === "layers" && /^\d+$/.test(line)) {
       line = `layer ${line}`;
     }
-    const o = execute(line);
+    let o = execute(line);
     if (o.quit) {
       rl.close();
       return;
     }
-    if (o.flash) {
-      process.stdout.write("\n");
-      overlay = runFlash(o.flash);
-      overlayKind = null;
-      // Scroll the build output into scrollback so the repaint doesn't erase it.
+    if (o.flash || o.edit) {
+      const wasRaw = process.stdin.isRaw;
+      rl.pause();
+      process.stdin.setRawMode(false);
+      try {
+        process.stdout.write("\x1b[2J\x1b[H");
+        o = runExternal(o);
+      } finally {
+        process.stdin.setRawMode(wasRaw);
+        rl.resume();
+      }
+      // Move child-process output into scrollback before restoring the TUI.
       process.stdout.write("\n".repeat(process.stdout.rows || 24));
-    } else if (o.layerShown) {
+    }
+    if (o.layerShown) {
       overlay = null;
       overlayKind = null;
     } else if (o.text) {
@@ -283,7 +343,7 @@ function interactiveLoop(): void {
 function pipedLoop(): void {
   console.log(
     dim(
-      "Glove80 keymap REPL (mostly read-only; `rm` edits config.json). Tab completes; `help` for commands, `quit` to exit.",
+      "Glove80 keymap REPL (`rm` edits native config; `reload` rereads it). Type `help` for commands, `quit` to exit.",
     ),
   );
   const rl = readline.createInterface({
@@ -294,20 +354,15 @@ function pipedLoop(): void {
   });
   rl.prompt();
   rl.on("line", (line) => {
-    const o = execute(line.trim());
+    const o = runExternal(execute(line.trim()));
     if (o.quit) {
       rl.close();
       return;
     }
-    if (o.flash) {
-      const status = runFlash(o.flash);
-      if (status !== "flash done") console.error(status);
-    } else if (o.text) {
-      console.log(`\n${o.text}\n`);
-    }
+    printResult(o);
     rl.prompt();
   });
-  rl.on("close", () => process.exit(0));
+  rl.on("close", () => process.exit(process.exitCode ?? 0));
 }
 
 function commonPrefix(items: string[]): string {

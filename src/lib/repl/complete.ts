@@ -1,17 +1,17 @@
-import type { KeyboardConfig } from "../../types/schema";
+import type { Keymap } from "../../types/keymap";
 import { GLOVE80_KEY_NAMES } from "../layout-map";
 import { FIND_ALIASES } from "./find-aliases";
 
 export const COMMANDS = [
   "layers", "layer", "left", "right", "both", "key", "rm", "macros", "macro",
   "combos", "combo", "holdtaps", "morphs", "condlayers", "find", "flash",
-  "help", "quit", "exit",
+  "reload", "edit", "help", "quit", "exit",
 ];
 
 export const FLASH_FLAGS = ["--local", "--remote", "--full"];
 
 /** Readline completer: candidates for the token being typed + that token. */
-export function complete(config: KeyboardConfig, line: string): [string[], string] {
+export function complete(config: Keymap, line: string): [string[], string] {
   const parts = line.split(/\s+/);
   const last = parts[parts.length - 1] ?? "";
   const pick = (candidates: readonly string[]): [string[], string] => [

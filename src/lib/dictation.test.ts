@@ -1,11 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "fs";
-import { generateKeymap } from "./generator";
-import { migrateConfig } from "./migrations";
-import { KeyboardConfigSchema } from "../types/schema";
+import { loadKeymap } from "./keymap-loader";
 
-const config = KeyboardConfigSchema.parse(JSON.parse(readFileSync("config.json", "utf-8")));
-migrateConfig(config);
+const config = loadKeymap().config;
 
 describe("dictation key", () => {
   it("defines a dictation macro that double-taps Left-Control", () => {
@@ -26,12 +22,12 @@ describe("dictation key", () => {
     });
   });
 
-  it("emits the macro and binding into the generated keymap", () => {
-    const result = generateKeymap(config);
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.keymap).toContain("dictation: dictation {");
-      expect(result.keymap).toContain("&macro_tap &kp LCTRL");
-    }
+  it("keeps the hold-tap dictation target on the Enter thumb", () => {
+    const def = config.holdTaps?.find((h) => h.name === "dict_enter");
+    expect(def?.holdBinding).toBe("&dictation");
+    expect(def?.tapBinding).toBe("&kp");
+    expect(config.layers[0]!.keys[75]!.tap).toEqual({
+      type: "hold_tap", name: "dict_enter", param1: "0", param2: "ENTER",
+    });
   });
 });

@@ -1,4 +1,4 @@
-import type { KeyboardConfig } from "../../types/schema";
+import type { Keymap } from "../../types/keymap";
 import { GLOVE80_KEY_NAMES } from "../layout-map";
 import { findBindings, parseFindQuery, resolveLayer, resolvePosition, textSearch } from "./query";
 import type { FindMatch } from "./query";
@@ -31,9 +31,11 @@ export interface ReplState {
 const DEFAULT_STATE: ReplState = { layerIndex: 0 };
 
 export type DispatchResult =
-  | { kind: "output"; text: string }
+  | { kind: "output"; text: string; error?: true }
   | { kind: "flash"; args: string[] }
-  | { kind: "mutate"; text: string }
+  | { kind: "clear-key"; layerIndex: number; position: number; text: string }
+  | { kind: "reload" }
+  | { kind: "edit" }
   | { kind: "quit" }
   | { kind: "show-layer"; index: number; side: ViewSide; text: string };
 
@@ -53,7 +55,9 @@ const USAGE = {
   condlayers: "condlayers — list conditional layers",
   find: "find <query> — reverse lookup: keycodes (`find Cmd+C`), concepts (`find screenshot`), names/labels (`find print`)",
   rm: "rm <pos> — clear a key on the displayed layer: none on the base layer, trans elsewhere, e.g. `rm RM4`",
-  flash: "flash [--local|--remote] [--full] — generate, build, and flash via scripts/glove-flash.sh",
+  reload: "reload: reread the native config files; keep the last valid keymap if loading fails",
+  edit: "edit: open the keymap in $VISUAL or $EDITOR, then reload it",
+  flash: "flash [--local|--remote] [--full]: validate, build, and flash via scripts/glove-flash.sh",
   help: "help [command] — show help",
   quit: "quit — exit the REPL",
 } as const satisfies Record<string, string>;
@@ -91,6 +95,7 @@ function unknownCommand(cmd: string): string {
 }
 
 const out = (text: string): DispatchResult => ({ kind: "output", text });
+const error = (text: string): DispatchResult => ({ kind: "output", text, error: true });
 
 function formatFindMatches(results: FindMatch[]): string {
   const width = Math.max(...results.map((r) => displayWidth(r.location)));
@@ -103,7 +108,7 @@ function formatFindMatches(results: FindMatch[]): string {
 }
 
 export function dispatch(
-  config: KeyboardConfig,
+  config: Keymap,
   line: string,
   state: ReplState = DEFAULT_STATE,
   width?: number,
@@ -145,9 +150,9 @@ export function dispatch(
     case "condlayers":
       return out(listCondLayers(config).join("\n") || "No conditional layers defined.");
     case "layer": {
-      if (args.length !== 1) return out(USAGE.layer);
+      if (args.length !== 1) return error(USAGE.layer);
       const r = resolveLayer(config, args[0]!);
-      if (!r.ok) return out(r.error);
+      if (!r.ok) return error(r.error);
       return {
         kind: "show-layer",
         index: r.value.index,
@@ -159,7 +164,7 @@ export function dispatch(
     case "right":
     case "both": {
       const newSide = cmd.toLowerCase() as ViewSide;
-      if (args.length !== 0) return out(USAGE[newSide]);
+      if (args.length !== 0) return error(USAGE[newSide]);
       return {
         kind: "show-layer",
         index: layerIndex,
@@ -168,44 +173,43 @@ export function dispatch(
       };
     }
     case "key": {
-      if (args.length !== 1) return out(USAGE.key);
+      if (args.length !== 1) return error(USAGE.key);
       const pr = resolvePosition(args[0]!);
-      if (!pr.ok) return out(pr.error);
+      if (!pr.ok) return error(pr.error);
       return out(keyDetail(config, layerIndex, pr.value));
     }
     case "rm": {
-      if (args.length !== 1) return out(USAGE.rm);
+      if (args.length !== 1) return error(USAGE.rm);
       const pr = resolvePosition(args[0]!);
-      if (!pr.ok) return out(pr.error);
+      if (!pr.ok) return error(pr.error);
       const layer = config.layers[layerIndex]!;
       const key = layer.keys[pr.value]!;
       const prev = describeBehavior(key.tap, config).split("\n")[0]!;
       const label = `${GLOVE80_KEY_NAMES[pr.value]} (pos ${pr.value})`;
-      // Mirror the editor's clear semantics: hard "none" on the base layer,
-      // transparent (falls through) on every other layer.
+      // Request an edit only; persistence validates and updates the native source.
       const clearedType = layerIndex === 0 ? "none" : "trans";
-      if (key.tap.type === clearedType && key.hold === null) {
-        return out(`${label} was already clear (${prev}).`);
-      }
-      layer.keys[pr.value] = { tap: { type: clearedType }, hold: null };
-      return { kind: "mutate", text: `${green("removed")} ${label} — was ${prev}` };
+      const alreadyClear = key.tap.type === clearedType && key.hold === null;
+      return {
+        kind: "clear-key", layerIndex, position: pr.value,
+        text: alreadyClear ? `${label} was already clear (${prev}).` : `${green("removed")} ${label}, was ${prev}`,
+      };
     }
     case "macro": {
-      if (args.length !== 1) return out(USAGE.macro);
+      if (args.length !== 1) return error(USAGE.macro);
       const def = (config.macros ?? []).find((m) => m.name === args[0]);
       if (def) return out(macroDetail(def));
       const names = (config.macros ?? []).map((m) => m.name).join(", ");
-      return out(`Unknown macro "${args[0]}". ${names ? `Macros: ${names}` : "No macros defined."}`);
+      return error(`Unknown macro "${args[0]}". ${names ? `Macros: ${names}` : "No macros defined."}`);
     }
     case "combo": {
-      if (args.length !== 1) return out(USAGE.combo);
+      if (args.length !== 1) return error(USAGE.combo);
       const def = (config.combos ?? []).find((c) => c.name === args[0]);
       if (def) return out(comboDetail(config, def));
       const names = (config.combos ?? []).map((c) => c.name).join(", ");
-      return out(`Unknown combo "${args[0]}". ${names ? `Combos: ${names}` : "No combos defined."}`);
+      return error(`Unknown combo "${args[0]}". ${names ? `Combos: ${names}` : "No combos defined."}`);
     }
     case "find": {
-      if (args.length === 0) return out(USAGE.find);
+      if (args.length === 0) return error(USAGE.find);
       const raw = args.join(" ");
       const sections: string[] = [];
       const q = parseFindQuery(raw);
@@ -234,12 +238,18 @@ export function dispatch(
       if (sections.length === 0) return out(`No bindings found for ${raw}.`);
       return out(sections.join("\n\n"));
     }
+    case "reload":
+    case "edit": {
+      const kind = cmd.toLowerCase() as "reload" | "edit";
+      if (args.length !== 0) return error(USAGE[kind]);
+      return { kind };
+    }
     case "flash": {
       const bad = args.filter((a) => !FLASH_FLAGS.includes(a));
-      if (bad.length > 0) return out(`Unknown flash flag ${bad.join(" ")}. ${USAGE.flash}`);
+      if (bad.length > 0) return error(`Unknown flash flag ${bad.join(" ")}. ${USAGE.flash}`);
       return { kind: "flash", args };
     }
     default:
-      return out(unknownCommand(cmd));
+      return error(unknownCommand(cmd));
   }
 }

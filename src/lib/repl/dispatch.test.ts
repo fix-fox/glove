@@ -176,30 +176,33 @@ describe("left/right/both (view side)", () => {
 });
 
 describe("rm (clear key on the displayed layer)", () => {
-  it("clears a base-layer key to none and reports the old binding", () => {
+  it("requests a base-layer edit and preserves the model until persistence succeeds", () => {
     const cfg = makeConfig();
     const r = dispatch(cfg, "rm RM4");
-    expect(r.kind).toBe("mutate");
-    if (r.kind === "mutate") {
+    expect(r.kind).toBe("clear-key");
+    if (r.kind === "clear-key") {
+      expect(r.layerIndex).toBe(0);
+      expect(r.position).toBe(43);
       expect(r.text).toContain("RM4");
       expect(r.text).toContain("LG(C)");
     }
-    expect(cfg.layers[0]!.keys[43]).toEqual({ tap: { type: "none" }, hold: null });
+    expect(cfg.layers[0]!.keys[43]).toEqual({ tap: { type: "kp", keyCode: "LG(C)" }, hold: null });
   });
 
-  it("clears a non-base-layer key to trans", () => {
+  it("requests a non-base-layer edit without mutating the model", () => {
     const cfg = makeConfig();
     const r = dispatch(cfg, "rm 0", { layerIndex: 1 });
-    expect(r.kind).toBe("mutate");
-    expect(cfg.layers[1]!.keys[0]).toEqual({ tap: { type: "trans" }, hold: null });
+    expect(r.kind).toBe("clear-key");
+    expect(r).toMatchObject({ layerIndex: 1, position: 0 });
+    expect(cfg.layers[1]!.keys[0]).toEqual({ tap: { type: "none" }, hold: null });
   });
 
-  it("reports a no-op without mutating when the key is already clear", () => {
+  it("requests validation even when the displayed key is already clear", () => {
     const cfg = makeConfig();
-    dispatch(cfg, "rm RM4"); // now none
+    cfg.layers[0]!.keys[43] = { tap: { type: "none" }, hold: null };
     const r = dispatch(cfg, "rm RM4");
-    expect(r.kind).toBe("output");
-    expect(r.kind === "output" && r.text.includes("already clear")).toBe(true);
+    expect(r).toMatchObject({ kind: "clear-key", layerIndex: 0, position: 43 });
+    expect(r.kind === "clear-key" && r.text.includes("already clear")).toBe(true);
   });
 
   it("surfaces position errors and usage", () => {
@@ -207,10 +210,31 @@ describe("rm (clear key on the displayed layer)", () => {
     expect(dispatch(cfg, "rm nope")).toEqual({
       kind: "output",
       text: expect.stringContaining("Unknown key name"),
+      error: true,
     });
     expect(dispatch(cfg, "rm")).toEqual({
       kind: "output",
       text: expect.stringContaining("rm <pos>"),
+      error: true,
     });
+  });
+});
+
+
+describe("native config commands", () => {
+  it("returns reload and editor intents", () => {
+    expect(dispatch(config, "reload")).toEqual({ kind: "reload" });
+    expect(dispatch(config, "EDIT")).toEqual({ kind: "edit" });
+  });
+
+  it("rejects arguments without starting an editor or reload", () => {
+    expect(outputOf("edit other.keymap")).toContain("open the keymap");
+    expect(outputOf("reload other.keymap")).toContain("reread the native config");
+  });
+
+  it("documents direct editing and reload in help", () => {
+    expect(outputOf("help edit")).toContain("$EDITOR");
+    expect(outputOf("help reload")).toContain("last valid keymap");
+    expect(outputOf("help flash")).toContain("validate, build, and flash");
   });
 });

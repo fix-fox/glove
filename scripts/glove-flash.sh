@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generate ZMK firmware, build (locally or via GitHub Actions), and flash to Glove80.
+# Validate native ZMK configuration, build, and flash to Glove80.
 
 set -e
 
@@ -131,9 +131,9 @@ wait_for_disconnect() {
 
 cd "$REPO_DIR"
 
-# ── Generate keymap ──────────────────────────────────────────────────────────
-echo "Generating firmware files..."
-npm run generate-firmware --silent
+# Validate the native files before building or flashing.
+echo "Validating keymap..."
+npm run check-config --silent
 
 # ── Build firmware ───────────────────────────────────────────────────────────
 # Keep the temp dir under $HOME: the local Docker build mounts it into the
@@ -158,9 +158,9 @@ if [ "$MODE" = "local" ]; then
     fi
 else
     # ── Remote build via GitHub Actions ──
-    CHANGED_FILES="config/glove80.keymap config/glove80.conf"
-    CHANGES=$(git diff --name-only -- $CHANGED_FILES 2>/dev/null)
-    UNTRACKED=$(git ls-files --others --exclude-standard -- $CHANGED_FILES 2>/dev/null)
+    CHANGED_FILES="config"
+    CHANGES=$(git diff HEAD --name-only -- "$CHANGED_FILES" 2>/dev/null)
+    UNTRACKED=$(git ls-files --others --exclude-standard -- "$CHANGED_FILES" 2>/dev/null)
     ALL_CHANGES=$(echo -e "${CHANGES}\n${UNTRACKED}" | sed '/^$/d' | sort -u)
 
     if [ -n "$ALL_CHANGES" ]; then
@@ -170,7 +170,7 @@ else
             echo "  $f"
         done
         echo ""
-        git diff -- $CHANGED_FILES 2>/dev/null
+        git diff HEAD -- "$CHANGED_FILES" 2>/dev/null
         echo ""
         read -p "Commit and push? [Y/n] " -n 1 -r
         echo ""
@@ -178,18 +178,29 @@ else
             echo "Aborted."
             exit 0
         fi
-        git add -- $CHANGED_FILES 2>/dev/null
-        git commit -m "keymap: update from configurator"
+        git add -A -- "$CHANGED_FILES" 2>/dev/null
+        git commit -m "feat(keymap): update native configuration"
         git push
     else
-        echo "No keymap changes — checking latest build."
+        echo "No keymap changes. Checking the build for the current commit."
     fi
 
     echo ""
     echo "Checking for workflow runs..."
 
-    RUN_INFO=$(gh run list --repo "$REPO" --workflow build.yml --limit 1 --json databaseId,status,conclusion,headBranch,createdAt,displayTitle)
-    RUN_ID=$(echo "$RUN_INFO" | jq -r '.[0].databaseId')
+    HEAD_SHA=$(git rev-parse HEAD)
+    RUN_INFO=$(gh run list --repo "$REPO" --workflow build.yml --commit "$HEAD_SHA" --limit 1 --json databaseId,status,conclusion,headSha,headBranch,createdAt,displayTitle)
+    RUN_ID=$(echo "$RUN_INFO" | jq -r '.[0].databaseId // empty')
+    if [[ ! "$RUN_ID" =~ ^[0-9]+$ ]]; then
+        echo "Error: No firmware build found for current commit $HEAD_SHA." >&2
+        echo "Push this commit and wait for its build workflow, then retry." >&2
+        exit 1
+    fi
+    RUN_SHA=$(echo "$RUN_INFO" | jq -r '.[0].headSha // empty')
+    if [ "$RUN_SHA" != "$HEAD_SHA" ]; then
+        echo "Error: Workflow run $RUN_ID does not match current commit $HEAD_SHA." >&2
+        exit 1
+    fi
     STATUS=$(echo "$RUN_INFO" | jq -r '.[0].status')
     CONCLUSION=$(echo "$RUN_INFO" | jq -r '.[0].conclusion')
     BRANCH=$(echo "$RUN_INFO" | jq -r '.[0].headBranch')
@@ -206,13 +217,14 @@ else
     fi
 
     if [ "$CONCLUSION" != "success" ]; then
-        echo "Error: Latest build failed (status: $CONCLUSION)"
+        echo "Error: Build for current commit $HEAD_SHA failed (status: $CONCLUSION)"
         echo "Check: https://github.com/$REPO/actions/runs/$RUN_ID"
         exit 1
     fi
 
     echo ""
-    echo "=== Latest successful build ==="
+    echo "=== Successful build for current commit ==="
+    echo "  SHA:     $HEAD_SHA"
     echo "  Commit:  $TITLE"
     echo "  Branch:  $BRANCH"
     echo "  Time:    $CREATED_HUMAN"
@@ -230,6 +242,10 @@ else
         exit 0
     fi
 
+    if [ "$(git rev-parse HEAD)" != "$HEAD_SHA" ]; then
+        echo "Error: HEAD changed while selecting firmware. Run flash again." >&2
+        exit 1
+    fi
     echo "Downloading firmware artifact..."
     gh run download "$RUN_ID" --repo "$REPO" --dir "$TEMP_DIR"
 

@@ -1,0 +1,129 @@
+// Custom behaviors included inside the root node.
+// https://zmk.dev/docs/keymaps/behaviors/hold-tap
+    behaviors {
+        mm_bspc_shift_del: mm_bspc_shift_del {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp BSPC>, <&kp DEL>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_q_shift_qmark: mm_q_shift_qmark {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp Q>, <&kp QMARK>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        tmux_prefix: tmux_prefix {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp LC(A)>, <&kp LC(A)>;
+            mods = <(MOD_LSFT|MOD_RSFT|MOD_LALT|MOD_RALT|MOD_LCTL|MOD_RCTL|MOD_LGUI|MOD_RGUI)>;
+        };
+
+        // @label TD_LAUNCHER_PREVAPP
+        td_launcher_prevapp: td_launcher_prevapp {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LA(SPACE)>, <&kp LG(TAB)>;
+        };
+
+        // @label MAGIC_HOLD_TAP
+        magic: magic {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&mo>, <&rgb_ug_status_macro>;
+        };
+
+        hml: hml {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            HRM_PROPERTIES
+            bindings = <&mod_activate>, <&kp>;
+            hold-trigger-key-positions = <HRM_LEFT_TRIGGER_POSITIONS>;
+            hold-trigger-on-release;
+        };
+
+        hmr: hmr {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            HRM_PROPERTIES
+            bindings = <&mod_activate>, <&kp>;
+            hold-trigger-key-positions = <HRM_RIGHT_TRIGGER_POSITIONS>;
+            hold-trigger-on-release;
+        };
+
+        lt_mm_bspc_shift_del: lt_mm_bspc_shift_del {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            LT_PROPERTIES
+            bindings = <&mo>, <&mm_bspc_shift_del>;
+        };
+
+        // @label SHIFT_CAPS
+        shift_caps: shift_caps {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            bindings = <&kp>, <&caps_mac>;
+        };
+
+        // @label DICT_ENTER
+        dict_enter: dict_enter {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <220>;
+            quick-tap-ms = <175>;
+            bindings = <&dictation>, <&kp>;
+        };
+
+        // @label SHOT_HT
+        shot_ht: shot_ht {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&kp>, <&kp>;
+        };
+
+        // @label APP_ALT
+        app_alt: app_alt {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <250>;
+            bindings = <&kp>, <&kp>;
+        };
+
+        lt_td_launcher_prevapp: lt_td_launcher_prevapp {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            LT_PROPERTIES
+            bindings = <&mo>, <&td_launcher_prevapp>;
+        };
+
+        hml_ctrl_a: hml_ctrl_a {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            HRM_PROPERTIES
+            bindings = <&mod_activate>, <&ctrl_a>;
+            hold-trigger-key-positions = <HRM_LEFT_TRIGGER_POSITIONS>;
+            hold-trigger-on-release;
+        };
+
+        hmr_ctrl_a: hmr_ctrl_a {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            HRM_PROPERTIES
+            bindings = <&mod_activate>, <&ctrl_a>;
+            hold-trigger-key-positions = <HRM_RIGHT_TRIGGER_POSITIONS>;
+            hold-trigger-on-release;
+        };
+    };
