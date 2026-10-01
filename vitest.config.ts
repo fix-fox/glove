@@ -1,26 +1,15 @@
 import { defineConfig } from "vitest/config";
-import path from "path";
+import path from "node:path";
 
 export default defineConfig({
-  css: {
-    postcss: {},
-  },
+  // Vite otherwise discovers PostCSS config in an ancestor checkout.
+  css: { postcss: {} },
   test: {
-    globals: true,
-    exclude: ["e2e/**", "node_modules/**"],
-    setupFiles: ["./src/lib/test-setup.ts"],
-    server: {
-      deps: {
-        inline: ["zundo"],
-      },
-    },
+    include: ["src/**/*.test.ts"],
   },
   resolve: {
-    alias: [
-      {
-        find: "@",
-        replacement: path.resolve(__dirname, "src"),
-      },
-    ],
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
   },
 });

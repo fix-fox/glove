@@ -70,7 +70,7 @@ interface CellContent {
   kind: CellKind;
 }
 
-/** Same rule as the web UI (KeyCap.tsx): hebrew layers get Hebrew glyph labels. */
+/** Layers named Hebrew display keycodes as Hebrew glyphs. */
 function isHebrewLayer(layer: Layer): boolean {
   return layer.name.toLowerCase().includes("hebrew");
 }

@@ -1,7 +1,6 @@
 import { readFileSync, writeFileSync, unlinkSync, existsSync } from "fs";
 import { KeyboardConfigSchema } from "@/types/schema";
-import { generateKeymap } from "@/lib/generator";
-import { generateConf, detectPointingFeature } from "@/lib/repo-generator";
+import { generateConf, generateKeymap } from "@/lib/generator";
 import { migrateConfig } from "@/lib/migrations";
 
 const CONFIG_PATH = "config.json";

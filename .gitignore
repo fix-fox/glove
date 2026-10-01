@@ -1,9 +1,5 @@
 node_modules/
 
-# next.js
-/.next/
-/out/
-
 # production
 /build
 
@@ -19,14 +15,10 @@ npm-debug.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
-
-# playwright
-/test-results/
-/playwright-report/
 
 # worktrees
 .worktrees/
+.agents/worktrees/
 
 # West workspace (ZMK local build)
 /.west/

@@ -442,6 +442,11 @@ function detectFeatures(config: KeyboardConfig): { rgb: boolean; output: boolean
   return { rgb, output, pointing };
 }
 
+/** Enable pointing support when the keymap uses mouse bindings. */
+export function generateConf(config: KeyboardConfig): string {
+  return detectFeatures(config).pointing ? "CONFIG_ZMK_POINTING=y\n" : "";
+}
+
 export function generateKeymap(config: KeyboardConfig): GeneratorResult {
   const errors = validateConfig(config);
   if (errors.length > 0) {

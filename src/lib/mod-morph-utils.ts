@@ -1,5 +1,5 @@
 // =============================================================================
-// Mod-morph chain pack/unpack utilities
+// Mod-morph chain decoding
 // =============================================================================
 
 import type { Behavior, ModMorphDefinition } from "../types/schema";
@@ -20,14 +20,6 @@ const MOD_FLAG_TO_ABSTRACT: Record<string, ModMorphEntry["mod"]> = {
   MOD_LCTL: "ctrl",  MOD_RCTL: "ctrl",
   MOD_LALT: "alt",   MOD_RALT: "alt",
   MOD_LGUI: "gui",   MOD_RGUI: "gui",
-};
-
-/** Abstract modifier → ZMK MOD flags (both L+R). */
-const ABSTRACT_TO_MOD_FLAGS: Record<ModMorphEntry["mod"], string[]> = {
-  shift: ["MOD_LSFT", "MOD_RSFT"],
-  ctrl:  ["MOD_LCTL", "MOD_RCTL"],
-  alt:   ["MOD_LALT", "MOD_RALT"],
-  gui:   ["MOD_LGUI", "MOD_RGUI"],
 };
 
 function inferMod(mods: string[]): ModMorphEntry["mod"] | null {
@@ -87,50 +79,4 @@ export function unpackModMorphChain(
   }
 
   return null; // Too deep
-}
-
-/**
- * Build mod-morph definitions from a base keycode + list of morphs.
- * Returns the outermost behavior reference and all new/updated definitions.
- *
- * Morphs are ordered from innermost (closest to base) to outermost.
- */
-export function packModMorphChain(
-  baseKeyCode: string,
-  morphs: ModMorphEntry[],
-  existingModMorphs: ModMorphDefinition[],
-): { behavior: Behavior; newModMorphs: ModMorphDefinition[] } {
-  if (morphs.length === 0) {
-    return {
-      behavior: { type: "kp", keyCode: baseKeyCode },
-      newModMorphs: [],
-    };
-  }
-
-  const newDefs: ModMorphDefinition[] = [];
-  let prevBinding = `&kp ${baseKeyCode}`;
-
-  for (const morph of morphs) {
-    const morphKeyLower = morph.keyCode.toLowerCase();
-    const baseLower = baseKeyCode.toLowerCase();
-    const name = `mm_${baseLower}_${morph.mod}_${morphKeyLower}`;
-
-    const existing = existingModMorphs.find((m) => m.name === name);
-    const def: ModMorphDefinition = {
-      id: existing?.id ?? crypto.randomUUID(),
-      name,
-      defaultBinding: prevBinding,
-      morphBinding: `&kp ${morph.keyCode}`,
-      mods: ABSTRACT_TO_MOD_FLAGS[morph.mod],
-    };
-
-    newDefs.push(def);
-    prevBinding = `&${name}`;
-  }
-
-  const outermost = newDefs[newDefs.length - 1]!;
-  return {
-    behavior: { type: "mod_morph", name: outermost.name },
-    newModMorphs: newDefs,
-  };
 }

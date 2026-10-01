@@ -172,16 +172,11 @@ export const ZMK_KEYCODES: ZmkKeycode[] = [
   { code: "C_BRI_DN", label: "Bright Down", category: "Media" },
 ];
 
-export const ZMK_MODIFIER_CODES = new Set([
-  "LSHIFT", "RSHIFT", "LCTRL", "RCTRL", "LALT", "RALT", "LGUI", "RGUI",
-]);
-
 // =============================================================================
 // Modified key codes — LC(S), LA(LC(V)), LS(FSLH), etc.
 // =============================================================================
 
-export const MODIFIER_WRAPPERS = ["LC", "RC", "LA", "RA", "LS", "RS", "LG", "RG"] as const;
-export type ModifierWrapper = (typeof MODIFIER_WRAPPERS)[number];
+type ModifierWrapper = "LC" | "RC" | "LA" | "RA" | "LS" | "RS" | "LG" | "RG";
 
 export interface ParsedModifiedKey {
   key: string;
@@ -202,60 +197,6 @@ export function parseModifiedKeyCode(code: string): ParsedModifiedKey {
   return { key: remaining, mods };
 }
 
-export function composeModifiedKeyCode(parsed: ParsedModifiedKey): string {
-  let result = parsed.key;
-  // Wrap from innermost to outermost (reverse order)
-  for (let i = parsed.mods.length - 1; i >= 0; i--) {
-    result = `${parsed.mods[i]}(${result})`;
-  }
-  return result;
-}
-
 export function isModifiedKeyCode(code: string): boolean {
   return /^(LC|RC|LA|RA|LS|RS|LG|RG)\(/.test(code);
 }
-
-export function searchKeycodes(query: string, keycodes: ZmkKeycode[] = ZMK_KEYCODES): ZmkKeycode[] {
-  if (!query.trim()) return keycodes;
-  const lower = query.toLowerCase();
-  return keycodes.filter(
-    (k) =>
-      k.code.toLowerCase().includes(lower) ||
-      k.label.toLowerCase().includes(lower) ||
-      k.category.toLowerCase().includes(lower),
-  );
-}
-
-/** Hebrew keycodes — QWERTY code mapped to Hebrew character via OS Hebrew layout.
- *  Kept separate from ZMK_KEYCODES to avoid polluting the default label map. */
-export const HEBREW_KEYCODES: ZmkKeycode[] = [
-  { code: "A", label: "\u05E9 shin", category: "Hebrew" },
-  { code: "B", label: "\u05E0 nun", category: "Hebrew" },
-  { code: "C", label: "\u05D1 bet", category: "Hebrew" },
-  { code: "D", label: "\u05D2 gimel", category: "Hebrew" },
-  { code: "E", label: "\u05E7 qof", category: "Hebrew" },
-  { code: "F", label: "\u05DB kaf", category: "Hebrew" },
-  { code: "G", label: "\u05E2 ayin", category: "Hebrew" },
-  { code: "H", label: "\u05D9 yod", category: "Hebrew" },
-  { code: "I", label: "\u05DF nun sofit", category: "Hebrew" },
-  { code: "J", label: "\u05D7 het", category: "Hebrew" },
-  { code: "K", label: "\u05DC lamed", category: "Hebrew" },
-  { code: "L", label: "\u05DA kaf sofit", category: "Hebrew" },
-  { code: "M", label: "\u05E6 tsade", category: "Hebrew" },
-  { code: "N", label: "\u05DE mem", category: "Hebrew" },
-  { code: "O", label: "\u05DD mem sofit", category: "Hebrew" },
-  { code: "P", label: "\u05E4 pe", category: "Hebrew" },
-  { code: "R", label: "\u05E8 resh", category: "Hebrew" },
-  { code: "S", label: "\u05D3 dalet", category: "Hebrew" },
-  { code: "T", label: "\u05D0 alef", category: "Hebrew" },
-  { code: "U", label: "\u05D5 vav", category: "Hebrew" },
-  { code: "V", label: "\u05D4 he", category: "Hebrew" },
-  { code: "X", label: "\u05E1 samekh", category: "Hebrew" },
-  { code: "Y", label: "\u05D8 tet", category: "Hebrew" },
-  { code: "Z", label: "\u05D6 zayin", category: "Hebrew" },
-  { code: "SEMI", label: "\u05E3 pe sofit", category: "Hebrew" },
-  { code: "COMMA", label: "\u05EA tav", category: "Hebrew" },
-  { code: "DOT", label: "\u05E5 tsade sofit", category: "Hebrew" },
-  { code: "FSLH", label: ". (period-heb)", category: "Hebrew" },
-  { code: "SQT", label: ", (comma-heb)", category: "Hebrew" },
-];

@@ -299,7 +299,6 @@ export const KeyboardConfigSchema = z.object({
 export type Behavior = z.infer<typeof BehaviorSchema>;
 export type Key = z.infer<typeof KeySchema>;
 export type Layer = z.infer<typeof LayerSchema>;
-export type MacroStep = z.infer<typeof MacroStepSchema>;
 export type MacroDefinition = z.infer<typeof MacroDefinitionSchema>;
 export type ModMorphDefinition = z.infer<typeof ModMorphDefinitionSchema>;
 export type HoldTapDefinition = z.infer<typeof HoldTapDefinitionSchema>;
