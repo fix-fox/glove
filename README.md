@@ -12,6 +12,12 @@ The TUI starts on the base layer. Use `layer <name>` to switch layers, `key <pos
 to inspect a key, `find Cmd+C` to find bindings, and `help` to list commands.
 Tab completes commands and names.
 
+A [Go / Bubble Tea prototype](tui/README.md) is available for trying a new
+interface against this same configuration. Run `npm run tea` after building it.
+It includes Studio and Focus layouts, Tiles and Compact key styles, and a local
+HTML comparison generated from actual terminal frames. The current TUI remains
+available with `npm run repl` while the prototype is being evaluated.
+
 - `edit` opens `config/glove80.keymap` in `$VISUAL`, then `$EDITOR`, or `vi`.
   Quoted executable paths and arguments such as `code --wait` work. The editor
   command is executed without a shell, so shell expansions and pipelines do not

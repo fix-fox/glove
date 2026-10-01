@@ -8,6 +8,10 @@
   "scripts": {
     "test": "vitest run",
     "repl": "node --no-deprecation --import=tsx scripts/repl.ts",
+    "tea": "scripts/glove-tea",
+    "tea:build": "cd tui && go build -o ../build/glove-tea .",
+    "tea:test": "cd tui && go test ./...",
+    "tea:preview": "python3 scripts/tea-preview.py",
     "build-firmware": "bash scripts/zmk-docker-build.sh",
     "typecheck": "tsc --noEmit",
     "check-config": "node --no-deprecation --import=tsx scripts/validate-keymap.ts"
