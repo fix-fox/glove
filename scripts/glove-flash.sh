@@ -133,7 +133,7 @@ cd "$REPO_DIR"
 
 # Validate the native files before building or flashing.
 echo "Validating keymap..."
-npm run check-config --silent
+"$SCRIPT_DIR/glove" --check-config
 
 # ── Build firmware ───────────────────────────────────────────────────────────
 # Keep the temp dir under $HOME: the local Docker build mounts it into the

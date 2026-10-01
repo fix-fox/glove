@@ -9,7 +9,7 @@ The keymap is currently set up for **macOS** (branch `mac-migration`, see
 This guide is for reverting to Windows/Linux. Apply the reverse table directly
 in `config/glove80.keymap` and `config/glove80-macros.dtsi`. Shared behavior
 settings live in `config/glove80-behaviors.dtsi` and `config/constants.h`.
-Run `npm run check-config`, then build the firmware. The former JSON migration
+Run `make check-config`, then build the firmware. The former JSON migration
 script and generation step have been removed.
 
 ## The macOS-vs-Windows model (why these changes exist)

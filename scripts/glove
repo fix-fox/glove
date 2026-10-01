@@ -1,5 +1,44 @@
-#!/bin/bash
-# Global launcher for the Glove80 keymap REPL.
+#!/bin/sh
+# Launch this checkout's Glove80 TUI, rebuilding through Go's incremental cache.
 # Install: ln -sf ~/glove/scripts/glove ~/.local/bin/glove
-cd "$(dirname "$(readlink -f "$0")")/.." || exit 1
-exec node --no-deprecation --import=tsx scripts/repl.ts "$@"
+set -eu
+repo=$(CDPATH= cd -- "$(dirname -- "$(readlink -f "$0")")/.." && pwd)
+cd "$repo"
+go_cmd=${GLOVE_GO:-go}
+binary="$repo/build/glove"
+manifest="$repo/build/glove.sources"
+
+# Include file names and contents so edits, additions, and removals invalidate a build.
+source_manifest() {
+    {
+        cksum go.mod go.sum
+        find cmd internal -type f -name '*.go' -exec cksum {} \;
+    } | LC_ALL=C sort
+}
+
+compiled_manifest() {
+    source_manifest
+    cksum build/glove
+}
+
+if command -v "$go_cmd" >/dev/null 2>&1; then
+    mkdir -p "$repo/build"
+    pending=$(mktemp "$repo/build/.glove-sources.XXXXXX")
+    trap 'rm -f "$pending"' EXIT HUP INT TERM
+    source_manifest > "$pending"
+    "$go_cmd" build -o "$binary" ./cmd/glove
+    if [ "$(cat "$pending")" != "$(source_manifest)" ]; then
+        echo 'Glove sources changed during the build. Run the command again.' >&2
+        exit 1
+    fi
+    cksum build/glove >> "$pending"
+    mv "$pending" "$manifest"
+elif [ ! -x "$binary" ] || [ ! -f "$manifest" ] || [ "$(cat "$manifest")" != "$(compiled_manifest)" ]; then
+    echo 'Go 1.26+ is required to build this checkout. Install Go or set GLOVE_GO to its executable.' >&2
+    exit 1
+fi
+
+if [ "${GLOVE_BUILD_ONLY:-0}" = 1 ]; then
+    exit 0
+fi
+exec "$binary" --root "$repo" "$@"

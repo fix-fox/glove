@@ -29,7 +29,7 @@ func (m model) View() tea.View {
 	v.AltScreen = true
 	v.BackgroundColor = bg
 	v.ForegroundColor = ink
-	v.WindowTitle = "Glove80 · " + m.layout
+	v.WindowTitle = "Glove80"
 	return v
 }
 
@@ -39,7 +39,7 @@ func (m model) render() string {
 	}
 	w := m.width - 4
 	logo := accent.Bold(true).Render("GLOVE") + dimStyle.Render(" / ") + textStyle.Bold(true).Render("80")
-	meta := dimStyle.Render(strings.ToUpper(m.layout) + "  ·  " + strings.ToUpper(m.effectiveDensity()))
+	meta := dimStyle.Render("e edit  ·  r reload  ·  f flash")
 	header := spread(logo, meta, w) + "\n\n"
 	keyboard, library := dimStyle.Render("  Keyboard  "), dimStyle.Render("  Definitions  ")
 	active := lipgloss.NewStyle().Foreground(bg).Background(mint).Bold(true)
@@ -82,15 +82,8 @@ func (m model) render() string {
 	return lipgloss.NewStyle().Background(bg).Foreground(ink).Padding(1, 2).Render(fit(content, w, m.height-2))
 }
 
-func (m model) effectiveDensity() string {
-	if m.height < 42 {
-		return "compact"
-	}
-	return m.density
-}
-
 func (m model) keyboardView(w, h int) string {
-	sidePanel := m.layout == "studio" && w >= 140
+	sidePanel := w >= 140
 	boardWidth := w
 	if sidePanel {
 		boardWidth -= 28
@@ -104,8 +97,12 @@ func (m model) keyboardView(w, h int) string {
 		sideName += " · auto"
 	}
 	layerTitle := accent.Bold(true).Render(fmt.Sprintf("%02d", m.layer)) + "  " + textStyle.Bold(true).Render(m.data.Layers[m.layer].Name)
+	first, count := m.visibleRows(h)
+	if count < len(m.data.Grid) {
+		sideName += fmt.Sprintf(" · rows %d-%d", first+1, first+count)
+	}
 	title := spread(layerTitle, dimStyle.Render(sideName), boardWidth)
-	grid := m.keyboardGrid(boardWidth)
+	grid := m.keyboardGrid(boardWidth, first, count)
 	legend := dimStyle.Render("tap") + "  " + lipgloss.NewStyle().Foreground(lavender).Render("hold / morph") + "  " + lipgloss.NewStyle().Foreground(blue).Render("layer") + "  " + lipgloss.NewStyle().Foreground(rose).Render("macro")
 	board := title + "\n\n" + grid + "\n" + legend
 	if sidePanel {
@@ -120,7 +117,7 @@ func (m model) keyboardView(w, h int) string {
 	return board + "\n" + accent.Render(key.Name) + "  " + textStyle.Render(key.Tap) + "  " + dimStyle.Render(key.Hold+" · enter for details")
 }
 
-func (m model) keyboardGrid(w int) string {
+func (m model) keyboardGrid(w, first, count int) string {
 	side := m.effectiveSide()
 	start, end := 0, 19
 	if side == "left" {
@@ -131,11 +128,11 @@ func (m model) keyboardGrid(w int) string {
 	}
 	cellWidth := max(3, min(12, w/(end-start)))
 	rows := make([]string, 0, len(m.data.Grid))
-	for _, row := range m.data.Grid {
+	for _, row := range m.data.Grid[first : first+count] {
 		cells := make([]string, 0, end-start)
 		for _, pos := range row[start:end] {
 			if pos == nil {
-				cells = append(cells, fit("", cellWidth, m.keyRows()))
+				cells = append(cells, fit("", cellWidth, 4))
 				continue
 			}
 			cells = append(cells, m.keyCell(m.data.Layers[m.layer].Keys[*pos], cellWidth))
@@ -166,16 +163,10 @@ func (m model) keyCell(key binding, width int) string {
 	if selected && secondary == "" {
 		secondary = key.Name
 	}
-	inner := width
-	if m.effectiveDensity() == "tiles" {
-		inner -= 2
-	}
+	inner := width - 2
 	primaryStyle := lipgloss.NewStyle().Foreground(fg).Width(inner).Align(lipgloss.Center)
 	secondaryStyle := lipgloss.NewStyle().Foreground(muted).Width(inner).Align(lipgloss.Center)
-	style := lipgloss.NewStyle().Width(width).Background(panel)
-	if m.effectiveDensity() == "tiles" {
-		style = style.Border(lipgloss.RoundedBorder()).BorderForeground(line)
-	}
+	style := lipgloss.NewStyle().Width(width).Background(panel).Border(lipgloss.RoundedBorder()).BorderForeground(line)
 	if selected {
 		style = style.Background(lipgloss.Color("#273A36")).BorderForeground(mint)
 		primaryStyle = primaryStyle.Foreground(mint).Bold(true)
@@ -184,20 +175,23 @@ func (m model) keyCell(key binding, width int) string {
 	primaryStyle = primaryStyle.Background(style.GetBackground())
 	secondaryStyle = secondaryStyle.Background(style.GetBackground())
 	content := primaryStyle.Render(ansi.Truncate(label, inner, "…"))
-	if m.keyRows() != 1 {
-		content += "\n" + secondaryStyle.Render(ansi.Truncate(secondary, inner, "…"))
-	}
+	content += "\n" + secondaryStyle.Render(ansi.Truncate(secondary, inner, "…"))
 	return style.Render(content)
 }
 
-func (m model) keyRows() int {
-	if m.effectiveDensity() == "tiles" {
-		return 4
+// visibleRows scrolls whole physical rows and always includes the selected key.
+func (m model) visibleRows(height int) (first, count int) {
+	count = min(len(m.data.Grid), max(1, (height-4)/4))
+	selectedRow := 0
+	for row, positions := range m.data.Grid {
+		for _, position := range positions {
+			if position != nil && *position == m.selected {
+				selectedRow = row
+			}
+		}
 	}
-	if m.height < 30 {
-		return 1
-	}
-	return 2
+	first = min(max(0, selectedRow-count/2), len(m.data.Grid)-count)
+	return first, count
 }
 
 func (m model) inspector(w, h int, vertical bool) string {
@@ -247,18 +241,38 @@ func (m model) pickerView(w, h int) string {
 
 func (m model) confirmView(w, h int) string {
 	title, detail := "Clear this binding?", ""
+	compact := h < 20 || w < 80
+	cardWidth := min(70, w-4)
+	if compact {
+		cardWidth = min(70, w)
+	}
 	if m.mode == "confirm-clear" {
-		key := m.data.Layers[m.confirmation.Layer].Keys[m.confirmation.Position]
+		key := m.data.Layers[m.confirmation.layer].Keys[m.confirmation.position]
 		replacement := "&trans"
-		if m.confirmation.Layer == 0 {
+		if m.confirmation.layer == 0 {
 			replacement = "&none"
 		}
-		detail = fmt.Sprintf("%s · %s\n\n%s → %s\n\n%s\n\nThis writes to the native config file.", m.data.Layers[m.confirmation.Layer].Name, key.Name, key.Tap, replacement, key.Source)
+		detail = fmt.Sprintf("%s · %s\n\n%s → %s\n\n%s\n\nThis writes to the native config file.", m.data.Layers[m.confirmation.layer].Name, key.Name, key.Tap, replacement, key.Source)
+		if compact {
+			detail = fmt.Sprintf("%s · position %d\nWrite %s to config\n%s", key.Name, key.Position, replacement, key.Source)
+		}
 	} else {
 		title = "Build and flash?"
 		detail = "scripts/glove-flash.sh " + strings.Join(m.flashArgs, " ") + "\n\nThe build will run in this terminal.\nFollow its prompts to connect the keyboard."
+		if compact {
+			detail = strings.Join(m.flashArgs, " ") + "\nBuild runs in this terminal.\nFollow the connection prompts."
+		}
 	}
-	card := lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(rose).Padding(2, 3).Width(min(70, w-4)).Render(
+	style := lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(rose).Padding(2, 3).Width(cardWidth)
+	if compact {
+		style = style.Padding(0, 1)
+		lines := strings.Split(detail, "\n")
+		for i := range lines {
+			lines[i] = ansi.Truncate(lines[i], cardWidth-4, "…")
+		}
+		detail = strings.Join(lines, "\n")
+	}
+	card := style.Render(
 		textStyle.Bold(true).Render(title) + "\n\n" + textStyle.Render(detail) + "\n\n" + accent.Render("y  confirm") + "     " + dimStyle.Render("n / esc  cancel"))
 	return lipgloss.Place(w, h, lipgloss.Center, lipgloss.Center, card)
 }
@@ -276,7 +290,11 @@ func (m model) outputView(w, h int) string {
 		content += lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(lavender).Width(w-4).Padding(0, 1).Render(m.input.View()) + "\n\n"
 	}
 	if m.output == "" {
-		content += dimStyle.Render("Search chords like Cmd+C, concepts like screenshot, or definition names.\nPress enter to search across every layer and definition.")
+		if m.mode == "command" {
+			content += dimStyle.Render("Try layer symbols, key RM4, or find Cmd+C.\nTab completes commands and names. Enter runs the command.")
+		} else {
+			content += dimStyle.Render("Search chords like Cmd+C, concepts like screenshot, or definition names.\nPress enter to search across every layer and definition.")
+		}
 	} else {
 		content += textStyle.Render(m.viewport.View())
 	}
@@ -288,8 +306,10 @@ func (m model) hints() string {
 	switch m.mode {
 	case "picker":
 		hints = [][2]string{{"↑↓", "choose"}, {"/", "filter"}, {"enter", "open"}, {"esc", "back"}}
-	case "search", "command":
-		hints = [][2]string{{"enter", "run"}, {"pgup/dn", "scroll"}, {"esc", "back"}}
+	case "command":
+		hints = [][2]string{{"enter", "run"}, {"tab", "complete"}, {"pgup/dn", "scroll"}, {"esc", "back"}}
+	case "search":
+		hints = [][2]string{{"enter", "search"}, {"pgup/dn", "scroll"}, {"esc", "back"}}
 	case "output":
 		hints = [][2]string{{"↑↓", "scroll"}, {"pgup/dn", "page"}, {"esc", "back"}}
 	case "confirm-clear", "confirm-flash":
@@ -298,7 +318,7 @@ func (m model) hints() string {
 		if m.screen == "library" {
 			hints = [][2]string{{"↑↓", "choose"}, {"/", "filter"}, {"enter", "details"}, {"tab", "keyboard"}, {"ctrl+p", "actions"}}
 		} else {
-			hints = [][2]string{{"↑↓←→", "move"}, {"g", "layers"}, {"/", "find"}, {"tab", "definitions"}, {"v", "layout"}, {"d", "density"}, {"?", "help"}}
+			hints = [][2]string{{"↑↓←→", "move"}, {"g", "layers"}, {"/", "find"}, {"tab", "definitions"}, {"?", "help"}}
 		}
 	}
 	parts := make([]string, 0, len(hints))

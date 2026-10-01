@@ -1,5 +1,3 @@
-node_modules/
-
 # production
 /build
 
@@ -7,14 +5,8 @@ node_modules/
 .DS_Store
 *.pem
 
-# debug
-npm-debug.log*
-
 # env files
 .env*
-
-# typescript
-*.tsbuildinfo
 
 # worktrees
 .worktrees/

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -12,6 +12,9 @@ import (
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+	"github.com/fix-fox/glove/internal/editor"
+	"github.com/fix-fox/glove/internal/keymap"
+	"github.com/fix-fox/glove/internal/keymapview"
 )
 
 type menuItem struct{ title, description, action string }
@@ -20,27 +23,27 @@ func (i menuItem) Title() string       { return i.title }
 func (i menuItem) Description() string { return i.description }
 func (i menuItem) FilterValue() string { return i.title + " " + i.description }
 
-type bridgeMsg struct {
-	response response
-	err      error
-}
 type processMsg struct{ err error }
 
 type model struct {
-	root, layout, density, side string
-	width, height               int
-	data                        *snapshot
-	layer, selected             int
-	screen, mode, pickerKind    string
-	status, output              string
-	busy                        bool
-	input                       textinput.Model
-	library, picker             list.Model
-	viewport                    viewport.Model
-	spinner                     spinner.Model
-	confirmation                request
-	flashArgs                   []string
-	processError                error
+	root, side                       string
+	width, height                    int
+	data                             *snapshot
+	document                         *keymap.Document
+	layer, selected                  int
+	screen, mode, pickerKind         string
+	status, output                   string
+	busy                             bool
+	input                            textinput.Model
+	library, picker                  list.Model
+	viewport                         viewport.Model
+	spinner                          spinner.Model
+	confirmation                     clearSelection
+	completions                      []string
+	completionPrefix, completionLine string
+	completionIndex                  int
+	flashArgs                        []string
+	processError                     error
 }
 
 func newMenu(items []list.Item, title string) list.Model {
@@ -58,7 +61,7 @@ func newMenu(items []list.Item, title string) list.Model {
 	return m
 }
 
-func newModel(root, layout, density string) model {
+func newModel(root string) model {
 	in := textinput.New()
 	in.Prompt = "› "
 	in.Placeholder = "Cmd+C, screenshot, a macro name…"
@@ -67,7 +70,7 @@ func newModel(root, layout, density string) model {
 	s.Spinner = spinner.Dot
 	s.Style = lipgloss.NewStyle().Foreground(mint)
 	return model{
-		root: root, layout: layout, density: density, side: "both", width: 150, height: 46,
+		root: root, side: "both", width: 150, height: 46,
 		selected: 37, screen: "keyboard", status: "Reading config…", busy: true,
 		input: in, library: newMenu(nil, "Definitions"), picker: newMenu(nil, "Actions"),
 		viewport: viewport.New(), spinner: s,
@@ -75,28 +78,23 @@ func newModel(root, layout, density string) model {
 }
 
 func (m model) Init() tea.Cmd {
-	return tea.Batch(m.bridge(request{Action: "snapshot"}), m.spinner.Tick)
+	return tea.Batch(loadConfig(m.root), m.spinner.Tick)
 }
 
-func (m model) bridge(req request) tea.Cmd {
-	return func() tea.Msg {
-		result, err := callBridge(m.root, req)
-		return bridgeMsg{result, err}
-	}
-}
-
-func (m *model) setSnapshot(data *snapshot) {
-	m.data = data
-	m.layer = min(max(0, m.layer), len(data.Layers)-1)
+func (m *model) setDocument(document *keymap.Document) {
+	m.layer = layerAfterReload(m.document, m.layer, document)
+	m.document = document
+	m.data = keymapview.SnapshotFrom(document, m.root)
 	m.library.ResetFilter()
 	if m.mode == "picker" {
 		m.mode = ""
 	}
-	items := make([]list.Item, 0, len(data.Entities))
-	for i, e := range data.Entities {
+	items := make([]list.Item, 0, len(m.data.Entities))
+	for i, e := range m.data.Entities {
 		items = append(items, menuItem{e.Name, e.Kind, strconv.Itoa(i)})
 	}
 	m.library.SetItems(items)
+	m.completions = nil
 	m.resize()
 }
 
@@ -109,7 +107,14 @@ func (m *model) resize() {
 		w = m.width - m.library.Width() - 10
 	}
 	m.viewport.SetWidth(w)
-	m.viewport.SetHeight(max(4, m.height-16))
+	viewportHeight := m.height - 12
+	if m.mode == "search" || m.mode == "command" {
+		viewportHeight = m.height - 17
+	}
+	if m.screen == "library" && m.mode == "" {
+		viewportHeight = m.height - 14
+	}
+	m.viewport.SetHeight(max(1, viewportHeight))
 	m.refreshViewport()
 }
 
@@ -139,8 +144,6 @@ func (m *model) openPalette() {
 		menuItem{"Reload config", "Validate edits and keep the last good map on error · r", "reload"},
 		menuItem{"Clear selected key", "Review the source edit before applying · x", "clear"},
 		menuItem{"Build and flash", "Choose local or remote, left half or both · f", "flash"},
-		menuItem{"Switch layout", "Studio / Focus · v", "layout"},
-		menuItem{"Switch key density", "Tiles / Compact · d", "density"},
 		menuItem{"Switch keyboard half", "Both / Left / Right · s", "side"},
 		menuItem{"Run a command", "All existing TUI commands · :", "command"},
 	})
@@ -157,6 +160,7 @@ func (m *model) openLayers() {
 
 func (m *model) openInput(mode string) tea.Cmd {
 	m.mode, m.output = mode, ""
+	m.completions = nil
 	m.input.SetValue("")
 	if mode == "command" {
 		m.input.Placeholder = "layer symbols, key RM4, find Cmd+C, flash --remote…"
@@ -165,6 +169,34 @@ func (m *model) openInput(mode string) tea.Cmd {
 	}
 	m.resize()
 	return m.input.Focus()
+}
+
+func (m *model) showError(err error) {
+	m.mode, m.output, m.status = "output", err.Error(), "Action failed"
+	m.resize()
+	m.viewport.GotoTop()
+}
+
+// completeCommand replaces only the token at the cursor and cycles repeated Tab presses.
+func (m *model) completeCommand() {
+	line := m.input.Value()
+	if m.input.Position() != len([]rune(line)) {
+		return
+	}
+	if len(m.completions) > 0 && line == m.completionLine {
+		m.completionIndex = (m.completionIndex + 1) % len(m.completions)
+	} else {
+		matches, token := keymapview.Complete(m.document.Config, line)
+		if len(matches) == 0 {
+			return
+		}
+		m.completions, m.completionIndex = matches, 0
+		m.completionPrefix = strings.TrimSuffix(line, token)
+	}
+	m.completionLine = m.completionPrefix + m.completions[m.completionIndex]
+	m.input.SetValue(m.completionLine)
+	m.input.CursorEnd()
+	m.status = fmt.Sprintf("%d/%d  %s", m.completionIndex+1, len(m.completions), strings.Join(m.completions, "  "))
 }
 
 func (m *model) perform(action string) tea.Cmd {
@@ -181,19 +213,23 @@ func (m *model) perform(action string) tea.Cmd {
 		m.screen = "library"
 		m.resize()
 	case "editor":
-		cmd := exec.Command("node", "--no-deprecation", "--import=tsx", "scripts/tea-bridge.ts", "--edit")
+		cmd, err := editor.Command(filepath.Join(m.root, "config", "glove80.keymap"))
+		if err != nil {
+			m.showError(err)
+			return nil
+		}
 		cmd.Dir = m.root
 		return tea.ExecProcess(cmd, func(err error) tea.Msg { return processMsg{err} })
 	case "reload":
 		m.busy, m.status = true, "Validating config…"
-		return tea.Batch(m.bridge(request{Action: "snapshot"}), m.spinner.Tick)
+		return tea.Batch(loadConfig(m.root), m.spinner.Tick)
 	case "clear":
 		key := m.data.Layers[m.layer].Keys[m.selected]
 		if !key.Editable {
 			m.status = "This binding is shared. Edit its source in your editor."
 			return nil
 		}
-		m.confirmation = request{Action: "clear", Layer: m.layer, Position: m.selected, Revision: m.data.Revision}
+		m.confirmation = clearSelection{document: m.document, layer: m.layer, position: m.selected}
 		m.mode = "confirm-clear"
 	case "flash":
 		m.openPicker("flash", "Build and flash", []list.Item{
@@ -202,18 +238,6 @@ func (m *model) perform(action string) tea.Cmd {
 			menuItem{"Remote · left half", "Build with GitHub Actions, then flash the left half", "--remote"},
 			menuItem{"Remote · both halves", "Build with GitHub Actions, then flash both halves", "--remote --full"},
 		})
-	case "layout":
-		if m.layout == "studio" {
-			m.layout = "focus"
-		} else {
-			m.layout = "studio"
-		}
-	case "density":
-		if m.density == "tiles" {
-			m.density = "compact"
-		} else {
-			m.density = "tiles"
-		}
 	case "side":
 		switch m.side {
 		case "both":
@@ -254,20 +278,25 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case processMsg:
 		m.processError = msg.err
 		m.busy, m.status = true, "Reloading config…"
-		return m, tea.Batch(m.bridge(request{Action: "snapshot"}), m.spinner.Tick)
-	case bridgeMsg:
+		return m, tea.Batch(loadConfig(m.root), m.spinner.Tick)
+	case configMsg:
 		m.busy = false
 		if msg.err != nil {
 			m.status = "Config request failed. Last valid map retained."
 			m.mode, m.output = "output", msg.err.Error()
+			if m.processError != nil {
+				m.output = "External command failed: " + m.processError.Error() + "\n\nReload failed: " + m.output
+				m.processError = nil
+			}
 			m.resize()
+			m.viewport.GotoTop()
 			return m, nil
 		}
-		if msg.response.Snapshot != nil {
-			m.setSnapshot(msg.response.Snapshot)
+		if msg.document != nil {
+			m.setDocument(msg.document)
 			m.status = "Config loaded"
-			if msg.response.Message != "" {
-				m.status = msg.response.Message
+			if msg.message != "" {
+				m.status = msg.message
 			}
 			if m.processError != nil {
 				m.mode, m.output = "output", "External command failed: "+m.processError.Error()
@@ -275,7 +304,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.resize()
 			}
 		}
-		if result := msg.response.Result; result != nil {
+		if result := msg.intent; result != nil {
+			m.status = "Ready"
 			switch result.Kind {
 			case "output":
 				m.output = result.Text
@@ -284,8 +314,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				if result.Error {
 					m.status = "Command failed"
-				} else {
-					m.status = "Ready"
 				}
 				m.resize()
 				m.viewport.GotoTop()
@@ -331,11 +359,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			if m.mode == "confirm-clear" {
 				m.mode, m.busy, m.status = "", true, "Writing config…"
-				return m, tea.Batch(m.bridge(m.confirmation), m.spinner.Tick)
+				return m, tea.Batch(clearBinding(m.confirmation), m.spinner.Tick)
 			}
 			m.mode = ""
-			args := append([]string{"scripts/glove-flash.sh"}, m.flashArgs...)
-			cmd := exec.Command("bash", args...)
+			cmd, err := flashCommand(m.root, m.flashArgs)
+			if err != nil {
+				m.showError(err)
+				return m, nil
+			}
 			cmd.Dir = m.root
 			return m, tea.ExecProcess(cmd, func(err error) tea.Msg { return processMsg{err} })
 		}
@@ -366,13 +397,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, cmd
 		}
 		if m.mode == "search" || m.mode == "command" {
+			if key == "tab" && m.mode == "command" {
+				m.completeCommand()
+				return m, nil
+			}
+			m.completions = nil
 			if key == "enter" && !m.busy && strings.TrimSpace(m.input.Value()) != "" {
 				line := m.input.Value()
 				if m.mode == "search" {
 					line = "find " + line
 				}
 				m.busy, m.status = true, "Searching config…"
-				return m, tea.Batch(m.bridge(request{Action: "command", Command: line, Layer: m.layer, Side: m.side, Revision: m.data.Revision}), m.spinner.Tick)
+				return m, tea.Batch(m.command(line), m.spinner.Tick)
 			}
 			var cmd tea.Cmd
 			if key == "pgdown" || key == "pgup" {
@@ -419,10 +455,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case ":":
 			return m.beginInput("command")
-		case "v":
-			return m.do("layout")
-		case "d":
-			return m.do("density")
 		case "s":
 			return m.do("side")
 		case "r":
@@ -601,9 +633,7 @@ Config
   x                 Clear selected key, with confirmation
   f                 Choose local/remote build and half/both flash
 
-Compare designs
-  v                 Studio / Focus layout
-  d                 Tiles / Compact keys
+Keyboard view
   s                 Both / Left / Right half
 
 Lists and details
@@ -616,8 +646,8 @@ Lists and details
 
 The full board is shown at 100 columns or more. Smaller terminals
 follow the selected half; arrows can cross the split when side is Both.
-Below 42 rows, keys use Compact density. Below 30 rows, hold labels
-move to the inspector. Resize to compare Tiles.
+Short terminals scroll the tiled keyboard to keep the selected row visible.
+In command entry, tab completes commands and names, then cycles matches.
 
 Commands
   layers · layer <name|index> · left · right · both · key <position>
