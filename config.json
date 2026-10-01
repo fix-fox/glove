@@ -15,8 +15,7 @@
         },
         {
           "tap": {
-            "type": "to",
-            "layerIndex": 9
+            "type": "none"
           },
           "hold": null
         },
@@ -491,29 +490,25 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "GRAVE"
+            "type": "none"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "ESC"
+            "type": "none"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "SPACE"
+            "type": "none"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "ENTER"
+            "type": "none"
           },
           "hold": null
         },
@@ -592,15 +587,13 @@
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "ESC"
+            "type": "none"
           },
           "hold": null
         },
         {
           "tap": {
-            "type": "kp",
-            "keyCode": "TILDE"
+            "type": "none"
           },
           "hold": null
         },
@@ -10244,7 +10237,7 @@
     {
       "id": "30c2864b-4a20-444d-ba10-73437df5fd29",
       "name": "v_space_ctrl_t",
-      "label": "v \u2303T",
+      "label": "v ⌃T",
       "steps": [
         {
           "directive": "tap",
@@ -10753,6 +10746,18 @@
       "holdTriggerOnRelease": true
     }
   ],
+  "tapDances": [
+    {
+      "id": "0f391a0c-c130-4ed2-b535-e3a089602251",
+      "name": "td_launcher_prevapp",
+      "label": "TD_LAUNCHER_PREVAPP",
+      "tappingTermMs": 200,
+      "bindings": [
+        "&kp LA(SPACE)",
+        "&kp LG(TAB)"
+      ]
+    }
+  ],
   "combos": [
     {
       "id": "e0e901a7-6eae-4016-949f-65c42b72afe0",
@@ -10830,17 +10835,5 @@
   "mouseSettings": {
     "normalSpeed": 900,
     "precisionSpeed": 300
-  },
-  "tapDances": [
-    {
-      "id": "0f391a0c-c130-4ed2-b535-e3a089602251",
-      "name": "td_launcher_prevapp",
-      "label": "TD_LAUNCHER_PREVAPP",
-      "tappingTermMs": 200,
-      "bindings": [
-        "&kp LA(SPACE)",
-        "&kp LG(TAB)"
-      ]
-    }
-  ]
+  }
 }
