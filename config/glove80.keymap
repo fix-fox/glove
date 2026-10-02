@@ -70,7 +70,7 @@
                 &tog LAYER_HEBREW  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &none
                 &none  &kp Q  &kp W  &kp F  &kp P  &kp B  &kp J  &kp L  &kp U  &kp Y  &kp LC(LG(SPACE))  &none
                 &none  &hml LCTRL A  &hml LALT R  &hml LGUI S  &hml LSHIFT T  &kp G  &kp M  &hmr RSHIFT N  &hmr RGUI E  &hmr RALT I  &hmr RCTRL O  &none
-                &none  &kp Z  &kp X  &lt LAYER_TMUX C  &lt LAYER_MACROS D  &kp V  &lt LAYER_NUMBERS TAB  &lt LAYER_SYSTEM ESCAPE  &shift_caps LSHIFT 0  &shift_caps LSHIFT 0  &none  &lt LAYER_MOUSE TAB  &kp K  &lt LAYER_MACROS H  &lt LAYER_TMUX COMMA  &kp DOT  &kp FSLH  &none
+                &none  &kp Z  &kp X  &lt LAYER_TMUX C  &lt LAYER_MACROS D  &kp V  &lt LAYER_NUMBERS TAB  &lt LAYER_SYSTEM ESCAPE  &shift_caps LSHIFT 0  &shift_caps LSHIFT 0  &none  &lt LAYER_MOUSE ENTER  &kp K  &lt LAYER_MACROS H  &lt LAYER_TMUX COMMA  &kp DOT  &kp FSLH  &none
                 &magic LAYER_MAGIC 0  &none  &none  &none  &none  &lt_mm_bspc_shift_del LAYER_CURSOR 0  &lt LAYER_MOUSE DEL  &mo LAYER_KEY_INDEX  &shot_ht LG(LS(N4)) LG(LS(N5))  &lt_td_launcher_prevapp LAYER_APPS 0  &lt LAYER_SYMBOLS SPACE  &dict_enter 0 ENTER  &none  &none  &none  &magic LAYER_MAGIC 0
             >;
         };
@@ -222,10 +222,10 @@
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                &trans  &kp LG(Q)  &kp LG(W)  &kp LG(F)  &kp LG(P)  &kp LG(B)  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
-                &trans  &hml LCTRL LG(A)  &hml LALT LG(R)  &hml LGUI LG(S)  &hml LSHIFT LG(T)  &kp LG(G)  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
-                &kp LG(Y)  &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(D)  &kp LG(V)  &trans  &trans  &trans  &trans  &trans  &kp ESCAPE  &trans  &kp LG(LEFT)  &kp ESCAPE  &kp LG(RIGHT)  &trans  &trans
-                &trans  &trans  &trans  &trans  &kp DEL  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &kp LA(LS(V))  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
+                &trans  &kp LCTRL  &kp LALT  &kp LGUI  &kp LSHIFT  &trans  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp LG(LEFT)  &trans  &kp LG(RIGHT)  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &trans  &trans  &trans  &trans  &trans
             >;
         };
 
