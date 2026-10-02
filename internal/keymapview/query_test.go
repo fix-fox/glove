@@ -66,8 +66,8 @@ func TestLayerAndPositionResolution(t *testing.T) {
 		_, err := ResolvePosition(ref)
 		if err == nil {
 			t.Errorf("accepted %s", ref)
-		} else if ref == "XX9" && !strings.Contains(err.Error(), "LM3") {
-			t.Error("missing name hint")
+		} else if ref == "XX9" && !strings.Contains(err.Error(), "0-79") {
+			t.Error("missing numeric position hint")
 		}
 	}
 }
@@ -109,14 +109,14 @@ func TestReverseBindingSearch(t *testing.T) {
 		query                   FindQuery
 		location, binding, note string
 	}{
-		{FindQuery{[]string{"LG"}, "C"}, "layer default · RM4 (pos 43) · tap", "LG(C)", ""},
-		{FindQuery{Key: "C"}, "layer default · RN5 (pos 20) · tap", "C", ""},
-		{FindQuery{Key: "C"}, "layer default · RM4 (pos 43) · tap", "LG(C)", "with LG"},
+		{FindQuery{[]string{"LG"}, "C"}, "layer default · position 43 · tap", "LG(C)", ""},
+		{FindQuery{Key: "C"}, "layer default · position 20 · tap", "C", ""},
+		{FindQuery{Key: "C"}, "layer default · position 43 · tap", "LG(C)", "with LG"},
 		{FindQuery{[]string{"LG"}, "C"}, "macro copy_url · step 2 (tap)", "LG(C)", ""},
-		{FindQuery{Key: "LGUI"}, "layer default · LM1 (pos 34) · tap", "LGUI", ""},
+		{FindQuery{Key: "LGUI"}, "layer default · position 34 · tap", "LGUI", ""},
 		{FindQuery{Key: "DEL"}, "mod-morph mm_bspc_shift_del · morph", "DEL", ""},
 		{FindQuery{Key: "ESC"}, "combo esc_combo", "ESC", ""},
-		{FindQuery{Key: "F5"}, "layer default · LN1 (pos 10) · tap", "F5", ""},
+		{FindQuery{Key: "F5"}, "layer default · position 10 · tap", "F5", ""},
 	} {
 		matches := FindBindings(config, tc.query)
 		want := FindMatch{tc.location, tc.binding, tc.note}
@@ -125,7 +125,7 @@ func TestReverseBindingSearch(t *testing.T) {
 		}
 	}
 	for _, match := range FindBindings(config, FindQuery{[]string{"LG"}, "C"}) {
-		if strings.Contains(match.Location, "pos 20") {
+		if strings.Contains(match.Location, "position 20") {
 			t.Fatal("modified query matched bare key")
 		}
 	}
@@ -135,7 +135,7 @@ func TestReverseBindingSearch(t *testing.T) {
 	config.HoldTaps = append(config.HoldTaps, keymap.HoldTapDefinition{Name: "escape", TapBinding: "&kp ESC", HoldBinding: "&kp X"})
 	for _, query := range []string{"ESC", "BSPC"} {
 		matches := FindBindings(config, FindQuery{Key: query})
-		if !slices.ContainsFunc(matches, func(m FindMatch) bool { return strings.Contains(m.Location, "LC1") }) {
+		if !slices.ContainsFunc(matches, func(m FindMatch) bool { return strings.Contains(m.Location, "position 0") }) {
 			t.Errorf("missing %s from hold/nested morph", query)
 		}
 	}
@@ -165,7 +165,10 @@ func TestTextSearchNamesLabelsAndKeycodes(t *testing.T) {
 			}
 		}
 	}
-	for _, query := range []string{"", "a", " "} {
+	if got := TextSearch(config, "a"); len(got) == 0 {
+		t.Error("single-character labels must be searchable")
+	}
+	for _, query := range []string{"", " "} {
 		if got := TextSearch(config, query); len(got) != 0 {
 			t.Errorf("short query %q produced hits", query)
 		}
@@ -179,7 +182,7 @@ func TestCompletionPreservesTokenAndContext(t *testing.T) {
 		want        []string
 	}{
 		{"", "", Commands}, {"la", "la", []string{"layers", "layer"}}, {"LM", "LM", []string{}}, {"re", "re", []string{"reload"}}, {"ed", "ed", []string{"edit"}}, {"help re", "re", []string{"reload"}},
-		{"layer sy", "sy", []string{"symbols", "system"}}, {"layer ", "", []string{"default", "symbols", "system"}}, {"key LM", "LM", []string{"LM1", "LM2", "LM3", "LM4", "LM5", "LM6"}}, {"rm lm", "lm", []string{"LM1", "LM2", "LM3", "LM4", "LM5", "LM6"}}, {"key LM4 ", "", []string{}},
+		{"layer sy", "sy", []string{"symbols", "system"}}, {"layer ", "", []string{"default", "symbols", "system"}}, {"key 3", "3", []string{"3", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39"}}, {"rm 7", "7", []string{"7", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79"}}, {"key LM", "LM", []string{}}, {"key 34 ", "", []string{}},
 		{"macro co", "co", []string{"copy_url"}}, {"combo e", "e", []string{"esc_combo"}}, {"flash --l", "--l", []string{"--local"}}, {"flash --remote --f", "--f", []string{"--full"}}, {"help fi", "fi", []string{"find"}}, {"find Cmd", "Cmd", []string{}}, {"find scre", "scre", []string{"screenshot"}},
 	} {
 		matches, token := Complete(config, tc.line)

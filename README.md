@@ -27,13 +27,14 @@ The minimum supported size is 40 columns by 22 rows.
 
 | Key | Action |
 | --- | --- |
-| Arrows or `h j k l` | Move across physical keys, including thumb clusters. |
-| `g`, `[` / `]` | Searchable layer picker, previous / next layer. |
+| Arrows | Move across physical keys, including thumb clusters. |
+| `l`, `[` / `]` | Layer picker, previous / next layer. Type to filter; Enter opens the selection. |
+| `g` | Show positions on the second line of every key. Type `0`–`79` and Enter to jump; Esc cancels. |
 | `enter` | Full binding or definition details. |
 | `tab` | Switch between keyboard and definitions. |
-| `/` | Find bindings on the keyboard; filter the definitions list. |
+| `/` | Search live, including single characters. Arrows choose a result; Enter navigates to its key, layer, or definition. |
 | `ctrl+f` | Find bindings from either tab. |
-| `ctrl+p` | Searchable action palette. |
+| `ctrl+p` | Command palette. Type to filter; Enter executes the selection. |
 | `:` | Command entry; Tab completes commands and names, then cycles matches. |
 | `s` | Show both halves, left, or right. |
 | `e` | Open the keymap in `$VISUAL`, `$EDITOR`, or `vi`. |
@@ -44,9 +45,18 @@ The minimum supported size is 40 columns by 22 rows.
 | `esc` | Cancel or go back. |
 | `?`, `q` | Help, quit. `ctrl+c` quits from inputs too. |
 
-For a filtered list, press Enter to accept the filter, then Enter again to open
-the selection. Search supports keycodes, chords such as `Cmd+C`, concepts such
-as `screenshot`, and definition names. Definitions include macros, combos,
+Mouse clicks select keys, open search results and menu choices, and switch tabs.
+The wheel moves through keys and lists or scrolls details. Positions are shown
+as numbers throughout the app; selecting a key does not add its position to the
+keycap. The `g` overlay temporarily replaces secondary labels with positions.
+
+Key labels and the legend share one color mapping: ordinary taps are white,
+modifiers and morph alternatives are purple, layer actions are blue, and macros
+are pink. Tap and hold labels are colored independently. Selection changes the
+border and background while preserving those colors.
+
+Search supports keycodes, chords such as `Cmd+C`, concepts such as `screenshot`,
+and partial labels and definition names. Definitions include macros, combos,
 hold-taps, mod-morphs, conditional layers, and tap dances.
 
 An editor command can include quoted paths and arguments, such as `code --wait`.
@@ -61,15 +71,15 @@ through stdin:
 ```sh
 scripts/glove layers
 scripts/glove find Cmd+C
-scripts/glove key RM4
-printf 'layer symbols\nkey LH1\nquit\n' | scripts/glove
+scripts/glove key 43
+printf 'layer symbols\nkey 52\nquit\n' | scripts/glove
 ```
 
 Commands: `layers`, `layer <name|index>`, `left`, `right`, `both`, `key <position>`,
 `macros`, `macro <name>`, `combos`, `combo <name>`, `holdtaps`, `morphs`,
 `condlayers`, `tapdances`, `find <query>`, `rm <position>`, `reload`, `edit`,
 `flash [--local|--remote] [--full]`, `help`, and `quit`. A bare position such as
-`RM4` or `43` opens that binding. Prefixes can select unambiguous layer names.
+`43` opens that binding. Prefixes can select unambiguous layer names.
 
 One-shot and piped failures produce a nonzero exit code. Piped sessions keep
 reading after a failed command, retaining the last valid map. `edit` needs an

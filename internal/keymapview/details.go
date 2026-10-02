@@ -8,10 +8,22 @@ import (
 )
 
 func positionName(position int) string {
-	if position >= 0 && position < len(KeyNames) {
-		return KeyNames[position]
-	}
 	return fmt.Sprint(position)
+}
+
+// PositionSide follows the physical grid, including thumb keys whose indices are interleaved.
+func PositionSide(position int) string {
+	for _, row := range Geometry {
+		for column, value := range row {
+			if value == position && value >= 0 {
+				if column < len(row)/2 {
+					return "left"
+				}
+				return "right"
+			}
+		}
+	}
+	return ""
 }
 func annotation(name, label string) string {
 	if label != "" {
@@ -44,7 +56,7 @@ func MacroDetail(def keymap.MacroDefinition, indent string) string {
 func ComboDetail(config keymap.Keymap, def keymap.ComboDefinition) string {
 	positions := []string{}
 	for _, p := range def.KeyPositions {
-		positions = append(positions, fmt.Sprintf("%s (%d)", positionName(p), p))
+		positions = append(positions, positionName(p))
 	}
 	layers := []string{}
 	for _, i := range def.Layers {
@@ -136,7 +148,7 @@ func KeyDetail(config keymap.Keymap, layerIndex, position int) string {
 	if key.Hold != nil {
 		hold = DescribeBehavior(*key.Hold, config, "  ", hebrew)
 	}
-	return fmt.Sprintf("%s (pos %d) on layer %d %q\n  tap:  %s\n  hold: %s", positionName(position), position, layerIndex, DisplayText(layer.Name, false), DescribeBehavior(key.Tap, config, "  ", hebrew), hold)
+	return fmt.Sprintf("Position %d on layer %d %q\n  tap:  %s\n  hold: %s", position, layerIndex, DisplayText(layer.Name, false), DescribeBehavior(key.Tap, config, "  ", hebrew), hold)
 }
 
 func listLayers(config keymap.Keymap) []string {
@@ -216,26 +228,18 @@ func RenderLayer(config keymap.Keymap, layerIndex int, side string) string {
 			if pos < 0 || pos >= len(layer.Keys) {
 				continue
 			}
-			name := positionName(pos)
-			if side == "left" && !strings.HasPrefix(name, "L") || side == "right" && !strings.HasPrefix(name, "R") {
+			if (side == "left" || side == "right") && side != PositionSide(pos) {
 				continue
 			}
 			key := layer.Keys[pos]
 			hebrew := strings.Contains(strings.ToLower(layer.Name), "hebrew")
-			tap := BehaviorLabel(key.Tap, config, hebrew)
-			if key.Tap.Type == "trans" {
-				tap = "·"
-			}
+			labels := presentation(key, config, hebrew)
+			tap := labels.tap
 			if tap == "" {
 				tap = "(none)"
 			}
-			hold := ""
-			if key.Tap.Type == "hold_tap" {
-				hold = HoldTapSecondaryLabel(key.Tap.Name, key.Tap.Param1)
-			} else if key.Hold != nil {
-				hold = BehaviorLabel(*key.Hold, config, hebrew)
-			}
-			line := fmt.Sprintf("%s (%2d)  %s", name, pos, tap)
+			hold := labels.hold
+			line := fmt.Sprintf("%2d  %s", pos, tap)
 			if hold != "" {
 				line += "  [hold: " + hold + "]"
 			}

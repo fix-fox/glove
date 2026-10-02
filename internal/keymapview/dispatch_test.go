@@ -1,6 +1,7 @@
 package keymapview
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -17,17 +18,17 @@ func TestDispatchCommandsAndErrors(t *testing.T) {
 	}{
 		{"quit", "quit", "", false}, {"exit", "quit", "", false}, {"  ", "output", "", false},
 		{"lyer default", "output", "Did you mean `layer`?", true}, {"layer", "output", "layer <name|index>", true}, {"key", "output", "key <pos>", true}, {"key symbols RM4", "output", "key <pos>", true},
-		{"layer nope", "output", "Unknown layer", true}, {"key nope", "output", "Unknown key name", true},
-		{"layers", "output", "default", false}, {"layer default", "show-layer", "Layer 0: default", false}, {"key RM4", "output", "kp LG(C)", false}, {"macro copy_url", "output", "1. tap", false}, {"combo esc_combo", "output", "LT1 (22)", false},
+		{"layer nope", "output", "Unknown layer", true}, {"key nope", "output", "Unknown key position", true},
+		{"layers", "output", "default", false}, {"layer default", "show-layer", "Layer 0: default", false}, {"key RM4", "output", "kp LG(C)", false}, {"macro copy_url", "output", "1. tap", false}, {"combo esc_combo", "output", "keys: 22", false},
 		{"macro nope", "output", "copy_url", true}, {"combo nope", "output", "esc_combo", true}, {"macro", "output", "macro <name>", true}, {"combo", "output", "combo <name>", true},
-		{"find Cmd+C", "output", "layer default · RM4 (pos 43) · tap → LG(C)", false}, {"find foo+c", "output", "No bindings found", false}, {"find F24", "output", "No bindings found", false}, {"find", "output", "find <query>", true},
+		{"find Cmd+C", "output", "layer default · position 43 · tap → LG(C)", false}, {"find foo+c", "output", "No bindings found", false}, {"find F24", "output", "No bindings found", false}, {"find", "output", "find <query>", true},
 		{"flash --bogus", "output", "--local|--remote", true}, {"flash --local --remote", "output", "Choose --local or --remote", true},
 		{"help", "output", "find <query>", false}, {"help find", "output", "reverse lookup", false}, {"help key", "output", "displayed layer", false}, {"help edit", "output", "$EDITOR", false}, {"help reload", "output", "last valid keymap", false}, {"help flash", "output", "validate, build, and flash", false},
 		{"find copy", "output", "copy ≈ ⌘C", false}, {"find copy_u", "output", `macro "copy_url"`, false}, {"find backspace", "output", "keycode BSPC", false}, {"find frobnicate", "output", "No bindings found", false},
 		{"RM4", "output", "kp LG(C)", false}, {"43", "output", "kp LG(C)", false}, {"rm4", "output", "kp LG(C)", false},
 		{"up", "output", "Unknown command", true}, {"..", "output", "Unknown command", true}, {"esc", "output", "Unknown command", true},
 		{"left foo", "output", "left half", true}, {"right foo", "output", "right half", true}, {"both foo", "output", "full board", true},
-		{"rm nope", "output", "Unknown key name", true}, {"rm", "output", "rm <pos>", true},
+		{"rm nope", "output", "Unknown key position", true}, {"rm", "output", "rm <pos>", true},
 		{"reload", "reload", "", false}, {"EDIT", "edit", "", false}, {"edit other.keymap", "output", "open the keymap", true}, {"reload other.keymap", "output", "reread the native config", true},
 	} {
 		t.Run(tc.command, func(t *testing.T) {
@@ -102,9 +103,9 @@ func TestDefinitionListsAndDetails(t *testing.T) {
 		parts   []string
 	}{
 		{"layers", []string{" 0: default (4 keys bound)", "symbols", "system"}},
-		{"macros", []string{"copy_url", "2 steps", "CopyURL"}}, {"combos", []string{"esc_combo", "LT1+LT2", "&kp ESC"}}, {"holdtaps", []string{"hml_lgui", "balanced", "280ms", "hold &kp", "tap &kp"}}, {"morphs", []string{"mm_bspc_shift_del", "&kp BSPC", "MOD_LSFT", "&kp DEL"}}, {"condlayers", []string{"tri_layer", "symbols + system", "system"}},
-		{"key 10", []string{"LN1 (pos 10)", "kp F5", "hold: mo 1", "symbols"}}, {"key 34", []string{"hold-tap hml_lgui(LGUI, A)", "hold: &kp LGUI", "tap:  &kp A", "280ms"}}, {"key 43", []string{"hold: (none)"}},
-		{"macro copy_url", []string{"1. tap &kp LG(L)", "2. tap &kp LG(C)"}}, {"combo esc_combo", []string{"LT1 (22) + LT2 (23)", "binding: &kp ESC", "layers: all"}},
+		{"macros", []string{"copy_url", "2 steps", "CopyURL"}}, {"combos", []string{"esc_combo", "22+23", "&kp ESC"}}, {"holdtaps", []string{"hml_lgui", "balanced", "280ms", "hold &kp", "tap &kp"}}, {"morphs", []string{"mm_bspc_shift_del", "&kp BSPC", "MOD_LSFT", "&kp DEL"}}, {"condlayers", []string{"tri_layer", "symbols + system", "system"}},
+		{"key 10", []string{"Position 10", "kp F5", "hold: mo 1", "symbols"}}, {"key 34", []string{"hold-tap hml_lgui(LGUI, A)", "hold: &kp LGUI", "tap:  &kp A", "280ms"}}, {"key 43", []string{"hold: (none)"}},
+		{"macro copy_url", []string{"1. tap &kp LG(L)", "2. tap &kp LG(C)"}}, {"combo esc_combo", []string{"22 + 23", "binding: &kp ESC", "layers: all"}},
 	} {
 		result := Dispatch(config, tc.command, 0, "both")
 		for _, part := range tc.parts {
@@ -145,7 +146,7 @@ func TestPlainLayerOutputPreservesAllBindingsAndSelectedHalf(t *testing.T) {
 		text := RenderLayer(config, 0, side)
 		seen := 0
 		for pos, name := range KeyNames {
-			found := strings.Contains(text, name+" (")
+			found := strings.Contains("\n"+text, fmt.Sprintf("\n%2d  ", pos))
 			want := side == "both" || strings.HasPrefix(name, strings.ToUpper(side[:1]))
 			if found != want {
 				t.Errorf("%s: key %d %s found=%v", side, pos, name, found)

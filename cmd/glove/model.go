@@ -36,6 +36,8 @@ type model struct {
 	busy                             bool
 	input                            textinput.Model
 	library, picker                  list.Model
+	pickerItems                      []list.Item
+	choiceTitle                      string
 	viewport                         viewport.Model
 	spinner                          spinner.Model
 	confirmation                     clearSelection
@@ -58,6 +60,12 @@ func newMenu(items []list.Item, title string) list.Model {
 	m.SetShowHelp(false)
 	m.SetShowStatusBar(true)
 	m.DisableQuitKeybindings()
+	m.KeyMap.CursorUp.SetKeys("up")
+	m.KeyMap.CursorDown.SetKeys("down")
+	m.KeyMap.PrevPage.SetKeys("left", "pgup")
+	m.KeyMap.NextPage.SetKeys("right", "pgdown")
+	m.KeyMap.GoToStart.SetKeys("home")
+	m.KeyMap.GoToEnd.SetKeys("end")
 	return m
 }
 
@@ -69,11 +77,18 @@ func newModel(root string) model {
 	s := spinner.New()
 	s.Spinner = spinner.Dot
 	s.Style = lipgloss.NewStyle().Foreground(mint)
+	view := viewport.New()
+	view.KeyMap.Up.SetKeys("up")
+	view.KeyMap.Down.SetKeys("down")
+	view.KeyMap.Left.SetKeys("left")
+	view.KeyMap.Right.SetKeys("right")
+	library := newMenu(nil, "Definitions")
+	library.SetFilteringEnabled(false)
 	return model{
 		root: root, side: "both", width: 150, height: 46,
 		selected: 37, screen: "keyboard", status: "Reading config…", busy: true,
-		input: in, library: newMenu(nil, "Definitions"), picker: newMenu(nil, "Actions"),
-		viewport: viewport.New(), spinner: s,
+		input: in, library: library, picker: newChoices(),
+		viewport: view, spinner: s,
 	}
 }
 
@@ -82,6 +97,13 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m *model) setDocument(document *keymap.Document) {
+	previousEntity := keymapview.Entity{}
+	if item, ok := m.library.SelectedItem().(menuItem); ok && m.data != nil {
+		index, _ := strconv.Atoi(item.action)
+		if index >= 0 && index < len(m.data.Entities) {
+			previousEntity = m.data.Entities[index]
+		}
+	}
 	m.layer = layerAfterReload(m.document, m.layer, document)
 	m.document = document
 	m.data = keymapview.SnapshotFrom(document, m.root)
@@ -90,17 +112,28 @@ func (m *model) setDocument(document *keymap.Document) {
 		m.mode = ""
 	}
 	items := make([]list.Item, 0, len(m.data.Entities))
+	selected := 0
 	for i, e := range m.data.Entities {
 		items = append(items, menuItem{e.Name, e.Kind, strconv.Itoa(i)})
+		if e.Kind == previousEntity.Kind && e.Name == previousEntity.Name {
+			selected = i
+		}
 	}
 	m.library.SetItems(items)
+	m.library.Select(selected)
+	if m.mode == "search" {
+		m.refreshChoices()
+	}
 	m.completions = nil
 	m.resize()
 }
 
 func (m *model) resize() {
 	m.input.SetWidth(max(10, m.width-12))
-	m.picker.SetSize(max(20, min(78, m.width-10)), max(6, m.height-14))
+	if m.mode == "jump" {
+		m.input.SetWidth(4)
+	}
+	m.picker.SetSize(max(1, m.width-4), max(1, m.height-17))
 	m.library.SetSize(max(20, min(38, m.width/3)), max(6, m.height-12))
 	w := max(20, m.width-10)
 	if m.screen == "library" && m.mode == "" && m.width >= 90 {
@@ -129,15 +162,20 @@ func (m *model) refreshViewport() {
 	m.viewport.SetContent(lipgloss.NewStyle().Width(m.viewport.Width()).Render(content))
 }
 
-func (m *model) openPicker(kind, title string, items []list.Item) {
+func (m *model) openPicker(kind, title string, items []list.Item) tea.Cmd {
 	m.mode, m.pickerKind = "picker", kind
-	m.picker = newMenu(items, title)
+	m.choiceTitle, m.pickerItems = title, items
+	m.picker = newChoices()
+	m.resetInput("Type to filter…")
+	m.refreshChoices()
 	m.resize()
+	return m.input.Focus()
 }
 
-func (m *model) openPalette() {
-	m.openPicker("action", "What would you like to do?", []list.Item{
-		menuItem{"Choose a layer", "Browse all layers · g", "layers"},
+func (m *model) openPalette() tea.Cmd {
+	return m.openPicker("action", "Commands", []list.Item{
+		menuItem{"Choose a layer", "Browse all layers · l", "layers"},
+		menuItem{"Go to a position", "Show key positions and jump · g", "jump"},
 		menuItem{"Find a binding", "Keycodes, chords, concepts and names · /", "search"},
 		menuItem{"Browse definitions", "Macros, combos, hold-taps, morphs and conditional layers · tab", "library"},
 		menuItem{"Edit config", "Open the native keymap in your editor · e", "editor"},
@@ -149,23 +187,33 @@ func (m *model) openPalette() {
 	})
 }
 
-func (m *model) openLayers() {
+func (m *model) openLayers() tea.Cmd {
 	items := make([]list.Item, 0, len(m.data.Layers))
 	for i, layer := range m.data.Layers {
 		items = append(items, menuItem{layer.Name, fmt.Sprintf("Layer %02d · 80 keys", i), strconv.Itoa(i)})
 	}
-	m.openPicker("layer", "Layers", items)
+	cmd := m.openPicker("layer", "Layers", items)
 	m.picker.Select(m.layer)
+	return cmd
+}
+
+func (m *model) resetInput(placeholder string) {
+	m.input.SetValue("")
+	m.input.Placeholder = placeholder
+	m.input.CharLimit = 256
+	m.input.Validate = nil
 }
 
 func (m *model) openInput(mode string) tea.Cmd {
 	m.mode, m.output = mode, ""
 	m.completions = nil
-	m.input.SetValue("")
 	if mode == "command" {
-		m.input.Placeholder = "layer symbols, key RM4, find Cmd+C, flash --remote…"
+		m.resetInput("layer symbols, key 43, find Cmd+C, flash --remote…")
 	} else {
-		m.input.Placeholder = "Cmd+C, screenshot, a macro name…"
+		m.resetInput("Cmd+C, screenshot, a macro name…")
+		m.choiceTitle = "Find a binding"
+		m.picker = newChoices()
+		m.refreshChoices()
 	}
 	m.resize()
 	return m.input.Focus()
@@ -206,7 +254,9 @@ func (m *model) perform(action string) tea.Cmd {
 	m.mode = ""
 	switch action {
 	case "layers":
-		m.openLayers()
+		return m.openLayers()
+	case "jump":
+		return m.openJump()
 	case "search", "command":
 		return m.openInput(action)
 	case "library":
@@ -232,7 +282,7 @@ func (m *model) perform(action string) tea.Cmd {
 		m.confirmation = clearSelection{document: m.document, layer: m.layer, position: m.selected}
 		m.mode = "confirm-clear"
 	case "flash":
-		m.openPicker("flash", "Build and flash", []list.Item{
+		return m.openPicker("flash", "Build and flash", []list.Item{
 			menuItem{"Local · left half", "Build with Docker, then flash the left half", "--local"},
 			menuItem{"Local · both halves", "Build with Docker, then flash both halves", "--local --full"},
 			menuItem{"Remote · left half", "Build with GitHub Actions, then flash the left half", "--remote"},
@@ -264,6 +314,8 @@ func (m *model) beginInput(mode string) (tea.Model, tea.Cmd) {
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.MouseMsg:
+		return m.handleMouse(msg)
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
 		m.resize()
@@ -340,12 +392,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 		if key == "esc" && m.mode != "" {
-			if m.mode == "picker" && m.picker.FilterState() != list.Unfiltered {
-				var cmd tea.Cmd
-				m.picker, cmd = m.picker.Update(msg)
-				return m, cmd
-			}
 			m.mode = ""
+			m.status = "Ready"
 			m.input.Blur()
 			m.resize()
 			return m, nil
@@ -370,44 +418,21 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmd.Dir = m.root
 			return m, tea.ExecProcess(cmd, func(err error) tea.Msg { return processMsg{err} })
 		}
-		if m.mode == "picker" {
-			if key == "enter" && m.picker.FilterState() != list.Filtering {
-				item, ok := m.picker.SelectedItem().(menuItem)
-				if !ok {
-					return m, nil
-				}
-				switch m.pickerKind {
-				case "layer":
-					index, err := strconv.Atoi(item.action)
-					if err != nil || index < 0 || index >= len(m.data.Layers) {
-						m.mode, m.status = "", "Layer changed. Open the layer picker again."
-						return m, nil
-					}
-					m.layer = index
-					m.mode, m.screen = "", "keyboard"
-				case "flash":
-					m.flashArgs, m.mode = strings.Fields(item.action), "confirm-flash"
-				case "action":
-					return m.do(item.action)
-				}
-				return m, nil
-			}
-			var cmd tea.Cmd
-			m.picker, cmd = m.picker.Update(msg)
-			return m, cmd
+		if m.mode == "jump" {
+			return m.updateJump(msg)
 		}
-		if m.mode == "search" || m.mode == "command" {
-			if key == "tab" && m.mode == "command" {
+		if m.mode == "picker" || m.mode == "search" {
+			return m.updateChoices(msg)
+		}
+		if m.mode == "command" {
+			if key == "tab" {
 				m.completeCommand()
 				return m, nil
 			}
 			m.completions = nil
 			if key == "enter" && !m.busy && strings.TrimSpace(m.input.Value()) != "" {
 				line := m.input.Value()
-				if m.mode == "search" {
-					line = "find " + line
-				}
-				m.busy, m.status = true, "Searching config…"
+				m.busy, m.status = true, "Running command…"
 				return m, tea.Batch(m.command(line), m.spinner.Tick)
 			}
 			var cmd tea.Cmd
@@ -434,25 +459,20 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return m, nil
 		}
-		if m.screen == "library" && m.library.FilterState() == list.Filtering {
-			var cmd tea.Cmd
-			m.library, cmd = m.library.Update(msg)
-			m.refreshViewport()
-			return m, cmd
-		}
 		switch key {
 		case "q":
 			return m, tea.Quit
 		case "ctrl+p":
-			m.openPalette()
+			cmd := m.openPalette()
+			return m, cmd
+		case "l":
+			cmd := m.openLayers()
+			return m, cmd
 		case "g":
-			m.openLayers()
-		case "ctrl+f":
+			cmd := m.openJump()
+			return m, cmd
+		case "ctrl+f", "/":
 			return m.beginInput("search")
-		case "/":
-			if m.screen != "library" {
-				return m.beginInput("search")
-			}
 		case ":":
 			return m.beginInput("command")
 		case "s":
@@ -488,6 +508,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else if item, ok := m.library.SelectedItem().(menuItem); ok {
 				i, _ := strconv.Atoi(item.action)
 				m.output = m.data.Entities[i].Detail
+			} else {
+				return m, nil
 			}
 			m.mode = "output"
 			m.resize()
@@ -509,24 +531,25 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, cmd
 		}
 		switch key {
-		case "left", "h":
+		case "left":
 			m.move(-1, 0)
-		case "right", "l":
+		case "right":
 			m.move(1, 0)
-		case "up", "k":
+		case "up":
 			m.move(0, -1)
-		case "down", "j":
+		case "down":
 			m.move(0, 1)
 		}
 	}
-	if m.mode == "search" || m.mode == "command" {
+	if m.mode == "picker" || m.mode == "search" {
+		return m.updateChoices(msg)
+	}
+	if m.mode == "jump" {
+		return m.updateJump(msg)
+	}
+	if m.mode == "command" {
 		var cmd tea.Cmd
 		m.input, cmd = m.input.Update(msg)
-		return m, cmd
-	}
-	if m.mode == "picker" {
-		var cmd tea.Cmd
-		m.picker, cmd = m.picker.Update(msg)
 		return m, cmd
 	}
 	if m.screen == "library" && m.mode == "" {
@@ -542,10 +565,7 @@ func (m model) selectedBinding() binding { return m.data.Layers[m.layer].Keys[m.
 
 func (m model) effectiveSide() string {
 	if m.side == "both" && m.width < 100 && m.data != nil {
-		if strings.HasPrefix(m.selectedBinding().Name, "L") {
-			return "left"
-		}
-		return "right"
+		return keymapview.PositionSide(m.selected)
 	}
 	return m.side
 }
@@ -554,13 +574,9 @@ func (m *model) ensureVisibleSelection() {
 	if m.side == "both" {
 		return
 	}
-	prefix := "L"
-	if m.side == "right" {
-		prefix = "R"
-	}
-	if !strings.HasPrefix(m.selectedBinding().Name, prefix) {
+	if keymapview.PositionSide(m.selected) != m.side {
 		for _, key := range m.data.Layers[m.layer].Keys {
-			if strings.HasPrefix(key.Name, prefix) {
+			if keymapview.PositionSide(key.Position) == m.side {
 				m.selected = key.Position
 				break
 			}
@@ -584,8 +600,7 @@ func (m *model) move(dx, dy int) {
 			if pos == nil {
 				continue
 			}
-			name := m.data.Layers[m.layer].Keys[*pos].Name
-			if m.side == "left" && !strings.HasPrefix(name, "L") || m.side == "right" && !strings.HasPrefix(name, "R") {
+			if m.side != "both" && keymapview.PositionSide(*pos) != m.side {
 				continue
 			}
 			if dy == 0 {
@@ -617,14 +632,15 @@ func abs(n int) int {
 }
 
 const helpText = `Explore
-  arrows / h j k l   Move across the physical keyboard
+  arrows            Move across the physical keyboard
   [ / ]             Previous / next layer
-  g                 Searchable layer picker
+  l                 Layer picker: type to filter, enter to open
+  g                 Show positions; type a number and enter to jump
   enter             Full binding or definition details
   tab               Keyboard / definitions
-  /                 Find bindings; filter while in definitions
+  /                 Live search; arrows choose, enter navigates
   ctrl+f            Find bindings from either tab
-  ctrl+p            Searchable action palette
+  ctrl+p            Command palette: type to filter, enter to execute
   :                 Run any existing TUI command
 
 Config
@@ -637,17 +653,23 @@ Keyboard view
   s                 Both / Left / Right half
 
 Lists and details
-  /                 Filter a list; enter accepts the filter
+  typing            Filter the open picker or search immediately
   arrows            Select a list item
   enter             Open the selected item
   pgup / pgdown     Scroll full details and search results
   esc               Go back or cancel
   q / ctrl+c        Quit (ctrl+c also works inside inputs)
 
+Mouse
+  click             Select a key, open a result, or switch tabs
+  wheel             Move through keys/lists or scroll details
+
 The full board is shown at 100 columns or more. Smaller terminals
 follow the selected half; arrows can cross the split when side is Both.
 Short terminals scroll the tiled keyboard to keep the selected row visible.
 In command entry, tab completes commands and names, then cycles matches.
+Positions are numbered 0–79. Selection changes the border and background;
+label colors always follow the legend, including hold and morph labels.
 
 Commands
   layers · layer <name|index> · left · right · both · key <position>

@@ -58,7 +58,7 @@ func ResolvePosition(ref string) (int, error) {
 			return i, nil
 		}
 	}
-	return 0, fmt.Errorf("Unknown key name %q: expected 0-79 or a name like LM3, RH1", ref)
+	return 0, fmt.Errorf("Unknown key position %q: expected 0-79", ref)
 }
 
 type FindQuery struct {
@@ -67,8 +67,10 @@ type FindQuery struct {
 }
 type FindMatch struct{ Location, Binding, Note string }
 type TextSearchResult struct {
-	Entity  string
-	Matches []FindMatch
+	Entity         string
+	Matches        []FindMatch
+	Target         SearchTarget
+	bindingMatches []bindingSearchMatch
 }
 
 var modifierWords = map[string]string{"cmd": "LG", "command": "LG", "gui": "LG", "win": "LG", "lg": "LG", "rcmd": "RG", "rgui": "RG", "rg": "RG", "ctrl": "LC", "control": "LC", "lc": "LC", "rctrl": "RC", "rc": "RC", "alt": "LA", "opt": "LA", "option": "LA", "la": "LA", "ralt": "RA", "ropt": "RA", "ra": "RA", "shift": "LS", "ls": "LS", "rshift": "RS", "rs": "RS"}
@@ -152,7 +154,15 @@ func behaviorKeyCodes(b keymap.Behavior, config keymap.Keymap, seen map[string]b
 
 func FindBindings(config keymap.Keymap, q FindQuery) []FindMatch {
 	results := []FindMatch{}
-	add := func(location, code string) {
+	for _, match := range findBindingMatches(config, q) {
+		results = append(results, match.FindMatch)
+	}
+	return results
+}
+
+func findBindingMatches(config keymap.Keymap, q FindQuery) []bindingSearchMatch {
+	results := []bindingSearchMatch{}
+	add := func(location, code string, target SearchTarget, kind string) {
 		key, mods := ParseModifiedKeyCode(code)
 		slices.Sort(mods)
 		if key != q.Key {
@@ -166,9 +176,9 @@ func FindBindings(config keymap.Keymap, q FindQuery) []FindMatch {
 		} else if !slices.Equal(mods, q.Mods) {
 			return
 		}
-		results = append(results, FindMatch{location, code, note})
+		results = append(results, bindingSearchMatch{FindMatch{location, code, note}, target, kind})
 	}
-	for _, layer := range config.Layers {
+	for layerIndex, layer := range config.Layers {
 		for pos, key := range layer.Keys {
 			slots := []struct {
 				name     string
@@ -179,7 +189,7 @@ func FindBindings(config keymap.Keymap, q FindQuery) []FindMatch {
 					continue
 				}
 				for _, code := range behaviorKeyCodes(*slot.behavior, config, map[string]bool{}) {
-					add(fmt.Sprintf("layer %s · %s (pos %d) · %s", layer.Name, positionName(pos), pos, slot.name), code)
+					add(fmt.Sprintf("layer %s · position %d · %s", layer.Name, pos, slot.name), code, SearchTarget{Kind: "key", LayerIndex: layerIndex, Position: pos}, bindingCodeKind(*slot.behavior, code, config))
 				}
 			}
 		}
@@ -187,32 +197,32 @@ func FindBindings(config keymap.Keymap, q FindQuery) []FindMatch {
 	for _, def := range config.Macros {
 		for i, step := range def.Steps {
 			for _, code := range ExtractKpCodes(strings.Join(step.Bindings, " ")) {
-				add(fmt.Sprintf("macro %s · step %d (%s)", def.Name, i+1, step.Directive), code)
+				add(fmt.Sprintf("macro %s · step %d (%s)", def.Name, i+1, step.Directive), code, definitionTarget("macro", def.Name), "macro")
 			}
 		}
 	}
 	for _, def := range config.Combos {
 		for _, code := range ExtractKpCodes(def.Binding) {
-			add("combo "+def.Name, code)
+			add("combo "+def.Name, code, definitionTarget("combo", def.Name), "key")
 		}
 	}
 	for _, def := range config.ModMorphs {
 		for _, code := range ExtractKpCodes(def.DefaultBinding) {
-			add("mod-morph "+def.Name+" · default", code)
+			add("mod-morph "+def.Name+" · default", code, definitionTarget("mod-morph", def.Name), "modifier")
 		}
 		for _, code := range ExtractKpCodes(def.MorphBinding) {
-			add("mod-morph "+def.Name+" · morph", code)
+			add("mod-morph "+def.Name+" · morph", code, definitionTarget("mod-morph", def.Name), "modifier")
 		}
 	}
 	for _, def := range config.HoldTaps {
 		for _, code := range ExtractKpCodes(def.TapBinding + " " + def.HoldBinding) {
-			add("hold-tap "+def.Name+" · binding", code)
+			add("hold-tap "+def.Name+" · binding", code, definitionTarget("hold-tap", def.Name), "modifier")
 		}
 	}
 	for _, def := range config.TapDances {
 		for i, binding := range def.Bindings {
 			for _, code := range ExtractKpCodes(binding) {
-				add(fmt.Sprintf("tap-dance %s · tap %d", def.Name, i+1), code)
+				add(fmt.Sprintf("tap-dance %s · tap %d", def.Name, i+1), code, definitionTarget("tap-dance", def.Name), "modifier")
 			}
 		}
 	}
@@ -222,55 +232,61 @@ func FindBindings(config keymap.Keymap, q FindQuery) []FindMatch {
 func TextSearch(config keymap.Keymap, query string) []TextSearchResult {
 	q := strings.ToLower(strings.TrimSpace(query))
 	results := []TextSearchResult{}
-	if len([]rune(q)) < 2 {
+	if q == "" {
 		return results
 	}
 	hit := func(s string) bool { return strings.Contains(strings.ToLower(s), q) }
-	add := func(entity string) { results = append(results, TextSearchResult{Entity: entity}) }
+	add := func(entity, kind, name string) {
+		results = append(results, TextSearchResult{Entity: entity, Target: definitionTarget(kind, name)})
+	}
 	for _, def := range config.Macros {
 		if hit(def.Name) || hit(def.Label) {
 			s := fmt.Sprintf("macro %q", def.Name)
 			if def.Label != "" {
 				s += " (" + def.Label + ")"
 			}
-			add(s)
+			add(s, "macro", def.Name)
 		}
 	}
 	for _, def := range config.Combos {
 		if hit(def.Name) {
-			add(fmt.Sprintf("combo %q", def.Name))
+			add(fmt.Sprintf("combo %q", def.Name), "combo", def.Name)
 		}
 	}
 	for _, def := range config.ModMorphs {
 		if hit(def.Name) || hit(def.Label) {
-			add(fmt.Sprintf("mod-morph %q", def.Name))
+			add(fmt.Sprintf("mod-morph %q", def.Name), "mod-morph", def.Name)
 		}
 	}
 	for _, def := range config.HoldTaps {
 		if hit(def.Name) || hit(def.Label) {
-			add(fmt.Sprintf("hold-tap %q", def.Name))
+			add(fmt.Sprintf("hold-tap %q", def.Name), "hold-tap", def.Name)
 		}
 	}
 	for _, def := range config.TapDances {
 		if hit(def.Name) || hit(def.Label) {
-			add(fmt.Sprintf("tap-dance %q", def.Name))
+			add(fmt.Sprintf("tap-dance %q", def.Name), "tap-dance", def.Name)
 		}
 	}
 	for _, def := range config.ConditionalLayers {
 		if hit(def.Name) {
-			add(fmt.Sprintf("conditional layer %q", def.Name))
+			add(fmt.Sprintf("conditional layer %q", def.Name), "conditional", def.Name)
 		}
 	}
 	for i, layer := range config.Layers {
 		if hit(layer.Name) {
-			add(fmt.Sprintf("layer %d %q", i, layer.Name))
+			results = append(results, TextSearchResult{Entity: fmt.Sprintf("layer %d %q", i, layer.Name), Target: SearchTarget{Kind: "layer", LayerIndex: i}})
 		}
 	}
 	for _, kc := range Keycodes {
 		if hit(kc.Label) && !strings.EqualFold(kc.Label, kc.Code) {
-			matches := FindBindings(config, FindQuery{Key: kc.Code})
+			resolved := findBindingMatches(config, FindQuery{Key: kc.Code})
+			matches := []FindMatch{}
+			for _, match := range resolved {
+				matches = append(matches, match.FindMatch)
+			}
 			if len(matches) > 0 {
-				results = append(results, TextSearchResult{fmt.Sprintf("keycode %s %q", kc.Code, kc.Label), matches})
+				results = append(results, TextSearchResult{Entity: fmt.Sprintf("keycode %s %q", kc.Code, kc.Label), Matches: matches, bindingMatches: resolved})
 			}
 		}
 	}

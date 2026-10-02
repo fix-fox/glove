@@ -27,12 +27,12 @@ var usage = map[string]string{
 	"left":   "left: show only the left half of the board",
 	"right":  "right: show only the right half of the board",
 	"both":   "both: show the full board",
-	"key":    "key <pos>: key detail on the displayed layer, e.g. `key RM4` or `key 43` (a bare position works too)",
+	"key":    "key <pos>: key detail on the displayed layer, e.g. `key 43` (a bare position works too)",
 	"macros": "macros: list all macros", "macro": "macro <name>: full macro definition",
 	"combos": "combos: list all combos", "combo": "combo <name>: full combo definition",
 	"holdtaps": "holdtaps: list hold-tap definitions", "morphs": "morphs: list mod-morph definitions", "condlayers": "condlayers: list conditional layers", "tapdances": "tapdances: list tap-dance definitions",
 	"find":   "find <query>: reverse lookup: keycodes (`find Cmd+C`), concepts (`find screenshot`), names/labels (`find print`)",
-	"rm":     "rm <pos>: clear a key on the displayed layer: none on the base layer, trans elsewhere, e.g. `rm RM4`",
+	"rm":     "rm <pos>: clear a key on the displayed layer: none on the base layer, trans elsewhere, e.g. `rm 43`",
 	"reload": "reload: reread the native config files; keep the last valid keymap if loading fails",
 	"edit":   "edit: open the keymap in $VISUAL or $EDITOR, then reload it",
 	"flash":  "flash [--local|--remote] [--full]: validate, build, and flash via scripts/glove-flash.sh",
@@ -213,7 +213,7 @@ func Dispatch(config keymap.Keymap, line string, layerIndex int, side string) (r
 		}
 		key := layer.Keys[position]
 		previous := strings.SplitN(DescribeBehavior(key.Tap, config, "", false), "\n", 2)[0]
-		label := fmt.Sprintf("%s (pos %d)", positionName(position), position)
+		label := fmt.Sprintf("position %d", position)
 		clearType := "none"
 		if layerIndex != 0 {
 			clearType = "trans"
@@ -296,7 +296,9 @@ func Complete(config keymap.Keymap, line string) (matches []string, completeOn s
 				candidates = append(candidates, layer.Name)
 			}
 		case (cmd == "key" || cmd == "rm") && len(parts) == 2:
-			candidates = KeyNames
+			for position := range keymap.KeyCount {
+				candidates = append(candidates, positionName(position))
+			}
 		case cmd == "macro" && len(parts) == 2:
 			for _, def := range config.Macros {
 				candidates = append(candidates, def.Name)

@@ -22,8 +22,10 @@ type Layer struct {
 	Keys []Binding
 }
 type Binding struct {
-	Position                              int
-	Name, Tap, Hold, Kind, Detail, Source string
+	Position                        int
+	Name, Tap, Hold, Detail, Source string
+	// TapKind and HoldKind classify each displayed line independently for consistent colors.
+	TapKind, HoldKind string
 	// Editable is false for shared macro references and bindings containing comments.
 	Editable bool
 }
@@ -48,24 +50,6 @@ func relativePath(root, path string) string {
 		return path
 	}
 	return rel
-}
-
-func keyKind(key keymap.Key) string {
-	if (key.Tap.Type == "none" || key.Tap.Type == "trans") && key.Hold == nil {
-		return "empty"
-	}
-	switch key.Tap.Type {
-	case "mo", "to", "tog", "sl":
-		return "layer"
-	case "macro":
-		return "macro"
-	case "hold_tap", "mod_morph":
-		return "modifier"
-	}
-	if key.Hold != nil {
-		return "modifier"
-	}
-	return "key"
 }
 
 func definitionEntities(config keymap.Keymap) []Entity {
@@ -152,17 +136,8 @@ func SnapshotFrom(doc *keymap.Document, root string) *Snapshot {
 		view := Layer{Name: DisplayText(layer.Name, false)}
 		hebrew := strings.Contains(strings.ToLower(layer.Name), "hebrew")
 		for position, key := range layer.Keys {
-			tap := BehaviorLabel(key.Tap, doc.Config, hebrew)
-			if key.Tap.Type == "trans" {
-				tap = "·"
-			}
-			hold := ""
-			if key.Tap.Type == "hold_tap" {
-				hold = HoldTapSecondaryLabel(key.Tap.Name, key.Tap.Param1)
-			} else if key.Hold != nil {
-				hold = BehaviorLabel(*key.Hold, doc.Config, hebrew)
-			}
-			binding := Binding{Position: position, Name: positionName(position), Tap: DisplayText(tap, false), Hold: DisplayText(hold, false), Kind: keyKind(key), Detail: DisplayText(KeyDetail(doc.Config, layerIndex, position), true)}
+			labels := presentation(key, doc.Config, hebrew)
+			binding := Binding{Position: position, Name: positionName(position), Tap: labels.tap, Hold: labels.hold, TapKind: labels.tapKind, HoldKind: labels.holdKind, Detail: DisplayText(KeyDetail(doc.Config, layerIndex, position), true)}
 			if layerIndex < len(doc.Bindings) && position < len(doc.Bindings[layerIndex]) {
 				source := doc.Bindings[layerIndex][position]
 				contents := doc.Sources[source.File]
