@@ -9,10 +9,11 @@ import (
 )
 
 type binding struct {
-	name   string
-	args   []string
-	token  sourceToken
-	source BindingSource
+	name    string
+	keyName string
+	args    []string
+	token   sourceToken
+	source  BindingSource
 }
 
 func property(node *keymapNode, name string) []sourceToken {
@@ -173,6 +174,21 @@ func bindingsIn(group []sourceToken) []binding {
 	for index := 0; index < len(group); {
 		token := group[index]
 		index++
+		var annotation sourceToken
+		if isKeyName(token) {
+			annotation = token
+			if index >= len(group) {
+				sourceError(token, "Orphan @name annotation: expected a literal layer binding")
+			}
+			token = group[index]
+			index++
+			if isKeyName(token) {
+				sourceError(token, "Duplicate @name annotation for one binding")
+			}
+			if token.text != "&" {
+				sourceError(token, "@name must appear immediately before a literal layer binding")
+			}
+		}
 		if token.text != "&" {
 			sourceError(token, "Expected a behavior reference beginning with &")
 		}
@@ -182,7 +198,7 @@ func bindingsIn(group []sourceToken) []binding {
 		name := group[index]
 		index++
 		params := []sourceToken{}
-		for index < len(group) && group[index].text != "&" {
+		for index < len(group) && group[index].text != "&" && !isKeyName(group[index]) {
 			params = append(params, group[index])
 			index++
 		}
@@ -190,7 +206,16 @@ func bindingsIn(group []sourceToken) []binding {
 		if len(params) > 0 {
 			last = params[len(params)-1]
 		}
-		result = append(result, binding{name: name.text, args: argumentsFrom(params), token: token, source: BindingSource{File: token.file, Start: token.start, End: last.end, Editable: !token.expanded && !name.expanded && last.file == token.file}})
+		source := BindingSource{File: token.file, Start: token.start, End: last.end, Editable: !token.expanded && !name.expanded && last.file == token.file}
+		keyName := ""
+		if isKeyName(annotation) {
+			if !source.Editable || annotation.expanded || annotation.file != token.file || annotation.end > token.start {
+				sourceError(annotation, "@name annotations cannot name a shared macro; use a literal layer binding")
+			}
+			keyName = strings.TrimPrefix(annotation.text, keyNamePrefix)
+			source.NameStart, source.NameEnd = annotation.start, annotation.end
+		}
+		result = append(result, binding{name: name.text, keyName: keyName, args: argumentsFrom(params), token: token, source: source})
 	}
 	return result
 }

@@ -62,6 +62,8 @@ func (m model) render() string {
 		body = m.confirmView(w, bodyHeight)
 	case m.mode == "command" || m.mode == "output":
 		body = m.outputView(w, bodyHeight)
+	case m.mode == "name":
+		body = m.keyNameView(w, bodyHeight)
 	case m.data == nil:
 		body = "\n" + m.spinner.View() + " Reading your keyboard config…\n\n" + dimStyle.Render("r reload   e edit   q quit")
 	case m.screen == "library":
@@ -117,7 +119,11 @@ func (m model) keyboardView(w, h int) string {
 		return board + "\n\n" + m.inspector(w, remaining-1, false)
 	}
 	key := m.selectedBinding()
-	return board + "\n" + accent.Render("pos "+key.Name) + "  " + bindingStyle(key.TapKind).Render(key.Tap) + "  " + bindingStyle(key.HoldKind).Render(key.Hold) + dimStyle.Render(" · enter for details")
+	summary := accent.Render("pos " + strconv.Itoa(key.Position))
+	if key.Name != "" {
+		summary += "  " + textStyle.Bold(true).Render(key.Name)
+	}
+	return board + "\n" + summary + "  " + bindingStyle(key.TapKind).Render(key.Tap) + "  " + bindingStyle(key.HoldKind).Render(key.Hold) + dimStyle.Render(" · enter for details")
 }
 
 func (m model) keyboardGrid() string {
@@ -142,6 +148,9 @@ func (m model) keyboardGrid() string {
 func (m model) keyCell(key binding, width int) string {
 	selected := key.Position == m.selected
 	label := key.Tap
+	if key.Name != "" {
+		label = key.Name
+	}
 	if label == "" {
 		label = "·"
 	}
@@ -208,6 +217,13 @@ func (m model) visibleRows(height int) (first, count int) {
 func (m model) inspector(w, h int, vertical bool) string {
 	key := m.selectedBinding()
 	title := dimStyle.Render("pos ") + accent.Bold(true).Render(strconv.Itoa(key.Position))
+	if key.Name != "" {
+		if vertical {
+			title += "\n" + textStyle.Bold(true).Width(w).Render(key.Name)
+		} else {
+			title += "   " + textStyle.Bold(true).Render(key.Name)
+		}
+	}
 	if !vertical {
 		summary := bindingStyle(key.TapKind).Bold(true).Render(key.Tap)
 		if key.Hold != "" {
@@ -222,7 +238,7 @@ func (m model) inspector(w, h int, vertical bool) string {
 	}
 	content += lipgloss.NewStyle().Foreground(line).Render(strings.Repeat("─", w)) + "\n\n"
 	content += textStyle.Width(w).Render(key.Detail) + "\n\n" + dimStyle.Width(w).Render(key.Source)
-	content += "\n\n" + accent.Render("enter") + dimStyle.Render(" details   ") + accent.Render("x") + dimStyle.Render(" clear")
+	content += "\n\n" + accent.Render("n") + dimStyle.Render(" name   ") + accent.Render("x") + dimStyle.Render(" clear")
 	return fit(content, w, h)
 }
 
@@ -310,6 +326,8 @@ func (m model) hints() string {
 		hints = [][2]string{{"0–79", "position"}, {"enter", "jump"}, {"esc", "cancel"}}
 	case "command":
 		hints = [][2]string{{"enter", "run"}, {"tab", "complete"}, {"pgup/dn", "scroll"}, {"esc", "back"}}
+	case "name":
+		hints = [][2]string{{"enter", "save"}, {"empty", "remove name"}, {"esc", "cancel"}}
 	case "output":
 		hints = [][2]string{{"↑↓", "scroll"}, {"pgup/dn", "page"}, {"esc", "back"}}
 	case "confirm-clear", "confirm-flash":
@@ -318,7 +336,7 @@ func (m model) hints() string {
 		if m.screen == "library" {
 			hints = [][2]string{{"↑↓", "choose"}, {"/", "find"}, {"enter", "details"}, {"tab", "keyboard"}, {"ctrl+p", "actions"}}
 		} else {
-			hints = [][2]string{{"↑↓←→", "move"}, {"l", "layers"}, {"g", "position"}, {"/", "find"}, {"tab", "definitions"}}
+			hints = [][2]string{{"↑↓←→", "move"}, {"l", "layers"}, {"g", "position"}, {"/", "find"}, {"n", "name"}, {"tab", "definitions"}}
 		}
 	}
 	parts := make([]string, 0, len(hints))

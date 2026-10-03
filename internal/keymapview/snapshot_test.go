@@ -47,7 +47,7 @@ func TestSnapshotNativeLabelsGeometrySourcesAndDefinitions(t *testing.T) {
 		}
 	}
 	key := snapshot.Layers[0].Keys[35]
-	if key.Position != 35 || key.Name != "35" || key.Tap != "A" || key.Hold != "⌃" || key.TapKind != "key" || key.HoldKind != "modifier" || !key.Editable || !strings.HasPrefix(key.Source, "config/glove80.keymap:") || !strings.Contains(key.Detail, "hold-tap hml(LCTRL, A)") {
+	if key.Position != 35 || key.Name != "" || key.Tap != "A" || key.Hold != "⌃" || key.TapKind != "key" || key.HoldKind != "modifier" || !key.Editable || !strings.HasPrefix(key.Source, "config/glove80.keymap:") || !strings.Contains(key.Detail, "hold-tap hml(LCTRL, A)") {
 		t.Fatalf("incorrect key: %+v", key)
 	}
 	for _, position := range []int{1, 65, 66, 67, 68, 77, 78} {

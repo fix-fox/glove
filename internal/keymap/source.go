@@ -66,11 +66,15 @@ func tokenize(fragment, file, source string, offset int) []sourceToken {
 			if label := labelPattern.FindStringSubmatch(rest[:length]); label != nil {
 				tokens = append(tokens, at("@label "+strings.TrimSpace(label[1]), index, index+length))
 			}
+			keyNameComment(rest[:length], at("", index, index+length))
 			index += length
 		case strings.HasPrefix(rest, "/*"):
 			end := strings.Index(rest[2:], "*/")
 			if end < 0 {
 				sourceError(at("/*", index, index+2), "Unterminated comment")
+			}
+			if name, ok := keyNameComment(rest[:end+4], at("", index, index+end+4)); ok {
+				tokens = append(tokens, name)
 			}
 			index += end + 4
 		case rest[0] == '"':
@@ -152,8 +156,9 @@ func (r *sourceReader) expand(tokens []sourceToken, active []string) []sourceTok
 }
 
 // maskComments prevents commented directives from changing the include graph.
-func maskComments(source, file string) string {
+func maskComments(source, file string) (string, []sourceToken) {
 	masked := []byte(source)
+	var names []sourceToken
 	for index := 0; index < len(source); {
 		rest := source[index:]
 		if strings.HasPrefix(rest, "\"") {
@@ -179,6 +184,9 @@ func maskComments(source, file string) string {
 			continue
 		}
 		comment := source[index : index+length]
+		if name, ok := keyNameComment(comment, sourceToken{file: file, source: source, start: index, end: index + length}); ok {
+			names = append(names, name)
+		}
 		if commentSplicePattern.MatchString(comment) {
 			sourceError(sourceToken{file: file, source: source, start: index}, "Line continuations inside comments are not supported")
 		}
@@ -189,7 +197,7 @@ func maskComments(source, file string) string {
 		}
 		index += length
 	}
-	return string(masked)
+	return string(masked), names
 }
 
 func (r *sourceReader) read(requested string) []sourceToken {
@@ -222,7 +230,7 @@ func (r *sourceReader) read(requested string) []sourceToken {
 		source = string(data)
 	}
 	r.sources[file] = source
-	masked := maskComments(source, file)
+	masked, names := maskComments(source, file)
 	result := []sourceToken{}
 	previous := 0
 	for _, match := range directivePattern.FindAllStringIndex(masked, -1) {
@@ -251,6 +259,11 @@ func (r *sourceReader) read(requested string) []sourceToken {
 			}
 		}
 		raw := source[start:end]
+		for _, name := range names {
+			if name.start < end && name.end > start {
+				sourceError(name, "@name annotations are not supported in preprocessor directives or shared macros")
+			}
+		}
 		line := strings.TrimSpace(splicePattern.ReplaceAllString(masked[start:end], " "))
 		at := sourceToken{text: raw, file: file, source: source, start: start, end: end}
 		include := includePattern.FindStringSubmatch(line)
@@ -316,6 +329,9 @@ func (p *nodeParser) take() sourceToken {
 }
 func (p *nodeParser) expect(text string) {
 	t := p.take()
+	if isKeyName(t) {
+		sourceError(t, "@name annotations are supported only before literal layer bindings")
+	}
 	if t.text != text {
 		sourceError(t, "Expected %s, got %s", text, t.text)
 	}
@@ -330,6 +346,9 @@ func (p *nodeParser) node(depth int) *keymapNode {
 		n.displayLabel = strings.TrimPrefix(p.take().text, "@label ")
 	}
 	n.token = p.take()
+	if isKeyName(n.token) {
+		sourceError(n.token, "@name annotations are supported only before literal layer bindings")
+	}
 	n.reference = n.token.text == "&"
 	n.name = n.token.text
 	if n.reference {
@@ -360,6 +379,9 @@ func (p *nodeParser) node(depth int) *keymapNode {
 			continue
 		}
 		property := p.take()
+		if isKeyName(property) {
+			sourceError(property, "@name annotations are supported only before literal layer bindings")
+		}
 		if _, ok := n.properties[property.text]; ok {
 			sourceError(property, "Duplicate property %s", property.text)
 		}

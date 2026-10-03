@@ -148,7 +148,11 @@ func KeyDetail(config keymap.Keymap, layerIndex, position int) string {
 	if key.Hold != nil {
 		hold = DescribeBehavior(*key.Hold, config, "  ", hebrew)
 	}
-	return fmt.Sprintf("Position %d on layer %d %q\n  tap:  %s\n  hold: %s", position, layerIndex, DisplayText(layer.Name, false), DescribeBehavior(key.Tap, config, "  ", hebrew), hold)
+	header := fmt.Sprintf("Position %d on layer %d %q", position, layerIndex, DisplayText(layer.Name, false))
+	if key.Name != "" {
+		header += "\n  name: " + DisplayText(key.Name, false)
+	}
+	return fmt.Sprintf("%s\n  tap:  %s\n  hold: %s", header, DescribeBehavior(key.Tap, config, "  ", hebrew), hold)
 }
 
 func listLayers(config keymap.Keymap) []string {
@@ -240,6 +244,9 @@ func RenderLayer(config keymap.Keymap, layerIndex int, side string) string {
 			}
 			hold := labels.hold
 			line := fmt.Sprintf("%2d  %s", pos, tap)
+			if key.Name != "" {
+				line += "  (" + DisplayText(key.Name, false) + ")"
+			}
 			if hold != "" {
 				line += "  [hold: " + hold + "]"
 			}

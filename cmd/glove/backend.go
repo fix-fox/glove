@@ -19,7 +19,7 @@ type configMsg struct {
 	err      error
 }
 
-type clearSelection struct {
+type bindingSelection struct {
 	document        *keymap.Document
 	layer, position int
 }
@@ -39,9 +39,16 @@ func (m model) command(line string) tea.Cmd {
 	}
 }
 
-func clearBinding(selection clearSelection) tea.Cmd {
+func clearBinding(selection bindingSelection) tea.Cmd {
 	return func() tea.Msg {
 		document, err := keymap.Clear(selection.document, selection.layer, selection.position)
 		return configMsg{document: document, err: err, message: fmt.Sprintf("Cleared position %d; saved native config", selection.position)}
+	}
+}
+
+func renameBinding(selection bindingSelection, name string) tea.Cmd {
+	return func() tea.Msg {
+		document, err := keymap.RenameKey(selection.document, selection.layer, selection.position, name)
+		return configMsg{document: document, err: err, message: fmt.Sprintf("Saved name for position %d in native config", selection.position)}
 	}
 }

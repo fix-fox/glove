@@ -172,7 +172,7 @@ func TestSelectionNeverAddsPositionsOrChangesSemanticLabelColors(t *testing.T) {
 	for _, kind := range []struct{ name, color string }{{"key", "38;2;231;233;240"}, {"modifier", "38;2;197;176;255"}, {"layer", "38;2;150;199;242"}, {"macro", "38;2;237;172;199"}} {
 		for _, selected := range []int{25, 26} {
 			m.selected = selected
-			key := binding{Position: 25, Name: "25", Tap: "Label", Hold: "Hold", TapKind: kind.name, HoldKind: kind.name}
+			key := binding{Position: 25, Tap: "Label", Hold: "Hold", TapKind: kind.name, HoldKind: kind.name}
 			lines := strings.Split(m.keyCell(key, 12), "\n")
 			for _, line := range lines[1:3] {
 				if !strings.Contains(line, kind.color) {

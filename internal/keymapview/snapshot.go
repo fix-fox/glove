@@ -22,7 +22,8 @@ type Layer struct {
 	Keys []Binding
 }
 type Binding struct {
-	Position                        int
+	Position int
+	// Name is an optional per-layer key name, separate from the actual tap and hold labels.
 	Name, Tap, Hold, Detail, Source string
 	// TapKind and HoldKind classify each displayed line independently for consistent colors.
 	TapKind, HoldKind string
@@ -137,7 +138,7 @@ func SnapshotFrom(doc *keymap.Document, root string) *Snapshot {
 		hebrew := strings.Contains(strings.ToLower(layer.Name), "hebrew")
 		for position, key := range layer.Keys {
 			labels := presentation(key, doc.Config, hebrew)
-			binding := Binding{Position: position, Name: positionName(position), Tap: labels.tap, Hold: labels.hold, TapKind: labels.tapKind, HoldKind: labels.holdKind, Detail: DisplayText(KeyDetail(doc.Config, layerIndex, position), true)}
+			binding := Binding{Position: position, Name: DisplayText(key.Name, false), Tap: labels.tap, Hold: labels.hold, TapKind: labels.tapKind, HoldKind: labels.holdKind, Detail: DisplayText(KeyDetail(doc.Config, layerIndex, position), true)}
 			if layerIndex < len(doc.Bindings) && position < len(doc.Bindings[layerIndex]) {
 				source := doc.Bindings[layerIndex][position]
 				contents := doc.Sources[source.File]

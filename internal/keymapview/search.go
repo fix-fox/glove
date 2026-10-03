@@ -59,6 +59,11 @@ func Search(config keymap.Keymap, query string) []SearchResult {
 			return
 		}
 		seen[result.Target] = true
+		if target := result.Target; target.Kind == "key" {
+			if name := config.Layers[target.LayerIndex].Keys[target.Position].Name; name != "" {
+				result.Title = name + " · " + result.Title
+			}
+		}
 		result.Title = DisplayText(result.Title, false)
 		result.Description = DisplayText(result.Description, false)
 		results = append(results, result)
@@ -104,7 +109,7 @@ func Search(config keymap.Keymap, query string) []SearchResult {
 		for position, key := range layer.Keys {
 			labels := presentation(key, config, hebrew)
 			kind := labels.tapKind
-			hit := strings.Contains(strings.ToLower(labels.tap), lower)
+			hit := strings.Contains(strings.ToLower(labels.tap), lower) || strings.Contains(strings.ToLower(DisplayText(key.Name, false)), lower)
 			if !hit && labels.hold != "" && strings.Contains(strings.ToLower(labels.hold), lower) {
 				hit = true
 				kind = labels.holdKind

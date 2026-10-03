@@ -69,6 +69,7 @@ func load(path string, replacements map[string]string) (document *Document, err 
 	if keymapNode == nil {
 		fail(path + ": Missing keymap node")
 	}
+	validateKeyNameLocations(nodes, keymapNode)
 	for _, node := range root.children {
 		expected := map[string]string{"keymap": "zmk,keymap", "combos": "zmk,combos", "conditional_layers": "zmk,conditional-layers"}[node.name]
 		if expected == "" {
@@ -170,6 +171,7 @@ func load(path string, replacements map[string]string) (document *Document, err 
 		ranges := make([]BindingSource, len(bindings))
 		for i, binding := range bindings {
 			layer.Keys[i] = l.key(binding)
+			layer.Keys[i].Name = binding.keyName
 			ranges[i] = binding.source
 		}
 		l.config.Layers = append(l.config.Layers, layer)

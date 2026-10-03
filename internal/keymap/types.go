@@ -21,7 +21,9 @@ type Behavior struct {
 }
 
 type Key struct {
-	Tap Behavior
+	// Name is an optional display name for this binding, independent of its behavior.
+	Name string
+	Tap  Behavior
 	// A nil Hold means holding repeats the tap behavior.
 	Hold *Behavior
 }
@@ -106,6 +108,8 @@ type Keymap struct {
 type BindingSource struct {
 	File       string
 	Start, End int
+	// NameStart and NameEnd delimit the optional @name comment; both are zero when absent.
+	NameStart, NameEnd int
 	// Editable is false for references produced by a shared object macro.
 	Editable bool
 }

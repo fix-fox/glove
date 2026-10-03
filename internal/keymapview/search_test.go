@@ -100,6 +100,37 @@ func TestSearchDescriptionsAreSafeAndTargetsRemainStable(t *testing.T) {
 	}
 }
 
+func TestNamesAreSearchableWithoutHidingBehaviorAndStaySpecificToLayer(t *testing.T) {
+	config := fixture()
+	config.Layers[0].Keys[43].Name = "Clipboard"
+	config.Layers[1].Keys[43].Name = "העתק"
+	target := SearchTarget{Kind: "key", LayerIndex: 0, Position: 43}
+	for _, query := range []string{"clipb", "CLIPBOARD", "Cmd+C", "43"} {
+		result := resultFor(t, Search(config, query), target)
+		if !strings.Contains(result.Title, "Clipboard") || result.Description == "" {
+			t.Fatalf("name or behavior missing: %+v", result)
+		}
+	}
+	results := Search(config, "clipb")
+	if len(results) != 1 || results[0].Target != target {
+		t.Fatalf("custom name leaked to another layer: %+v", results)
+	}
+	resultFor(t, Search(config, "עת"), SearchTarget{Kind: "key", LayerIndex: 1, Position: 43})
+	config.Layers[0].Keys[43].Name = "\x1b[31mClipboard\x1b[0m\a"
+	result := resultFor(t, Search(config, "clipb"), target)
+	if strings.ContainsAny(result.Title+result.Description, "\x1b\a") {
+		t.Fatal("unsafe custom name")
+	}
+	snapshot := SnapshotFrom(&keymap.Document{Config: config}, "")
+	key := snapshot.Layers[0].Keys[43]
+	if key.Name != "Clipboard" || key.Tap != "⌘C" || !strings.Contains(key.Detail, "name: Clipboard") || !strings.Contains(key.Detail, "LG(C)") {
+		t.Fatalf("snapshot lost name or underlying behavior: %+v", key)
+	}
+	if text := RenderLayer(config, 0, "both"); !strings.Contains(text, "Clipboard") || !strings.Contains(text, "⌘C") {
+		t.Fatal("plain layer display lost name or behavior")
+	}
+}
+
 func TestAllKeyDisplaysUseNumericPositions(t *testing.T) {
 	config := fixture()
 	aliases := regexp.MustCompile(`\b[LR][CNTMBFH][1-6]\b`)
@@ -123,7 +154,7 @@ func TestAllKeyDisplaysUseNumericPositions(t *testing.T) {
 	snapshot := SnapshotFrom(&keymap.Document{Config: config}, "")
 	for _, layer := range snapshot.Layers {
 		for position, key := range layer.Keys {
-			if key.Name != fmt.Sprint(position) || aliases.MatchString(key.Detail) {
+			if key.Position != position || aliases.MatchString(key.Detail) {
 				t.Fatalf("legacy position in %+v", key)
 			}
 		}

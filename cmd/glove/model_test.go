@@ -118,7 +118,7 @@ func TestConfirmationChoicesFitSmallTerminals(t *testing.T) {
 		for _, mode := range []string{"confirm-clear", "confirm-flash"} {
 			m := loadedModel(t)
 			m.width, m.height, m.mode = size[0], size[1], mode
-			m.confirmation = clearSelection{document: m.document, layer: m.layer, position: m.selected}
+			m.confirmation = bindingSelection{document: m.document, layer: m.layer, position: m.selected}
 			m.flashArgs = []string{"--remote", "--full"}
 			frame := ansi.Strip(m.confirmView(m.width-4, m.height-10))
 			if lipgloss.Height(frame) > m.height-10 || lipgloss.Width(frame) > m.width-4 || !strings.Contains(frame, "y  confirm") || !strings.Contains(frame, "cancel") {

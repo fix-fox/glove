@@ -69,3 +69,14 @@ func Command(path string) (*exec.Cmd, error) {
 	}
 	return exec.Command(args[0], append(args[1:], path)...), nil
 }
+
+// CommandAt opens Vim at a 1-based line and byte column in the file.
+func CommandAt(path string, line, column int) (*exec.Cmd, error) {
+	if path == "" {
+		return nil, fmt.Errorf("editor file path must not be empty")
+	}
+	if line < 1 || column < 1 {
+		return nil, fmt.Errorf("editor line and byte column must be positive, got %d:%d", line, column)
+	}
+	return exec.Command("vim", "-c", fmt.Sprintf("call cursor(%d,%d)", line, column), "--", path), nil
+}

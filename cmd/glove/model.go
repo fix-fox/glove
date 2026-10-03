@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -12,7 +11,6 @@ import (
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/fix-fox/glove/internal/editor"
 	"github.com/fix-fox/glove/internal/keymap"
 	"github.com/fix-fox/glove/internal/keymapview"
 )
@@ -40,7 +38,8 @@ type model struct {
 	choiceTitle                      string
 	viewport                         viewport.Model
 	spinner                          spinner.Model
-	confirmation                     clearSelection
+	confirmation                     bindingSelection
+	naming                           bindingSelection
 	completions                      []string
 	completionPrefix, completionLine string
 	completionIndex                  int
@@ -178,7 +177,8 @@ func (m *model) openPalette() tea.Cmd {
 		menuItem{"Go to a position", "Show key positions and jump · g", "jump"},
 		menuItem{"Find a binding", "Keycodes, chords, concepts and names · /", "search"},
 		menuItem{"Browse definitions", "Macros, combos, hold-taps, morphs and conditional layers · tab", "library"},
-		menuItem{"Edit config", "Open the native keymap in your editor · e", "editor"},
+		menuItem{"Name selected key", "Show a memorable name on the keycap · n", "name"},
+		menuItem{"Edit config", "Open Vim at the selected binding · e", "editor"},
 		menuItem{"Reload config", "Validate edits and keep the last good map on error · r", "reload"},
 		menuItem{"Clear selected key", "Review the source edit before applying · x", "clear"},
 		menuItem{"Build and flash", "Choose local or remote, left half or both · f", "flash"},
@@ -263,13 +263,15 @@ func (m *model) perform(action string) tea.Cmd {
 		m.screen = "library"
 		m.resize()
 	case "editor":
-		cmd, err := editor.Command(filepath.Join(m.root, "config", "glove80.keymap"))
+		cmd, err := m.bindingEditor()
 		if err != nil {
 			m.showError(err)
 			return nil
 		}
 		cmd.Dir = m.root
 		return tea.ExecProcess(cmd, func(err error) tea.Msg { return processMsg{err} })
+	case "name":
+		return m.openKeyName()
 	case "reload":
 		m.busy, m.status = true, "Validating config…"
 		return tea.Batch(loadConfig(m.root), m.spinner.Tick)
@@ -279,7 +281,7 @@ func (m *model) perform(action string) tea.Cmd {
 			m.status = "This binding is shared. Edit its source in your editor."
 			return nil
 		}
-		m.confirmation = clearSelection{document: m.document, layer: m.layer, position: m.selected}
+		m.confirmation = bindingSelection{document: m.document, layer: m.layer, position: m.selected}
 		m.mode = "confirm-clear"
 	case "flash":
 		return m.openPicker("flash", "Build and flash", []list.Item{
@@ -333,6 +335,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Batch(loadConfig(m.root), m.spinner.Tick)
 	case configMsg:
 		m.busy = false
+		if m.mode == "name" {
+			if msg.err != nil {
+				m.output, m.status = msg.err.Error(), "Name not saved"
+				return m, nil
+			}
+			m.mode = ""
+			m.input.Blur()
+		}
 		if msg.err != nil {
 			m.status = "Config request failed. Last valid map retained."
 			m.mode, m.output = "output", msg.err.Error()
@@ -421,6 +431,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.mode == "jump" {
 			return m.updateJump(msg)
 		}
+		if m.mode == "name" {
+			return m.updateKeyName(msg)
+		}
 		if m.mode == "picker" || m.mode == "search" {
 			return m.updateChoices(msg)
 		}
@@ -481,6 +494,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.do("reload")
 		case "e":
 			return m.do("editor")
+		case "n":
+			return m.do("name")
 		case "x":
 			return m.do("clear")
 		case "f":
@@ -546,6 +561,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 	if m.mode == "jump" {
 		return m.updateJump(msg)
+	}
+	if m.mode == "name" {
+		return m.updateKeyName(msg)
 	}
 	if m.mode == "command" {
 		var cmd tea.Cmd
@@ -644,7 +662,8 @@ const helpText = `Explore
   :                 Run any existing TUI command
 
 Config
-  e                 Open the native keymap in $VISUAL / $EDITOR
+  n                 Name selected key; Enter saves, empty removes
+  e                 Open Vim at the selected binding's line and column
   r                 Reload and validate the config
   x                 Clear selected key, with confirmation
   f                 Choose local/remote build and half/both flash

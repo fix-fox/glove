@@ -37,7 +37,8 @@ The minimum supported size is 40 columns by 22 rows.
 | `ctrl+p` | Command palette. Type to filter; Enter executes the selection. |
 | `:` | Command entry; Tab completes commands and names, then cycles matches. |
 | `s` | Show both halves, left, or right. |
-| `e` | Open the keymap in `$VISUAL`, `$EDITOR`, or `vi`. |
+| `n` | Name the selected key on this layer. Enter saves; an empty name removes it; Esc cancels. |
+| `e` | Open Vim at the selected binding's line and column, including bindings in local includes. |
 | `r` | Reload config. A failed load retains the last valid map. |
 | `x` | Confirm clearing the selected key. |
 | `f` | Choose local/remote and left/both build and flash, then confirm. |
@@ -56,12 +57,15 @@ are pink. Tap and hold labels are colored independently. Selection changes the
 border and background while preserving those colors.
 
 Search supports keycodes, chords such as `Cmd+C`, concepts such as `screenshot`,
-and partial labels and definition names. Definitions include macros, combos,
-hold-taps, mod-morphs, conditional layers, and tap dances.
+and partial labels, custom key names, and definition names. Definitions include
+macros, combos, hold-taps, mod-morphs, conditional layers, and tap dances.
 
-An editor command can include quoted paths and arguments, such as `code --wait`.
-Arguments are parsed without a shell. Use an editor that waits for editing to
-finish; the TUI restores the terminal and reloads the config when it exits.
+Names replace the tap label on keycaps; hold labels and semantic colors stay the
+same. The side panel and full details show the name alongside the actual actions.
+
+The TUI uses Vim for `e` and `:edit`, refreshes source locations before opening,
+and reloads config when Vim exits. If a broken external edit prevents locating
+the binding, it opens the source file for repair without using stale offsets.
 
 ## Commands and scripting
 
@@ -84,7 +88,9 @@ Commands: `layers`, `layer <name|index>`, `left`, `right`, `both`, `key <positio
 One-shot and piped failures produce a nonzero exit code. Piped sessions keep
 reading after a failed command, retaining the last valid map. `edit` needs an
 interactive terminal. `rm` in the CLI is an explicit edit and runs directly;
-the full-screen TUI asks for confirmation.
+the full-screen TUI asks for confirmation. The interactive CLI's `edit` command
+opens the root keymap with `$VISUAL`, `$EDITOR`, or `vi`; quoted paths and
+arguments are parsed without a shell.
 
 ## Native configuration
 
@@ -94,6 +100,12 @@ There is no JSON authoring format or generation step. Shared constants and
 behavior definitions live in native include files, so timing values, layer
 indices, and repeated behavior settings have one definition. Optional
 `// @label Friendly name` comments immediately before a node supply TUI labels.
+
+To name a key directly in config, put `/* @name Copy */` before its layer
+binding, for example `/* @name Copy */ &kp LG(C)`. These are ordinary ZMK
+comments, so names do not affect firmware. Names belong to individual keys on individual
+layers. The TUI writes this same annotation when you press `n`. Names must be
+single-line text without control characters or block-comment delimiters.
 
 The layer constants in `config/constants.h` must match declaration order.
 The reader checks references, argument counts, all 80 bindings per layer,
@@ -106,11 +118,13 @@ macros, unknown behavior types/properties, duplicate or cyclic includes, and
 ambiguous numeric syntax are rejected. Add reader support and tests before
 adopting those constructs.
 
-Clearing uses `&none` on the base layer and `&trans` elsewhere. It changes only
-the selected literal binding, validates the candidate, rechecks every source
-and include destination, and atomically replaces the edited file. Shared macros
-and bindings with embedded comments require the external editor. Reload after
-external edits before clearing a key. Failed edits preserve the original files.
+Naming and clearing validate the candidate, recheck every source and include
+destination, and atomically replace the edited file. Clearing uses `&none` on the
+base layer and `&trans` elsewhere and removes the key's name. Shared object macros
+require the external editor for both actions. Bindings with embedded comments
+can be named, but clearing them requires the editor to preserve those comments.
+Reload after external edits before naming or clearing a key. Failed edits
+preserve the original files.
 
 ## Firmware
 
