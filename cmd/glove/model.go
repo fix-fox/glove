@@ -178,7 +178,7 @@ func (m *model) openPalette() tea.Cmd {
 		menuItem{"Find a binding", "Keycodes, chords, concepts and names · /", "search"},
 		menuItem{"Browse definitions", "Macros, combos, hold-taps, morphs and conditional layers · tab", "library"},
 		menuItem{"Name selected key", "Show a memorable name on the keycap · n", "name"},
-		menuItem{"Edit config", "Open Vim at the selected binding · e", "editor"},
+		menuItem{"Edit config", "Open Neovim at the selected binding · e", "editor"},
 		menuItem{"Reload config", "Validate edits and keep the last good map on error · r", "reload"},
 		menuItem{"Clear selected key", "Review the source edit before applying · x", "clear"},
 		menuItem{"Build and flash", "Choose local or remote, left half or both · f", "flash"},
@@ -663,7 +663,7 @@ const helpText = `Explore
 
 Config
   n                 Name selected key; Enter saves, empty removes
-  e                 Open Vim at the selected binding's line and column
+  e                 Open Neovim at the selected binding's line and column
   r                 Reload and validate the config
   x                 Clear selected key, with confirmation
   f                 Choose local/remote build and half/both flash

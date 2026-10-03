@@ -10,7 +10,7 @@ import (
 	"github.com/fix-fox/glove/internal/keymap"
 )
 
-// bindingEditor refreshes source offsets before positioning Vim at the selected key.
+// bindingEditor refreshes source offsets before positioning Neovim at the selected key.
 func (m *model) bindingEditor() (*exec.Cmd, error) {
 	path := filepath.Join(m.root, "config", "glove80.keymap")
 	if m.document != nil {

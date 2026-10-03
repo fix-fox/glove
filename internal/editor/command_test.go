@@ -59,7 +59,7 @@ func TestEditorPrecedenceAndLiteralFileArgument(t *testing.T) {
 	}
 }
 
-func TestCommandAtUsesVimAndLiteralFileArgument(t *testing.T) {
+func TestCommandAtUsesNeovimAndLiteralFileArgument(t *testing.T) {
 	t.Setenv("VISUAL", "code --wait")
 	t.Setenv("EDITOR", "nano")
 	path := "-config with spaces; $(touch nope).keymap"
@@ -67,7 +67,7 @@ func TestCommandAtUsesVimAndLiteralFileArgument(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := []string{"vim", "-c", "call cursor(23,47)", "--", path}
+	want := []string{"nvim", "-c", "call cursor(23,47)", "--", path}
 	if !reflect.DeepEqual(cmd.Args, want) {
 		t.Fatalf("CommandAt arguments = %q, want %q", cmd.Args, want)
 	}
@@ -94,9 +94,9 @@ func TestCommandAtRejectsMissingFileAndInvalidCoordinates(t *testing.T) {
 	}
 }
 
-func TestCommandAtPositionsVimAtByteColumn(t *testing.T) {
-	if _, err := exec.LookPath("vim"); err != nil {
-		t.Skip("Vim is not installed")
+func TestCommandAtPositionsNeovimAtByteColumn(t *testing.T) {
+	if _, err := exec.LookPath("nvim"); err != nil {
+		t.Skip("Neovim is not installed")
 	}
 	for _, test := range []struct {
 		name, content string
@@ -121,12 +121,12 @@ func TestCommandAtPositionsVimAtByteColumn(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			args := []string{"vim", "-Nu", "NONE", "-n", "-i", "NONE", "-es"}
+			args := []string{"nvim", "-Nu", "NONE", "-n", "-i", "NONE", "-es"}
 			args = append(args, cmd.Args[1:len(cmd.Args)-2]...)
 			args = append(args, "-S", checkPath)
 			cmd.Args = append(args, cmd.Args[len(cmd.Args)-2:]...)
 			if output, err := cmd.CombinedOutput(); err != nil {
-				t.Fatalf("Vim did not reach %d:%d: %v\n%s", test.line, test.column, err, output)
+				t.Fatalf("Neovim did not reach %d:%d: %v\n%s", test.line, test.column, err, output)
 			}
 		})
 	}

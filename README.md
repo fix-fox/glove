@@ -38,7 +38,7 @@ The minimum supported size is 40 columns by 22 rows.
 | `:` | Command entry; Tab completes commands and names, then cycles matches. |
 | `s` | Show both halves, left, or right. |
 | `n` | Name the selected key on this layer. Enter saves; an empty name removes it; Esc cancels. |
-| `e` | Open Vim at the selected binding's line and column, including bindings in local includes. |
+| `e` | Open Neovim at the selected binding's line and column, including bindings in local includes. |
 | `r` | Reload config. A failed load retains the last valid map. |
 | `x` | Confirm clearing the selected key. |
 | `f` | Choose local/remote and left/both build and flash, then confirm. |
@@ -63,8 +63,8 @@ macros, combos, hold-taps, mod-morphs, conditional layers, and tap dances.
 Names replace the tap label on keycaps; hold labels and semantic colors stay the
 same. The side panel and full details show the name alongside the actual actions.
 
-The TUI uses Vim for `e` and `:edit`, refreshes source locations before opening,
-and reloads config when Vim exits. If a broken external edit prevents locating
+The TUI uses Neovim for `e` and `:edit`, refreshes source locations before opening,
+and reloads config when Neovim exits. If a broken external edit prevents locating
 the binding, it opens the source file for repair without using stale offsets.
 
 ## Commands and scripting

@@ -11,7 +11,7 @@ import (
 	"github.com/fix-fox/glove/internal/keymap"
 )
 
-func TestVimTargetsSelectedBindingInIncludeWithByteColumnsAndFreshOffsets(t *testing.T) {
+func TestNeovimTargetsSelectedBindingInIncludeWithByteColumnsAndFreshOffsets(t *testing.T) {
 	s := nativeFixture(t, "A", "base")
 	path := filepath.Join(s.root, "config", "keys.dtsi")
 	source := "// Layer bindings\n" + strings.Replace(fixtureSource("A", "base"), "&kp A", "\t/* העתק */ &kp A /* @name Copy */ &kp LG(C)", 1)
@@ -43,7 +43,7 @@ func TestVimTargetsSelectedBindingInIncludeWithByteColumnsAndFreshOffsets(t *tes
 		offset := strings.Index(current, "&kp LG(C)")
 		line := strings.Count(current[:offset], "\n") + 1
 		column := offset - strings.LastIndex(current[:offset], "\n")
-		want := []string{"vim", "-c", fmt.Sprintf("call cursor(%d,%d)", line, column), "--", resolvedPath}
+		want := []string{"nvim", "-c", fmt.Sprintf("call cursor(%d,%d)", line, column), "--", resolvedPath}
 		if !slices.Equal(cmd.Args, want) {
 			t.Fatalf("got %v, want %v", cmd.Args, want)
 		}
@@ -54,7 +54,7 @@ func TestVimTargetsSelectedBindingInIncludeWithByteColumnsAndFreshOffsets(t *tes
 	}
 }
 
-func TestVimAllowsRepairingInvalidConfigWithoutUsingStaleOffsets(t *testing.T) {
+func TestNeovimAllowsRepairingInvalidConfigWithoutUsingStaleOffsets(t *testing.T) {
 	s := nativeFixture(t, "A", "base")
 	m := newModel(s.root)
 	m.setDocument(s.document)
