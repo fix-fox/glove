@@ -46,8 +46,8 @@ func TestCursorNavigationAndDefaultEnterBindings(t *testing.T) {
 	if len(left) != 40 || len(right) != 40 {
 		t.Fatalf("expected 40 physical positions per half, got left=%d right=%d", len(left), len(right))
 	}
-	t.Run("left half has four plain modifiers and 36 transparent keys", func(t *testing.T) {
-		modifiers := map[int]string{35: "LCTRL", 36: "LALT", 37: "LGUI", 38: "LSHIFT"}
+	t.Run("left half has plain modifiers and Command shortcuts on Z X C D V", func(t *testing.T) {
+		keycodes := map[int]string{35: "LCTRL", 36: "LALT", 37: "LGUI", 38: "LSHIFT", 47: "LG(Z)", 48: "LG(X)", 49: "LG(C)", 50: "LG(D)", 51: "LG(V)"}
 		for position, letter := range map[int]string{35: "A", 36: "R", 37: "S", 38: "T"} {
 			if !left[position] || doc.Config.Layers[0].Keys[position].Tap.Param2 != letter {
 				t.Fatalf("position %d no longer matches the default %s home-row key", position, letter)
@@ -55,8 +55,8 @@ func TestCursorNavigationAndDefaultEnterBindings(t *testing.T) {
 		}
 		for position := range left {
 			want := keymap.Key{Tap: keymap.Behavior{Type: "trans"}}
-			if modifier := modifiers[position]; modifier != "" {
-				want.Tap = keymap.Behavior{Type: "kp", KeyCode: modifier}
+			if code := keycodes[position]; code != "" {
+				want.Tap = keymap.Behavior{Type: "kp", KeyCode: code}
 			}
 			if got := doc.Config.Layers[cursor].Keys[position]; !reflect.DeepEqual(got, want) {
 				t.Errorf("Cursor %s (%d): got %+v, want %+v", keymapview.KeyNames[position], position, got, want)

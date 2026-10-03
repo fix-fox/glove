@@ -29,8 +29,8 @@ Swap the first argument of each `&hml` and `&hmr` binding on all layers: `LCTRL�
 
 The `cursor` layer has plain Ctrl, Alt, Cmd, and Shift keys at A/R/S/T,
 positions 35–38. For Windows/Linux, swap its `&kp LCTRL` at position 35 with
-`&kp LGUI` at position 37; leave Alt and Shift unchanged. The other 36 keys
-on its left half are transparent.
+`&kp LGUI` at position 37; leave Alt and Shift unchanged. Positions 47–51
+send Cmd+Z/X/C/D/V; the remaining 31 keys on its left half are transparent.
 
 Keep `hml_ctrl_a` and `hmr_ctrl_a` on the `tmux` layer unchanged: their Ctrl, Alt,
 and Shift holds are terminal modifiers on every OS. The `tmux_prefix`
@@ -40,13 +40,15 @@ masks held modifiers only during Ctrl+A, restoring them for the command key.
 ### Shortcut keycodes: Mac Cmd → Windows Ctrl
 
 On the `mouse` layer, convert Cmd copy/paste/cut shortcuts back to Ctrl.
-The `cursor` layer retains Cmd+Left and Cmd+Right for line navigation; its
-former left-hand shortcuts and right-hand Maccy shortcut have been cleared.
+The `cursor` layer uses Cmd+Left and Cmd+Right for line navigation and
+Cmd+Z/X/C/D/V at positions 47–51. Convert those letter shortcuts to Ctrl
+for Windows/Linux. Its right-hand Maccy shortcut remains cleared.
 
 | Mac (now) | Windows/Linux | Where |
 |---|---|---|
 | `LG(LEFT)` / `LG(RIGHT)` (line start/end) | `HOME` / `END` | cursor layer nav keys |
 | `LG(C/V/X)` | `LC(...)` | mouse layer taps |
+| `LG(Z/X/C/D/V)` | `LC(...)` | cursor layer positions 47–51 |
 | `LC(LG(Q))` (lock) | `LG(L)` (Win+L) | default layer |
 | `LC(LG(SPACE))` (emoji) | `LG(SEMI)` (Win+; emoji) | default layer |
 | `LG(LS(N5))` (Cmd+Shift+5) | `PSCRN` | default layer (key 72 tap, via `shot_ht`) |

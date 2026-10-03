@@ -224,7 +224,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp PG_UP  &kp UP  &kp PG_DN  &trans  &trans
                 &trans  &kp LCTRL  &kp LALT  &kp LGUI  &kp LSHIFT  &trans  &trans  &kp LEFT  &kp DOWN  &kp RIGHT  &trans  &trans
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp LG(LEFT)  &trans  &kp LG(RIGHT)  &trans  &trans
+                &trans  &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(D)  &kp LG(V)  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp LG(LEFT)  &trans  &kp LG(RIGHT)  &trans  &trans
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &kp ENTER  &trans  &trans  &trans  &trans  &trans
             >;
         };
