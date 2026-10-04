@@ -70,6 +70,9 @@ func (m model) handleMouse(msg tea.MouseMsg) (tea.Model, tea.Cmd) {
 	if mouse.X < 0 || mouse.X >= m.width || mouse.Y < 0 || mouse.Y >= m.height {
 		return m, nil
 	}
+	if m.mode == "key-edit" {
+		return m.keyEditMouse(msg)
+	}
 	switch msg.(type) {
 	case tea.MouseWheelMsg:
 		direction := 0

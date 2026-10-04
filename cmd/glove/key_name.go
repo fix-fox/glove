@@ -12,7 +12,7 @@ func (m *model) openKeyName() tea.Cmd {
 		return nil
 	}
 	if !m.document.Bindings[m.layer][m.selected].Editable {
-		m.status = "This binding is shared. Use e to edit its source."
+		m.status = "This binding is shared. Use Shift+E to edit its source."
 		return nil
 	}
 	m.naming = bindingSelection{document: m.document, layer: m.layer, position: m.selected}

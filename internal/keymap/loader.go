@@ -3,6 +3,7 @@ package keymap
 import (
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 )
 
@@ -143,6 +144,7 @@ func load(path string, replacements map[string]string) (document *Document, err 
 		l.parseDefinition(name)
 	}
 	layerBindings := [][]BindingSource{}
+	layerReferences := []string{}
 	layerNames := map[string]bool{}
 	for _, node := range keymapNode.children {
 		allowedProperties(node, "bindings")
@@ -154,11 +156,14 @@ func load(path string, replacements map[string]string) (document *Document, err 
 			name = node.name
 		}
 		constantName := "LAYER_" + strings.ToUpper(node.name)
+		layerReference := strconv.Itoa(len(l.config.Layers))
 		if constant, ok := source.constants[constantName]; ok {
 			if len(constant) != 1 || nonnegative(constant[0].text, node.token) != len(l.config.Layers) {
 				sourceError(node.token, "%s must equal declaration index %d; update layer constants when reordering layers", constantName, len(l.config.Layers))
 			}
+			layerReference = constantName
 		}
+		layerReferences = append(layerReferences, layerReference)
 		if layerNames[strings.ToLower(name)] {
 			sourceError(node.token, "Duplicate layer name %s", name)
 		}
@@ -231,7 +236,7 @@ func load(path string, replacements map[string]string) (document *Document, err 
 			l.config.ConditionalLayers = append(l.config.ConditionalLayers, ConditionalLayerDefinition{Name: node.name, IfLayers: ifLayers, ThenLayer: thenLayer})
 		}
 	}
-	return &Document{Path: path, Config: l.config, Sources: source.sources, Resolutions: source.resolutions, Bindings: layerBindings}, nil
+	return &Document{Path: path, Config: l.config, Sources: source.sources, Resolutions: source.resolutions, Bindings: layerBindings, LayerReferences: layerReferences}, nil
 }
 
 func (l *loader) checkCycle(name string, stack []string, visited map[string]bool) {

@@ -56,6 +56,8 @@ func (m model) render() string {
 	bodyHeight := m.height - 10
 	body := ""
 	switch {
+	case m.mode == "key-edit":
+		body = m.keyEditView(w, bodyHeight)
 	case m.mode == "picker" || m.mode == "search":
 		body = m.choicesView(w, bodyHeight)
 	case m.mode == "confirm-clear" || m.mode == "confirm-flash":
@@ -65,7 +67,7 @@ func (m model) render() string {
 	case m.mode == "name":
 		body = m.keyNameView(w, bodyHeight)
 	case m.data == nil:
-		body = "\n" + m.spinner.View() + " Reading your keyboard config…\n\n" + dimStyle.Render("r reload   e edit   q quit")
+		body = "\n" + m.spinner.View() + " Reading your keyboard config…\n\n" + dimStyle.Render("r reload   Shift+E Neovim   q quit")
 	case m.screen == "library":
 		body = m.libraryView(w, bodyHeight)
 	default:
@@ -320,6 +322,21 @@ func (m model) outputView(w, h int) string {
 func (m model) hints() string {
 	var hints [][2]string
 	switch m.mode {
+	case "key-edit":
+		if m.keyEditor.readOnly != "" {
+			hints = [][2]string{{"Shift+E", "Neovim"}, {"esc", "back"}, {"↑↓", "scroll"}}
+		} else {
+			switch m.keyEditor.page {
+			case "tap", "hold":
+				hints = [][2]string{{"↑↓", "choose"}, {"enter", "select"}, {"esc", "back"}}
+			case "modifiers":
+				hints = [][2]string{{"↑↓", "choose"}, {"space", "toggle"}, {"esc", "back"}}
+			case "name":
+				hints = [][2]string{{"enter", "accept"}, {"esc", "back"}}
+			default:
+				hints = [][2]string{{"tab", "move"}, {"enter", "select"}, {"esc", "cancel"}}
+			}
+		}
 	case "picker", "search":
 		hints = [][2]string{{"type", "filter"}, {"↑↓", "choose"}, {"enter", "open"}, {"esc", "back"}}
 	case "jump":

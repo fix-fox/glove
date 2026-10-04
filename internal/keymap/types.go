@@ -121,4 +121,7 @@ type Document struct {
 	Sources     map[string]string
 	Resolutions map[string]string
 	Bindings    [][]BindingSource
+	// LayerReferences uses a validated LAYER_<node> constant where one exists,
+	// otherwise the declaration index. Editors keep native layer names intact.
+	LayerReferences []string
 }

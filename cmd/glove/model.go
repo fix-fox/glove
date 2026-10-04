@@ -40,6 +40,7 @@ type model struct {
 	spinner                          spinner.Model
 	confirmation                     bindingSelection
 	naming                           bindingSelection
+	keyEditor                        keyEditorState
 	completions                      []string
 	completionPrefix, completionLine string
 	completionIndex                  int
@@ -147,6 +148,16 @@ func (m *model) resize() {
 		viewportHeight = m.height - 14
 	}
 	m.viewport.SetHeight(max(1, viewportHeight))
+	if m.mode == "key-edit" {
+		if m.keyEditor.page == "modifiers" {
+			m.picker.SetSize(max(1, m.width-4), max(1, m.height-13))
+		}
+		if m.keyEditor.readOnly != "" {
+			headingHeight := lipgloss.Height(lipgloss.NewStyle().Width(max(1, m.width-4)).Render(m.keyEditor.readOnly))
+			m.viewport.SetWidth(max(1, m.width-4))
+			m.viewport.SetHeight(max(1, m.height-13-headingHeight))
+		}
+	}
 	m.refreshViewport()
 }
 
@@ -178,7 +189,8 @@ func (m *model) openPalette() tea.Cmd {
 		menuItem{"Find a binding", "Keycodes, chords, concepts and names · /", "search"},
 		menuItem{"Browse definitions", "Macros, combos, hold-taps, morphs and conditional layers · tab", "library"},
 		menuItem{"Name selected key", "Show a memorable name on the keycap · n", "name"},
-		menuItem{"Edit config", "Open Neovim at the selected binding · e", "editor"},
+		menuItem{"Edit selected key", "Change tap, hold, shortcut modifiers, and name · e", "key-edit"},
+		menuItem{"Open Neovim", "Edit the selected binding's source · Shift+E", "editor"},
 		menuItem{"Reload config", "Validate edits and keep the last good map on error · r", "reload"},
 		menuItem{"Clear selected key", "Review the source edit before applying · x", "clear"},
 		menuItem{"Build and flash", "Choose local or remote, left half or both · f", "flash"},
@@ -270,6 +282,8 @@ func (m *model) perform(action string) tea.Cmd {
 		}
 		cmd.Dir = m.root
 		return tea.ExecProcess(cmd, func(err error) tea.Msg { return processMsg{err} })
+	case "key-edit":
+		return m.openKeyEdit()
 	case "name":
 		return m.openKeyName()
 	case "reload":
@@ -335,6 +349,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Batch(loadConfig(m.root), m.spinner.Tick)
 	case configMsg:
 		m.busy = false
+		if m.mode == "key-edit" {
+			if msg.err != nil {
+				m.output, m.status = msg.err.Error(), "Key not saved"
+				return m, nil
+			}
+			m.closeKeyEdit()
+		}
 		if m.mode == "name" {
 			if msg.err != nil {
 				m.output, m.status = msg.err.Error(), "Name not saved"
@@ -400,6 +421,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		key := msg.String()
 		if key == "ctrl+c" {
 			return m, tea.Quit
+		}
+		if m.mode == "key-edit" {
+			return m.updateKeyEdit(msg)
 		}
 		if key == "esc" && m.mode != "" {
 			m.mode = ""
@@ -467,7 +491,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, tea.Quit
 			case "r":
 				return m.do("reload")
-			case "e":
+			case "E", "shift+e":
 				return m.do("editor")
 			}
 			return m, nil
@@ -493,6 +517,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "r":
 			return m.do("reload")
 		case "e":
+			return m.do("key-edit")
+		case "E", "shift+e":
 			return m.do("editor")
 		case "n":
 			return m.do("name")
@@ -555,6 +581,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "down":
 			m.move(0, 1)
 		}
+	}
+	if m.mode == "key-edit" {
+		return m.updateKeyEdit(msg)
 	}
 	if m.mode == "picker" || m.mode == "search" {
 		return m.updateChoices(msg)
@@ -663,7 +692,8 @@ const helpText = `Explore
 
 Config
   n                 Name selected key; Enter saves, empty removes
-  e                 Open Neovim at the selected binding's line and column
+  e                 Edit selected key: tap, hold, shortcut modifiers, name
+  Shift+E           Open Neovim at the selected binding's line and column
   r                 Reload and validate the config
   x                 Clear selected key, with confirmation
   f                 Choose local/remote build and half/both flash

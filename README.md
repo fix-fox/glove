@@ -38,7 +38,8 @@ The minimum supported size is 40 columns by 22 rows.
 | `:` | Command entry; Tab completes commands and names, then cycles matches. |
 | `s` | Show both halves, left, or right. |
 | `n` | Name the selected key on this layer. Enter saves; an empty name removes it; Esc cancels. |
-| `e` | Open Neovim at the selected binding's line and column, including bindings in local includes. |
+| `e` | Edit the selected key's tap, hold, shortcut modifiers, and name. |
+| `shift+e` | Open Neovim at the selected binding's line and column, including bindings in local includes. |
 | `r` | Reload config. A failed load retains the last valid map. |
 | `x` | Confirm clearing the selected key. |
 | `f` | Choose local/remote and left/both build and flash, then confirm. |
@@ -63,9 +64,40 @@ macros, combos, hold-taps, mod-morphs, conditional layers, and tap dances.
 Names replace the tap label on keycaps; hold labels and semantic colors stay the
 same. The side panel and full details show the name alongside the actual actions.
 
-The TUI uses Neovim for `e` and `:edit`, refreshes source locations before opening,
+The TUI uses Neovim for `Shift+E` and `:edit`, refreshes source locations before opening,
 and reloads config when Neovim exits. If a broken external edit prevents locating
 the binding, it opens the source file for repair without using stale offsets.
+
+### Editing a key
+
+Press `e` to open the key editor. Use Tab or arrows to move between fields,
+Enter to open a field, and type to filter the action list. The Modifiers field
+has checkboxes for left/right Cmd, Shift, Ctrl, and Alt/Option. Space or Enter
+toggles a checkbox. Mouse clicks select fields, actions, checkboxes, and buttons.
+
+For example, select the Space/Symbols thumb key, open **On tap**, search for
+Enter, and select it. **On hold** stays on Symbols. Choose **Save** to update
+that key on the current layer. Changes remain in a draft until Save; Escape
+returns from a field, and Escape from the form cancels the draft. Saving
+refreshes the view. Use the existing build-and-flash flow to apply it to the
+keyboard.
+
+The editor supports ordinary keys, shortcuts, a modifier or layer on hold,
+dedicated layer keys that activate while held, toggle, or switch layers,
+disabled keys, and transparent keys that use a lower layer. Choosing a whole-key
+action replaces both tap and hold. Choosing **Normal key behavior** under
+**On hold** removes the separate hold action and restores ordinary press,
+release, and repeat behavior. Names can be changed or removed in the same save.
+
+Edits to existing home-row modifiers and compatible tap/hold keys retain their
+behavior definitions and timing. New tap/hold pairs use ZMK's built-in `mt` or
+the configured `lt`. Changing between modifier-hold and layer-hold also uses
+the corresponding built-in behavior. Layer choices use existing layer constants.
+
+Custom macros, tap dances, mod-morphs, and other complex bindings are read-only
+in this editor. Their details remain visible, and `Shift+E` opens Neovim.
+The editor does not create or change behavior definitions, timing, combos,
+double-tap actions, or tap-then-hold actions.
 
 ## Commands and scripting
 
@@ -118,13 +150,13 @@ macros, unknown behavior types/properties, duplicate or cyclic includes, and
 ambiguous numeric syntax are rejected. Add reader support and tests before
 adopting those constructs.
 
-Naming and clearing validate the candidate, recheck every source and include
+Key edits, naming, and clearing validate the candidate, recheck every source and include
 destination, and atomically replace the edited file. Clearing uses `&none` on the
 base layer and `&trans` elsewhere and removes the key's name. Shared object macros
-require the external editor for both actions. Bindings with embedded comments
-can be named, but clearing them requires the editor to preserve those comments.
-Reload after external edits before naming or clearing a key. Failed edits
-preserve the original files.
+require the external editor. Bindings with embedded comments can be named with
+`n`, but changing their actions requires Neovim to preserve those comments.
+Reload after external edits before editing a key. Failed edits preserve the
+original files, and a failed key-editor save keeps the draft open.
 
 ## Firmware
 

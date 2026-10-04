@@ -48,9 +48,9 @@ func TestNeovimTargetsSelectedBindingInIncludeWithByteColumnsAndFreshOffsets(t *
 			t.Fatalf("got %v, want %v", cmd.Args, want)
 		}
 	}
-	_, cmd := press(m, 'e')
+	_, cmd := press(m, 'E')
 	if cmd == nil {
-		t.Fatal("e did not start the positioned editor action")
+		t.Fatal("Shift+E did not start the positioned editor action")
 	}
 }
 
